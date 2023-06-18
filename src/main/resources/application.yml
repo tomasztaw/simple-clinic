@@ -1,0 +1,34 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /clinic
+
+api:
+  cepik:
+    url: https://api.cepik.gov.pl/
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/simple_clinic
+    username: postgres
+    password: postgres
+    hikari:
+      idle-timeout: 10000
+      connectionTimeout: 20000
+      minimumIdle: 10
+      maximumPoolSize: 20
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  security:
+    enabled: false

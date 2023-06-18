@@ -1,0 +1,140 @@
+{
+  "data": [
+    {
+      "id": "849930752201839",
+      "type": "pojazdy",
+      "attributes": {
+        "marka": "HONDA",
+        "kategoria-pojazdu": "11111111",
+        "typ": "---",
+        "model": "LOGO",
+        "wariant": "---",
+        "rodzaj-pojazdu": "SAMOCHÓD OSOBOWY",
+        "pochodzenie-pojazdu": "UŻYW. IMPORT INDYW",
+        "rok-produkcji": "FABRYCZNY",
+        "data-pierwszej-rejestracji-w-kraju": "2021-10-11",
+        "pojemnosc-skokowa-silnika": 1343,
+        "masa-wlasna": 988,
+        "rodzaj-paliwa": "BENZYNA",
+        "wojewodztwo-kod": "14"
+      },
+      "links": {
+        "self": "https://api.cepik.gov.pl/pojazdy/849930752201839"
+      }
+    },
+    {
+      "id": "3948620503340695",
+      "type": "pojazdy",
+      "attributes": {
+        "marka": "SEAT",
+        "kategoria-pojazdu": "13",
+        "typ": "KJ",
+        "model": "IBIZA",
+        "wariant": "BDLAA",
+        "rodzaj-pojazdu": "SAMOCHÓD OSOBOWY",
+        "pochodzenie-pojazdu": "NOWY ZAKUPIONY W KRAJU",
+        "rok-produkcji": "FABRYCZNY",
+        "data-pierwszej-rejestracji-w-kraju": "2021-10-11",
+        "pojemnosc-skokowa-silnika": 999,
+        "masa-wlasna": 1115,
+        "rodzaj-paliwa": "BENZYNA",
+        "wojewodztwo-kod": "14"
+      },
+      "links": {
+        "self": "https://api.cepik.gov.pl/pojazdy/3948620503340695"
+      }
+    },
+    {
+      "id": "1545997190537371",
+      "type": "pojazdy",
+      "attributes": {
+        "marka": "SEAT",
+        "kategoria-pojazdu": "13",
+        "typ": "KJ",
+        "model": "IBIZA",
+        "wariant": "BDLAA",
+        "rodzaj-pojazdu": "SAMOCHÓD OSOBOWY",
+        "pochodzenie-pojazdu": "NOWY ZAKUPIONY W KRAJU",
+        "rok-produkcji": "FABRYCZNY",
+        "data-pierwszej-rejestracji-w-kraju": "2021-10-11",
+        "pojemnosc-skokowa-silnika": 999,
+        "masa-wlasna": 1115,
+        "rodzaj-paliwa": "BENZYNA",
+        "wojewodztwo-kod": "14"
+      },
+      "links": {
+        "self": "https://api.cepik.gov.pl/pojazdy/1545997190537371"
+      }
+    },
+    {
+      "id": "2340228674273462",
+      "type": "pojazdy",
+      "attributes": {
+        "marka": "VOLKSWAGEN",
+        "kategoria-pojazdu": "11111111",
+        "typ": "---",
+        "model": "POLO",
+        "wariant": "---",
+        "rodzaj-pojazdu": "SAMOCHÓD OSOBOWY",
+        "pochodzenie-pojazdu": "UŻYW. IMPORT INDYW",
+        "rok-produkcji": "FABRYCZNY",
+        "data-pierwszej-rejestracji-w-kraju": "2021-10-11",
+        "pojemnosc-skokowa-silnika": 1390,
+        "masa-wlasna": 1064,
+        "rodzaj-paliwa": "BENZYNA",
+        "wojewodztwo-kod": "14"
+      },
+      "links": {
+        "self": "https://api.cepik.gov.pl/pojazdy/2340228674273462"
+      }
+    },
+    {
+      "id": "4280837150558054",
+      "type": "pojazdy",
+      "attributes": {
+        "marka": "MERCEDES-BENZ",
+        "kategoria-pojazdu": "0",
+        "typ": "---",
+        "model": "B 180 D",
+        "wariant": "---",
+        "rodzaj-pojazdu": "SAMOCHÓD OSOBOWY",
+        "pochodzenie-pojazdu": "UŻYW. ZAKUPIONY W KRAJU",
+        "rok-produkcji": "FABRYCZNY",
+        "data-pierwszej-rejestracji-w-kraju": "2021-10-11",
+        "pojemnosc-skokowa-silnika": 1991,
+        "masa-wlasna": 1435,
+        "rodzaj-paliwa": "OLEJ NAPĘDOWY",
+        "wojewodztwo-kod": "14"
+      },
+      "links": {
+        "self": "https://api.cepik.gov.pl/pojazdy/4280837150558054"
+      }
+    }
+  ],
+  "meta": {
+    "json-ld-id": "/pojazdy?wojewodztwo=14&data-od=20211010&data-do=20221010&limit=5&page=1&typ-daty=1&tylko-zarejestrowane=true&pokaz-wszystkie-pola=false",
+    "schema": "https://api.cepik.gov.pl/www/schema/vehicle.json",
+    "dc:title": "Lista pojazdów",
+    "schema:provider": "Ministerstwo Cyfryzacji",
+    "schema:datePublished": "2019-05-13",
+    "schema:dateModified": "2022-12-03",
+    "dc:description": "Lista pojazdów udostępnionych z bazy CEPiK",
+    "dc:language": "pl",
+    "sy:updatePeriod": "weekly",
+    "sy:updateFrequency": "1",
+    "sy:updateBase": "2022-12-10",
+    "schema:contentType": "application/json",
+    "schema:isPartOf": "https://api.cepik.gov.pl/pojazdy",
+    "count": 328673,
+    "page": 1,
+    "limit": 5,
+    "dc:rights": "brak",
+    "schema:keywords": "pojazdy, cepik, cep, dane techniczne, spalanie, samochody, autobusy, motocykle, daty rejestracji"
+  },
+  "links": {
+    "first": "https://api.cepik.gov.pl/pojazdy?wojewodztwo=14&data-od=20211010&data-do=20221010&limit=5&page=1&typ-daty=1&tylko-zarejestrowane=true&pokaz-wszystkie-pola=false",
+    "self": "https://api.cepik.gov.pl/pojazdy?wojewodztwo=14&data-od=20211010&data-do=20221010&limit=5&page=1&typ-daty=1&tylko-zarejestrowane=true&pokaz-wszystkie-pola=false",
+    "next": "https://api.cepik.gov.pl/pojazdy?wojewodztwo=14&data-od=20211010&data-do=20221010&limit=5&page=2&typ-daty=1&tylko-zarejestrowane=true&pokaz-wszystkie-pola=false",
+    "last": "https://api.cepik.gov.pl/pojazdy?wojewodztwo=14&data-od=20211010&data-do=20221010&limit=5&page=65735&typ-daty=1&tylko-zarejestrowane=true&pokaz-wszystkie-pola=false"
+  }
+}
