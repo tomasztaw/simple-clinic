@@ -1,16 +1,21 @@
 package pl.taw.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import pl.taw.api.dto.AlterVisitDTO;
 import pl.taw.api.dto.VisitDTO;
+import pl.taw.business.dao.AlterVisitDAO;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 import pl.taw.infrastructure.database.repository.jpa.VisitJpaRepository;
+import pl.taw.infrastructure.database.repository.mapper.AlterVisitMapper;
 import pl.taw.infrastructure.database.repository.mapper.VisitMapper;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 @AllArgsConstructor
 public class VisitRepository implements VisitDAO {
@@ -20,7 +25,13 @@ public class VisitRepository implements VisitDAO {
 
 
     @Override
-    public List<VisitDTO> findAll() {
+    public List<VisitEntity> findAll() {
+        log.debug("Fetching all visits from the database");
+        return visitJpaRepository.findAll().stream()
+                .toList();
+    }
+
+    public List<VisitDTO> findAllDto() {
         return visitJpaRepository.findAll().stream()
                 .map(visitMapper::mapFromEntityToDTO)
                 .toList();
@@ -33,15 +44,22 @@ public class VisitRepository implements VisitDAO {
     }
 
     @Override
-    public VisitDTO save(VisitDTO visitDTO) {
-        VisitEntity visitEntity = visitMapper.mapFromDtoToEntity(visitDTO);
-        VisitEntity savedVisitEntity = visitJpaRepository.save(visitEntity);
-        return visitMapper.mapFromEntityToDTO(savedVisitEntity);
+    public Optional<VisitEntity> findEntityById(Integer visitId) {
+        return visitJpaRepository.findById(visitId);
     }
 
     @Override
-    public void delete(VisitDTO visitDTO) {
-        VisitEntity visitEntity = visitMapper.mapFromDtoToEntity(visitDTO);
+    public VisitEntity save(VisitEntity visitEntity) {
+        return visitJpaRepository.save(visitEntity);
+    }
+
+    @Override
+    public void saveEntity(VisitEntity visitEntity) {
+        visitJpaRepository.save(visitEntity);
+    }
+
+    @Override
+    public void delete(VisitEntity visitEntity) {
         visitJpaRepository.delete(visitEntity);
     }
 

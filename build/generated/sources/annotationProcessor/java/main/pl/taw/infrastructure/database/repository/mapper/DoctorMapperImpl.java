@@ -15,7 +15,7 @@ import pl.taw.infrastructure.database.entity.VisitEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-18T17:09:36+0200",
+    date = "2023-06-19T21:09:38+0200",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (GraalVM Community)"
 )
 @Component
@@ -184,11 +184,11 @@ public class DoctorMapperImpl implements DoctorMapper {
         VisitEntity.VisitEntityBuilder visitEntity = VisitEntity.builder();
 
         visitEntity.visitId( visit.getVisitId() );
-        visitEntity.doctor( mapToEntity( visit.getDoctor() ) );
-        visitEntity.patient( patientToPatientEntity( visit.getPatient() ) );
         visitEntity.note( visit.getNote() );
         visitEntity.dateTime( visit.getDateTime() );
         visitEntity.status( visit.getStatus() );
+        visitEntity.doctor( mapToEntity( visit.getDoctor() ) );
+        visitEntity.patient( patientToPatientEntity( visit.getPatient() ) );
 
         return visitEntity.build();
     }
@@ -201,6 +201,8 @@ public class DoctorMapperImpl implements DoctorMapper {
         VisitDTO.VisitDTOBuilder visitDTO = VisitDTO.builder();
 
         visitDTO.visitId( visitEntity.getVisitId() );
+        visitDTO.doctorId( visitEntity.getDoctorId() );
+        visitDTO.patientId( visitEntity.getPatientId() );
         visitDTO.dateTime( visitEntity.getDateTime() );
         visitDTO.note( visitEntity.getNote() );
         visitDTO.status( visitEntity.getStatus() );
@@ -229,6 +231,8 @@ public class DoctorMapperImpl implements DoctorMapper {
         VisitEntity.VisitEntityBuilder visitEntity = VisitEntity.builder();
 
         visitEntity.visitId( visitDTO.getVisitId() );
+        visitEntity.doctorId( visitDTO.getDoctorId() );
+        visitEntity.patientId( visitDTO.getPatientId() );
         visitEntity.note( visitDTO.getNote() );
         visitEntity.dateTime( visitDTO.getDateTime() );
         visitEntity.status( visitDTO.getStatus() );

@@ -68,9 +68,9 @@
       <tr>
         <th>Id wizyty</th>
         <th>Id lekarza</th>
-<!--        <th>Lekarz</th>-->
+        <th>Lekarz</th>
         <th>Id pacjenta</th>
-<!--        <th>Pacjent</th>-->
+        <th>Pacjent</th>
         <th>Godzina wizyty</th>
         <th>Notatka</th>
         <th>Status</th>
@@ -80,10 +80,12 @@
       <tbody>
       <tr th:each="visit : ${visits}">
         <td th:text="${visit.visitId}"></td>
-        <td th:text="${visit.doctorId}"></td>
-<!--        <td th:text="${visit.doctor.name + ' ' + visit.doctor.surname}"></td>-->
-        <td th:text="${visit.patientId}"></td>
-<!--        <td th:text="${visit.patient.name + ' ' + visit.patient.surname}"></td>-->
+<!--        <td th:text="${visit.doctorId}"></td>-->
+        <td th:text="${visit.doctor.doctorId}"></td>
+        <td th:text="${visit.doctor.name + ' ' + visit.doctor.surname}"></td>
+<!--        <td th:text="${visit.patientId}"></td>-->
+        <td th:text="${visit.patient.patientId}"></td>
+        <td th:text="${visit.patient.name + ' ' + visit.patient.surname}"></td>
         <td th:text="${#temporals.format(visit.dateTime, 'dd MM yyyy HH:mm')}"></td>
         <td th:text="${visit.note}"></td>
         <td th:text="${visit.status}"></td>

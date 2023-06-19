@@ -9,17 +9,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VisitDTO {
+public class AlterVisitDTO {
 
     private Integer visitId;
-    private Integer doctorId;
-    private Integer patientId;
+    private DoctorDTO doctor;
+    private PatientDTO patient;
     private LocalDateTime dateTime;
     private String note;
     private String status;
-
-    // relacje
-    private DoctorDTO doctorDTO;
-    private PatientDTO patientDTO;
 
 }

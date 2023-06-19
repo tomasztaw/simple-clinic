@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "patient")
+@Table(name = "patients")
 public class PatientEntity {
 
     @Id
@@ -36,7 +36,11 @@ public class PatientEntity {
     @Column(name = "email", unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    // przy usunięciu pacjent, usuwane są też wizyty
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE)
     private List<VisitEntity> visits;
+
+    @OneToMany(mappedBy = "patient", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private List<AlterVisitEntity> alterVisits;
 
 }

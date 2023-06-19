@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.VisitDAO;
+import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,30 +23,30 @@ public class VisitRestController {
 
 
     @GetMapping
-    public ResponseEntity<List<VisitDTO>> getAllVisits() {
-        List<VisitDTO> visits = visitDAO.findAll();
+    public ResponseEntity<List<VisitEntity>> getAllVisits() {
+        List<VisitEntity> visits = visitDAO.findAll();
         return ResponseEntity.ok(visits);
     }
 
     @GetMapping(VISIT_ID)
-    public ResponseEntity<VisitDTO> getVisitById(@PathVariable("visitId") Integer visitId) {
-        Optional<VisitDTO> visit = visitDAO.findById(visitId);
+    public ResponseEntity<VisitEntity> getVisitById(@PathVariable("visitId") Integer visitId) {
+        Optional<VisitEntity> visit = visitDAO.findEntityById(visitId);
         return visit.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<VisitDTO> createVisit(@RequestBody VisitDTO visitDTO) {
-        VisitDTO createdVisit = visitDAO.save(visitDTO);
+    public ResponseEntity<VisitEntity> createVisit(@RequestBody VisitEntity visitEntity) {
+        VisitEntity createdVisit = visitDAO.save(visitEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdVisit);
     }
 
     @PutMapping(VISIT_ID)
-    public ResponseEntity<VisitDTO> updateVisit(@PathVariable("visitId") Integer visitId, @RequestBody VisitDTO updatedVisit) {
-        Optional<VisitDTO> existingVisit = visitDAO.findById(visitId);
+    public ResponseEntity<VisitEntity> updateVisit(@PathVariable("visitId") Integer visitId, @RequestBody VisitEntity updatedVisit) {
+        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
         if (existingVisit.isPresent()) {
-            VisitDTO existingVisitData = existingVisit.get();
-            VisitDTO updatedVisitWithId = VisitDTO.builder()
+            VisitEntity existingVisitData = existingVisit.get();
+            VisitEntity updatedVisitWithId = VisitEntity.builder()
                     .visitId(existingVisitData.getVisitId())
                     .doctorId(updatedVisit.getDoctorId())
                     .patientId(updatedVisit.getPatientId())
@@ -55,7 +55,7 @@ public class VisitRestController {
                     .status(updatedVisit.getStatus())
                     .build();
 
-            VisitDTO savedVisit = visitDAO.save(updatedVisitWithId);
+            VisitEntity savedVisit = visitDAO.save(updatedVisitWithId);
             return ResponseEntity.ok(savedVisit);
         } else {
             return ResponseEntity.notFound().build();
@@ -64,7 +64,7 @@ public class VisitRestController {
 
     @DeleteMapping(VISIT_ID)
     public ResponseEntity<Void> deleteVisit(@PathVariable("visitId") Integer visitId) {
-        Optional<VisitDTO> existingVisit = visitDAO.findById(visitId);
+        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
         if (existingVisit.isPresent()) {
             visitDAO.delete(existingVisit.get());
             return ResponseEntity.noContent().build();

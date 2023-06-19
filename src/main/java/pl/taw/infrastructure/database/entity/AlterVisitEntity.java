@@ -13,19 +13,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "visits")
-public class VisitEntity {
+@Table(name = "alter_visits")
+public class AlterVisitEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "visit_id")
     private Integer visitId;
 
-    @Column(name = "doctor_id")
-    private Integer doctorId;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "doctor_id", nullable = true)
+    @MapsId
+    private DoctorEntity doctor;
 
-    @Column(name = "patient_id")
-    private Integer patientId;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "patient_id", nullable = true)
+    @MapsId
+    private PatientEntity patient;
 
     @Column(name = "note")
     private String note;
@@ -35,15 +39,5 @@ public class VisitEntity {
 
     @Column(name = "status")
     private String status;
-
-    // relacje
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
-    @JoinColumn(name = "doctor_id", insertable = false, updatable = false)
-    private DoctorEntity doctor;
-
-    // przy usuwaniu wizyty, doktor/pacjent zostaje
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
-    @JoinColumn(name = "patient_id", insertable = false, updatable = false)
-    private PatientEntity patient;
 
 }

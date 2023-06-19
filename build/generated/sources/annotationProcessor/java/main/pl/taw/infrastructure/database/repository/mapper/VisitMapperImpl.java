@@ -10,7 +10,7 @@ import pl.taw.infrastructure.database.entity.VisitEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-18T17:09:36+0200",
+    date = "2023-06-19T21:09:37+0200",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (GraalVM Community)"
 )
 @Component
@@ -77,6 +77,8 @@ public class VisitMapperImpl implements VisitMapper {
         visitEntity.doctor( visitDTOToDoctorEntity( visitDTO ) );
         visitEntity.patient( visitDTOToPatientEntity( visitDTO ) );
         visitEntity.visitId( visitDTO.getVisitId() );
+        visitEntity.doctorId( visitDTO.getDoctorId() );
+        visitEntity.patientId( visitDTO.getPatientId() );
         visitEntity.note( visitDTO.getNote() );
         visitEntity.dateTime( visitDTO.getDateTime() );
         visitEntity.status( visitDTO.getStatus() );

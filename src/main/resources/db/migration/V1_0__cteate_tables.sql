@@ -25,6 +25,15 @@ CREATE TABLE visits (
   status     VARCHAR(64)                                  NOT NULL
 );
 
+CREATE TABLE alter_visits (
+  visit_id   SERIAL      PRIMARY KEY,
+  doctor_id  INT         REFERENCES doctors (doctor_id),
+  patient_id INT         REFERENCES patients (patient_id),
+  date_time  TIMESTAMP                                    NOT NULL,
+  note       TEXT                                         NOT NULL,
+  status     VARCHAR(64)                                  NOT NULL
+);
+
 --CREATE TABLE opinions (
 --    opinion_id SERIAL    PRIMARY KEY,
 --    doctor_id  INT       REFERENCES doctors (doctor_id)   NOT NULL,
