@@ -12,14 +12,10 @@ import java.time.LocalDateTime;
 public class VisitDTO {
 
     private Integer visitId;
-    private Integer doctorId;
-    private Integer patientId;
+    private DoctorDTO doctor;
+    private PatientDTO patient;
     private LocalDateTime dateTime;
     private String note;
     private String status;
-
-    // relacje
-    private DoctorDTO doctorDTO;
-    private PatientDTO patientDTO;
 
 }

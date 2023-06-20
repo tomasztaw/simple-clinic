@@ -7,6 +7,7 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <!--  <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">-->
+<!--  Przy załadowaniu stylów z pliku, widok się rozjeżdża -->
 
   <style>
     .header {
@@ -72,9 +73,9 @@
       </tr>
       <tr>
         <td th:text="${visit.visitId}"></td>
-        <td th:text="${visit.doctorId}"></td>
+        <td th:text="${visit.doctor.doctorId}"></td>
         <td th:text="${visit.doctor.name + ' ' + visit.doctor.surname + ' ' + visit.doctor.title}"></td>
-        <td th:text="${visit.patientId}"></td>
+        <td th:text="${visit.patient.patientId}"></td>
         <td th:text="${visit.patient.name + ' ' + visit.patient.surname}"></td>
         <td th:text="${#temporals.format(visit.dateTime, 'dd MM yyyy HH:mm')}"></td>
       </tr>
@@ -86,7 +87,7 @@
         <h2>Opis wizyty</h2>
         <h1 th:text="${visit.note}"></h1>
 
-        <h2>Recepta</h2>
+        <h2>Recepta (na razie atrapa - może w przyszłości dołożę)</h2>
         <table class="table table-striped">
           <tr>
             <th>Nazwa leku</th>
@@ -107,11 +108,11 @@
 
     <div class="actions">
       <button class="btn btn-primary">Umów /wizytę/ kolejną wizytę</button>
-      <a th:href="@{/opinions/doctor/{doctorId}(doctorId=${visit.doctorId})}" class="btn btn-primary btn-lg">Opinie o tym lekarzy</a>
+      <a th:href="@{/opinions/doctor/{doctorId}(doctorId=${visit.doctor.doctorId})}" class="btn btn-primary btn-lg">Opinie o tym lekarzy</a>
       <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
     </div>
 
-    <a class="btn btn-light" th:href="@{/visits/panel}">Show all visits</a>
+    <a class="btn btn-light" th:href="@{/visits/panel}">Show all visits(panel wizyty)</a>
 
     <div class="footer">
       <!-- Tutaj wstaw kod dla stopki -->

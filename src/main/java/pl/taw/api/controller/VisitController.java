@@ -6,16 +6,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import pl.taw.api.dto.AlterVisitDTO;
+import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.PatientDTO;
+import pl.taw.api.dto.VisitDTO;
+import pl.taw.business.VisitService;
 import pl.taw.business.dao.AlterVisitDAO;
+import pl.taw.business.dao.DoctorDAO;
+import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
-import pl.taw.domain.exception.NotFoundException;
+import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
-import pl.taw.infrastructure.database.repository.mapper.VisitMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(VisitController.VISITS)
@@ -35,14 +39,20 @@ public class VisitController {
     public static final String PATIENT_ID = "/patient/{patientId}/all";
 
     private final VisitDAO visitDAO;
-    private final VisitMapper visitMapper;
+
+    private final VisitService visitService;
+
+    private final DoctorDAO doctorDAO;
+
+    private final PatientDAO patientDAO;
+
+
 
     private final AlterVisitDAO alterVisitDAO;
 
     @GetMapping(PANEL)
     public String showVisitPanel(Model model) {
-//        List<VisitEntity> visits = visitDAO.findAll();
-        List<AlterVisitDTO> visits = alterVisitDAO.findAllAlter();
+        List<VisitDTO> visits = visitDAO.findAll();
         model.addAttribute("visits", visits);
         model.addAttribute("updateVisit", new VisitEntity());
         return "visit/visit-panel";
@@ -50,8 +60,7 @@ public class VisitController {
 
     @GetMapping(SHOW)
     public String showVisit(@PathVariable("visitId") Integer visitId, Model model) {
-        VisitEntity visit = visitDAO.findEntityById(visitId)
-                .orElseThrow(() -> new NotFoundException("Could not found visit with id: [%s]".formatted(visitId)));
+        VisitDTO visit = visitDAO.findById(visitId);
         model.addAttribute("visit", visit);
         return "visit/visit-show";
     }
@@ -65,14 +74,16 @@ public class VisitController {
             @RequestParam(value = "status") String status,
             HttpServletRequest request
     ) {
+        DoctorEntity doctorEntity = doctorDAO.findEntityById(doctorId);
+        PatientEntity patientEntity = patientDAO.findEntityById(patientId);
         VisitEntity newVisit = VisitEntity.builder()
-                .doctorId(doctorId)
-                .patientId(patientId)
+                .doctor(doctorEntity)
+                .patient(patientEntity)
                 .dateTime(dateTime)
                 .note(note)
                 .status(status)
                 .build();
-        visitDAO.saveEntity(newVisit);
+        visitDAO.save(newVisit);
         // TODO sprawdzić czy jeżeli będę tworzył nową wizytę to doktor i pacjent będą obecni w widoku
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
@@ -83,17 +94,18 @@ public class VisitController {
             @ModelAttribute("updateVisit") VisitEntity updateVisit,
             HttpServletRequest request
     ) {
-        VisitEntity visitEntity = visitDAO.findById(updateVisit.getVisitId())
-                .map(visitMapper::mapFromDtoToEntity)
-                .orElseThrow(() -> new NotFoundException(
-                        "Could not found visit with id: [%s]".formatted(updateVisit.getVisitId())));
+        DoctorEntity doctor = doctorDAO.findEntityById(updateVisit.getDoctor().getDoctorId());
+        PatientEntity patient = patientDAO.findEntityById(updateVisit.getPatient().getPatientId());
+        VisitEntity visitEntity = visitDAO.findEntityById(updateVisit.getVisitId());
+
         visitEntity.setVisitId(updateVisit.getVisitId());
-        visitEntity.setDoctorId(updateVisit.getDoctorId());
-        visitEntity.setPatientId(updateVisit.getPatientId());
+        visitEntity.setDoctor(doctor);
+        visitEntity.setPatient(patient);
         visitEntity.setDateTime(updateVisit.getDateTime());
         visitEntity.setNote(updateVisit.getNote());
         visitEntity.setStatus(updateVisit.getStatus());
-        visitDAO.saveEntity(visitEntity);
+
+        visitDAO.save(visitEntity);
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
@@ -101,8 +113,7 @@ public class VisitController {
 
     @DeleteMapping(DELETE_BY_ID)
     public String deleteVisitById(@PathVariable Integer visitId, HttpServletRequest request) {
-        VisitEntity visitForDelete = visitDAO.findEntityById(visitId)
-                .orElseThrow(() -> new NotFoundException("Could not found visit with id: [%s]".formatted(visitId)));
+        VisitEntity visitForDelete = visitDAO.findEntityById(visitId);
         visitDAO.delete(visitForDelete);
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
@@ -110,22 +121,24 @@ public class VisitController {
 
     @GetMapping(DOCTOR_ID)
     public String showVisitsByDoctor(@PathVariable("doctorId") Integer doctorId, Model model) {
-//        List<VisitEntity> visits = visitService.getDoctorVisits(doctorId);
-//        DoctorDTO doctor = doctorDAO.findEntityById()(doctorId);
-//
-//        model.addAttribute("visits", visits);
-//        model.addAttribute("doctor", doctor);
+        List<VisitDTO> visits = visitService.findAllVisitByDoctor(doctorId);
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
 
-        return "doctor-visits";
+        model.addAttribute("visits", visits);
+        model.addAttribute("doctor", doctor);
+
+        return "doctor/doctor-visits";
     }
 
     @GetMapping(PATIENT_ID)
     public String showVisitsByPatient(@PathVariable("patientId") Integer patientId, Model model) {
-//        List<VisitEntity> visits = visitService.getPatientVisits(patientId);
+        List<VisitDTO> visits = visitService.findAllByPatient(patientId);
+        PatientDTO patient = patientDAO.findById(patientId);
 
-//        model.addAttribute("visits", visits);
+        model.addAttribute("visits", visits);
+        model.addAttribute("patient", patient);
 
-        return "patient-visits";
+        return "patient/patient-visits";
     }
 
 
@@ -133,7 +146,7 @@ public class VisitController {
 
     @GetMapping
     public String getAllVisits(Model model) {
-        List<VisitEntity> visits = visitDAO.findAll();
+        List<VisitDTO> visits = visitDAO.findAll();
         model.addAttribute("visits", visits);
         return "visitList"; // TODO zrobić widok wyświetlający wszystkie wizyt
     }
@@ -141,8 +154,8 @@ public class VisitController {
     @GetMapping("/{visitId}") // VISIT_ID
     public ModelAndView getVisitById(@PathVariable("visitId") Integer visitId) {
         ModelAndView modelAndView = new ModelAndView("visitDetails");
-        Optional<VisitEntity> visit = visitDAO.findEntityById(visitId);
-        visit.ifPresent(modelAndView::addObject);
+        VisitEntity visit = visitDAO.findEntityById(visitId);
+        modelAndView.addObject(visit);
         return modelAndView;
     }
 
@@ -155,69 +168,68 @@ public class VisitController {
 
     @PostMapping
     public String createVisit(@ModelAttribute("visit") VisitEntity visitDTO) {
-        VisitEntity createdVisit = visitDAO.save(visitDTO);
+        VisitEntity createdVisit = visitDAO.saveAndReturn(visitDTO);
         return "redirect:/visits/" + createdVisit.getVisitId();
     }
 
     @GetMapping("/{visitId}/edit")
     public ModelAndView showEditFormGETXXX(@PathVariable("visitId") Integer visitId) {
         ModelAndView modelAndView = new ModelAndView("visitForm");
-        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
-        existingVisit.ifPresent(modelAndView::addObject);
+        VisitDTO existingVisit = visitDAO.findById(visitId);
+        modelAndView.addObject(existingVisit);
         return modelAndView;
     }
 
     @PutMapping("/{visitId}/edit")
     public ModelAndView showEditForm(@PathVariable("visitId") Integer visitId) {
         ModelAndView modelAndView = new ModelAndView("visitForm");
-        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
-        existingVisit.ifPresent(modelAndView::addObject);
+        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
+        modelAndView.addObject(existingVisit);
         return modelAndView;
     }
 
 
     @PostMapping("/{visitId}")
     public String updateVisit(@PathVariable("visitId") Integer visitId, @ModelAttribute("visit") VisitEntity updatedVisit) {
-        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
-        if (existingVisit.isPresent()) {
-            VisitEntity existingVisitData = existingVisit.get();
-            VisitEntity updatedVisitWithId = VisitEntity.builder()
-                    .visitId(existingVisitData.getVisitId())
-                    .doctorId(updatedVisit.getDoctorId())
-                    .patientId(updatedVisit.getPatientId())
-                    .dateTime(updatedVisit.getDateTime())
-                    .note(updatedVisit.getNote())
-                    .status(updatedVisit.getStatus())
-                    .build();
+        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
+        DoctorEntity doctor = doctorDAO.findEntityById(updatedVisit.getDoctor().getDoctorId());
+        PatientEntity patient = patientDAO.findEntityById(updatedVisit.getPatient().getPatientId());
 
-            VisitEntity savedVisit = visitDAO.save(updatedVisitWithId);
-            return "redirect:/visits/" + savedVisit.getVisitId();
-        } else {
-            return "redirect:/visits";
-        }
+        VisitEntity updatedVisitWithId = VisitEntity.builder()
+                .visitId(existingVisit.getVisitId())
+                .doctor(doctor)
+                .patient(patient)
+                .dateTime(updatedVisit.getDateTime())
+                .note(updatedVisit.getNote())
+                .status(updatedVisit.getStatus())
+                .build();
+
+        VisitEntity savedVisit = visitDAO.saveAndReturn(updatedVisitWithId);
+        return "redirect:/visits/" + savedVisit.getVisitId();
+
     }
 
     @GetMapping("/{visitId}/delete")
     public ModelAndView showDeleteConfirmationGETXXX(@PathVariable("visitId") Integer visitId) {
         ModelAndView modelAndView = new ModelAndView("visitDelete");
-        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
-        existingVisit.ifPresent(modelAndView::addObject);
+        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
+        modelAndView.addObject(existingVisit);
         return modelAndView;
     }
 
     @DeleteMapping("/{visitId}/delete")
     public ModelAndView showDeleteConfirmation(@PathVariable("visitId") Integer visitId) {
         ModelAndView modelAndView = new ModelAndView("visitDelete");
-        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
-        existingVisit.ifPresent(modelAndView::addObject);
+        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
+        modelAndView.addObject(existingVisit);
         return modelAndView;
     }
 
 
     @PostMapping("/{visitId}/delete")
     public String deleteVisit(@PathVariable("visitId") Integer visitId) {
-        Optional<VisitEntity> existingVisit = visitDAO.findEntityById(visitId);
-        existingVisit.ifPresent(visitDAO::delete);
+        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
+        visitDAO.delete(existingVisit);
         return "redirect:/visits";
     }
 }

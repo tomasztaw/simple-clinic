@@ -3,17 +3,14 @@ package pl.taw.infrastructure.database.repository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import pl.taw.api.dto.AlterVisitDTO;
 import pl.taw.api.dto.VisitDTO;
-import pl.taw.business.dao.AlterVisitDAO;
 import pl.taw.business.dao.VisitDAO;
+import pl.taw.domain.exception.NotFoundException;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 import pl.taw.infrastructure.database.repository.jpa.VisitJpaRepository;
-import pl.taw.infrastructure.database.repository.mapper.AlterVisitMapper;
 import pl.taw.infrastructure.database.repository.mapper.VisitMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -25,42 +22,53 @@ public class VisitRepository implements VisitDAO {
 
 
     @Override
-    public List<VisitEntity> findAll() {
+    public List<VisitDTO> findAll() {
         log.debug("Fetching all visits from the database");
         return visitJpaRepository.findAll().stream()
-                .toList();
-    }
-
-    public List<VisitDTO> findAllDto() {
-        return visitJpaRepository.findAll().stream()
-                .map(visitMapper::mapFromEntityToDTO)
+                .map(visitMapper::mapFromEntity)
                 .toList();
     }
 
     @Override
-    public Optional<VisitDTO> findById(Integer visitId) {
+    public VisitDTO findById(Integer visitId) {
         return visitJpaRepository.findById(visitId)
-                .map(visitMapper::mapFromEntityToDTO);
+                .map(visitMapper::mapFromEntity)
+                .orElseThrow(() -> new NotFoundException("Could not found visit with id: [%s]".formatted(visitId)));
     }
 
     @Override
-    public Optional<VisitEntity> findEntityById(Integer visitId) {
-        return visitJpaRepository.findById(visitId);
+    public VisitEntity findEntityById(Integer visitId) {
+        return visitJpaRepository.findById(visitId)
+                .orElseThrow(() -> new NotFoundException("Could not found visit with id: [%s]".formatted(visitId)));
     }
 
     @Override
-    public VisitEntity save(VisitEntity visitEntity) {
+    public VisitEntity saveAndReturn(VisitEntity visitEntity) {
         return visitJpaRepository.save(visitEntity);
     }
 
     @Override
-    public void saveEntity(VisitEntity visitEntity) {
+    public void save(VisitEntity visitEntity) {
         visitJpaRepository.save(visitEntity);
     }
 
     @Override
     public void delete(VisitEntity visitEntity) {
         visitJpaRepository.delete(visitEntity);
+    }
+
+    public List<VisitDTO> findAllByDoctor(Integer doctorId) {
+        return  visitJpaRepository.findAll().stream()
+                .filter(visit -> visit.getDoctor().getDoctorId().equals(doctorId))
+                .map(visitMapper::mapFromEntity)
+                .toList();
+    }
+
+    public List<VisitDTO> findAllByPatient(Integer patientId) {
+        return  visitJpaRepository.findAll().stream()
+                .filter(visit -> visit.getPatient().getPatientId().equals(patientId))
+                .map(visitMapper::mapFromEntity)
+                .toList();
     }
 
 }

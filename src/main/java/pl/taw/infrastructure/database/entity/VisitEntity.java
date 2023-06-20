@@ -21,11 +21,13 @@ public class VisitEntity {
     @Column(name = "visit_id")
     private Integer visitId;
 
-    @Column(name = "doctor_id")
-    private Integer doctorId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "doctor_id", nullable = true)
+    private DoctorEntity doctor;
 
-    @Column(name = "patient_id")
-    private Integer patientId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "patient_id", nullable = true)
+    private PatientEntity patient;
 
     @Column(name = "note")
     private String note;
@@ -37,13 +39,13 @@ public class VisitEntity {
     private String status;
 
     // relacje
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
-    @JoinColumn(name = "doctor_id", insertable = false, updatable = false)
-    private DoctorEntity doctor;
-
-    // przy usuwaniu wizyty, doktor/pacjent zostaje
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
-    @JoinColumn(name = "patient_id", insertable = false, updatable = false)
-    private PatientEntity patient;
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
+//    @JoinColumn(name = "doctor_id", insertable = false, updatable = false)
+//    private DoctorEntity doctor;
+//
+//    // przy usuwaniu wizyty, doktor/pacjent zostaje
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
+//    @JoinColumn(name = "patient_id", insertable = false, updatable = false)
+//    private PatientEntity patient;
 
 }

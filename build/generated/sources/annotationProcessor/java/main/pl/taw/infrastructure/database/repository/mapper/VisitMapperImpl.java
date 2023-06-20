@@ -1,64 +1,35 @@
 package pl.taw.infrastructure.database.repository.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
+import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
-import pl.taw.domain.Visit;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-19T21:09:37+0200",
+    date = "2023-06-20T21:31:40+0200",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (GraalVM Community)"
 )
 @Component
 public class VisitMapperImpl implements VisitMapper {
 
     @Override
-    public Visit mapFromEntity(VisitEntity entity) {
-        if ( entity == null ) {
-            return null;
-        }
-
-        Visit.VisitBuilder visit = Visit.builder();
-
-        visit.visitId( entity.getVisitId() );
-        visit.dateTime( entity.getDateTime() );
-        visit.note( entity.getNote() );
-        visit.status( entity.getStatus() );
-
-        return visit.build();
-    }
-
-    @Override
-    public VisitEntity mapToEntity(Visit visit) {
-        if ( visit == null ) {
-            return null;
-        }
-
-        VisitEntity.VisitEntityBuilder visitEntity = VisitEntity.builder();
-
-        visitEntity.visitId( visit.getVisitId() );
-        visitEntity.note( visit.getNote() );
-        visitEntity.dateTime( visit.getDateTime() );
-        visitEntity.status( visit.getStatus() );
-
-        return visitEntity.build();
-    }
-
-    @Override
-    public VisitDTO mapFromEntityToDTO(VisitEntity visitEntity) {
+    public VisitDTO mapFromEntity(VisitEntity visitEntity) {
         if ( visitEntity == null ) {
             return null;
         }
 
         VisitDTO.VisitDTOBuilder visitDTO = VisitDTO.builder();
 
-        visitDTO.doctorId( visitEntityDoctorDoctorId( visitEntity ) );
-        visitDTO.patientId( visitEntityPatientPatientId( visitEntity ) );
         visitDTO.visitId( visitEntity.getVisitId() );
+        visitDTO.doctor( doctorEntityToDoctorDTO( visitEntity.getDoctor() ) );
+        visitDTO.patient( patientEntityToPatientDTO( visitEntity.getPatient() ) );
         visitDTO.dateTime( visitEntity.getDateTime() );
         visitDTO.note( visitEntity.getNote() );
         visitDTO.status( visitEntity.getStatus() );
@@ -67,18 +38,16 @@ public class VisitMapperImpl implements VisitMapper {
     }
 
     @Override
-    public VisitEntity mapFromDtoToEntity(VisitDTO visitDTO) {
+    public VisitEntity mapToEntity(VisitDTO visitDTO) {
         if ( visitDTO == null ) {
             return null;
         }
 
         VisitEntity.VisitEntityBuilder visitEntity = VisitEntity.builder();
 
-        visitEntity.doctor( visitDTOToDoctorEntity( visitDTO ) );
-        visitEntity.patient( visitDTOToPatientEntity( visitDTO ) );
         visitEntity.visitId( visitDTO.getVisitId() );
-        visitEntity.doctorId( visitDTO.getDoctorId() );
-        visitEntity.patientId( visitDTO.getPatientId() );
+        visitEntity.doctor( doctorDTOToDoctorEntity( visitDTO.getDoctor() ) );
+        visitEntity.patient( patientDTOToPatientEntity( visitDTO.getPatient() ) );
         visitEntity.note( visitDTO.getNote() );
         visitEntity.dateTime( visitDTO.getDateTime() );
         visitEntity.status( visitDTO.getStatus() );
@@ -86,56 +55,51 @@ public class VisitMapperImpl implements VisitMapper {
         return visitEntity.build();
     }
 
-    private Integer visitEntityDoctorDoctorId(VisitEntity visitEntity) {
-        if ( visitEntity == null ) {
+    protected List<VisitEntity> visitDTOListToVisitEntityList(List<VisitDTO> list) {
+        if ( list == null ) {
             return null;
         }
-        DoctorEntity doctor = visitEntity.getDoctor();
-        if ( doctor == null ) {
-            return null;
+
+        List<VisitEntity> list1 = new ArrayList<VisitEntity>( list.size() );
+        for ( VisitDTO visitDTO : list ) {
+            list1.add( mapToEntity( visitDTO ) );
         }
-        Integer doctorId = doctor.getDoctorId();
-        if ( doctorId == null ) {
-            return null;
-        }
-        return doctorId;
+
+        return list1;
     }
 
-    private Integer visitEntityPatientPatientId(VisitEntity visitEntity) {
-        if ( visitEntity == null ) {
-            return null;
-        }
-        PatientEntity patient = visitEntity.getPatient();
-        if ( patient == null ) {
-            return null;
-        }
-        Integer patientId = patient.getPatientId();
-        if ( patientId == null ) {
-            return null;
-        }
-        return patientId;
-    }
-
-    protected DoctorEntity visitDTOToDoctorEntity(VisitDTO visitDTO) {
-        if ( visitDTO == null ) {
+    protected DoctorEntity doctorDTOToDoctorEntity(DoctorDTO doctorDTO) {
+        if ( doctorDTO == null ) {
             return null;
         }
 
         DoctorEntity.DoctorEntityBuilder doctorEntity = DoctorEntity.builder();
 
-        doctorEntity.doctorId( visitDTO.getDoctorId() );
+        doctorEntity.doctorId( doctorDTO.getDoctorId() );
+        doctorEntity.name( doctorDTO.getName() );
+        doctorEntity.surname( doctorDTO.getSurname() );
+        doctorEntity.title( doctorDTO.getTitle() );
+        doctorEntity.phone( doctorDTO.getPhone() );
+        doctorEntity.email( doctorDTO.getEmail() );
+        doctorEntity.visits( visitDTOListToVisitEntityList( doctorDTO.getVisits() ) );
 
         return doctorEntity.build();
     }
 
-    protected PatientEntity visitDTOToPatientEntity(VisitDTO visitDTO) {
-        if ( visitDTO == null ) {
+    protected PatientEntity patientDTOToPatientEntity(PatientDTO patientDTO) {
+        if ( patientDTO == null ) {
             return null;
         }
 
         PatientEntity.PatientEntityBuilder patientEntity = PatientEntity.builder();
 
-        patientEntity.patientId( visitDTO.getPatientId() );
+        patientEntity.patientId( patientDTO.getPatientId() );
+        patientEntity.name( patientDTO.getName() );
+        patientEntity.surname( patientDTO.getSurname() );
+        patientEntity.pesel( patientDTO.getPesel() );
+        patientEntity.phone( patientDTO.getPhone() );
+        patientEntity.email( patientDTO.getEmail() );
+        patientEntity.visits( visitDTOListToVisitEntityList( patientDTO.getVisits() ) );
 
         return patientEntity.build();
     }

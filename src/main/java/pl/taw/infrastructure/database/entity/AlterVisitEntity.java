@@ -23,19 +23,18 @@ public class AlterVisitEntity {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "doctor_id", nullable = true)
-    @MapsId
     private DoctorEntity doctor;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "patient_id", nullable = true)
-    @MapsId
     private PatientEntity patient;
+
+    @Column(name = "date_time")
+    private LocalDateTime dateTime;
 
     @Column(name = "note")
     private String note;
 
-    @Column(name = "date_time")
-    private LocalDateTime dateTime;
 
     @Column(name = "status")
     private String status;

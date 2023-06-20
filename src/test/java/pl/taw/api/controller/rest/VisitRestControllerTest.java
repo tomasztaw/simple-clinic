@@ -7,12 +7,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -33,11 +33,11 @@ class VisitRestControllerTest {
     @Test
     void shouldReturnsListOfVisits() {
         // given
-        List<VisitEntity> visits = Arrays.asList(new VisitEntity(), new VisitEntity());
+        List<VisitDTO> visits = Arrays.asList(new VisitDTO(), new VisitDTO());
         when(visitDAO.findAll()).thenReturn(visits);
 
         // when
-        ResponseEntity<List<VisitEntity>> response = visitRestController.getAllVisits();
+        ResponseEntity<List<VisitDTO>> response = visitRestController.getAllVisits();
 
         // then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -50,7 +50,7 @@ class VisitRestControllerTest {
         // given
         Integer visitId = 1;
         VisitEntity visit = new VisitEntity();
-        when(visitDAO.findEntityById(visitId)).thenReturn(Optional.of(visit));
+        when(visitDAO.findEntityById(visitId)).thenReturn(visit);
 
         // when
         ResponseEntity<VisitEntity> response = visitRestController.getVisitById(visitId);
@@ -65,7 +65,7 @@ class VisitRestControllerTest {
     void shouldReturnNotFoundWhenVisitNonExist() {
         // given
         Integer visitId = 1;
-        when(visitDAO.findEntityById(visitId)).thenReturn(Optional.empty());
+        when(visitDAO.findEntityById(visitId)).thenReturn(null);
 
         // when
         ResponseEntity<VisitEntity> response = visitRestController.getVisitById(visitId);
@@ -80,7 +80,7 @@ class VisitRestControllerTest {
         // given
         VisitEntity visit = new VisitEntity();
         VisitEntity createdVisit = new VisitEntity();
-        when(visitDAO.save(visit)).thenReturn(createdVisit);
+        when(visitDAO.saveAndReturn(visit)).thenReturn(createdVisit);
 
         // when
         ResponseEntity<VisitEntity> response = visitRestController.createVisit(visit);
@@ -88,7 +88,7 @@ class VisitRestControllerTest {
         // then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(createdVisit, response.getBody());
-        verify(visitDAO, times(1)).save(visit);
+        verify(visitDAO, times(1)).saveAndReturn(visit);
     }
 
     @Test
@@ -97,8 +97,8 @@ class VisitRestControllerTest {
         Integer visitId = 1;
         VisitEntity existingVisit = new VisitEntity();
         VisitEntity updatedVisit = new VisitEntity();
-        when(visitDAO.findEntityById(visitId)).thenReturn(Optional.of(existingVisit));
-        when(visitDAO.save(updatedVisit)).thenReturn(updatedVisit);
+        when(visitDAO.findEntityById(visitId)).thenReturn(existingVisit);
+        when(visitDAO.saveAndReturn(updatedVisit)).thenReturn(updatedVisit);
 
         // when
         ResponseEntity<VisitEntity> response = visitRestController.updateVisit(visitId, updatedVisit);
@@ -107,7 +107,7 @@ class VisitRestControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(updatedVisit, response.getBody());
         verify(visitDAO, times(1)).findEntityById(visitId);
-        verify(visitDAO, times(1)).save(updatedVisit);
+        verify(visitDAO, times(1)).saveAndReturn(updatedVisit);
     }
 
     @Test
@@ -115,7 +115,7 @@ class VisitRestControllerTest {
         // given
         Integer visitId = 1;
         VisitEntity updatedVisit = new VisitEntity();
-        when(visitDAO.findEntityById(visitId)).thenReturn(Optional.empty());
+        when(visitDAO.findEntityById(visitId)).thenReturn(null);
 
         // when
         ResponseEntity<VisitEntity> response = visitRestController.updateVisit(visitId, updatedVisit);
@@ -123,7 +123,7 @@ class VisitRestControllerTest {
         // then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         verify(visitDAO, times(1)).findEntityById(visitId);
-        verify(visitDAO, never()).save(updatedVisit);
+        verify(visitDAO, never()).saveAndReturn(updatedVisit);
     }
 
     @Test
@@ -131,7 +131,7 @@ class VisitRestControllerTest {
         // given
         Integer visitId = 1;
         VisitEntity existingVisit = new VisitEntity();
-        when(visitDAO.findEntityById(visitId)).thenReturn(Optional.of(existingVisit));
+        when(visitDAO.findEntityById(visitId)).thenReturn(existingVisit);
 
         // when
         ResponseEntity<Void> response = visitRestController.deleteVisit(visitId);
@@ -146,7 +146,7 @@ class VisitRestControllerTest {
     void shouldReturnNotFoundWhenTryToDeleteNonExistingVisit() {
         // given
         Integer visitId = 1;
-        when(visitDAO.findEntityById(visitId)).thenReturn(Optional.empty());
+        when(visitDAO.findEntityById(visitId)).thenReturn(null);
 
         // when
         ResponseEntity<Void> response = visitRestController.deleteVisit(visitId);

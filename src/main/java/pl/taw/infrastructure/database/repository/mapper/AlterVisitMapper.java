@@ -10,4 +10,6 @@ public interface AlterVisitMapper {
 
     AlterVisitDTO mapFromEntity(AlterVisitEntity alterVisitEntity);
 
+    AlterVisitEntity mapToEntity(AlterVisitDTO alterVisitDTO);
+
 }

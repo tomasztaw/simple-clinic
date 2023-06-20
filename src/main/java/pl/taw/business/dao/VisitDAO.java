@@ -4,19 +4,18 @@ import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface VisitDAO {
 
-    List<VisitEntity> findAll();
+    List<VisitDTO> findAll();
 
-    Optional<VisitDTO> findById(Integer visitId);
+    VisitDTO findById(Integer visitId);
 
-    Optional<VisitEntity> findEntityById(Integer visitId);
+    VisitEntity findEntityById(Integer visitId);
 
-    VisitEntity save(VisitEntity visitEntity);
+    VisitEntity saveAndReturn(VisitEntity visitEntity);
 
-    void saveEntity(VisitEntity visitEntity);
+    void save(VisitEntity visitEntity);
 
     void delete(VisitEntity visitEntity);
 }

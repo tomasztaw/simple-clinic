@@ -1,20 +1,21 @@
 package pl.taw.infrastructure.database.repository.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 import pl.taw.api.dto.DoctorDTO;
-import pl.taw.domain.Doctor;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DoctorMapper {
 
-    Doctor mapFromEntity(DoctorEntity doctorEntity);
+    DoctorMapper INSTANCE = Mappers.getMapper(DoctorMapper.class);
 
-    DoctorEntity mapToEntity(Doctor doctor);
+    @Mapping(target = "visits", ignore = true)
+    DoctorDTO mapFromEntity(DoctorEntity doctorEntity);
 
-    DoctorDTO mapFromEntityToDTO(DoctorEntity doctorEntity);
-
-    DoctorEntity mapFromDtoToEntity(DoctorDTO doctorDTO);
+    @Mapping(target = "visits", ignore = true)
+    DoctorEntity mapToEntity(DoctorDTO doctorDTO);
 
 }

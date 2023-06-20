@@ -18,8 +18,8 @@ CREATE TABLE patients (
 
 CREATE TABLE visits (
   visit_id   SERIAL      PRIMARY KEY,
-  doctor_id  INT         REFERENCES doctors (doctor_id)   NOT NULL,
-  patient_id INT         REFERENCES patients (patient_id) NOT NULL,
+  doctor_id  INT         REFERENCES doctors (doctor_id),
+  patient_id INT         REFERENCES patients (patient_id),
   date_time  TIMESTAMP                                    NOT NULL,
   note       TEXT                                         NOT NULL,
   status     VARCHAR(64)                                  NOT NULL

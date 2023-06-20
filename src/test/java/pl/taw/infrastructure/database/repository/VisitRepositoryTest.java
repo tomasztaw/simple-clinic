@@ -29,7 +29,7 @@ public class VisitRepositoryTest {
 
     @Test
     public void testFindAll() {
-        // Arrange
+        // when
         List<VisitEntity> visitEntities = new ArrayList<>();
         visitEntities.add(new VisitEntity());
         visitEntities.add(new VisitEntity());
@@ -40,20 +40,20 @@ public class VisitRepositoryTest {
         expectedVisitDTOs.add(new VisitDTO());
         expectedVisitDTOs.add(new VisitDTO());
 
-        Mockito.when(visitMapper.mapFromEntityToDTO(Mockito.any(VisitEntity.class)))
+        Mockito.when(visitMapper.mapFromEntity(Mockito.any(VisitEntity.class)))
                 .thenReturn(new VisitDTO());
 
-        // Act
-        List<VisitEntity> result = visitRepository.findAll();
+        // then
+        List<VisitDTO> result = visitRepository.findAll();
 
-        // Assert
+        // given
         Assertions.assertEquals(expectedVisitDTOs.size(), result.size());
         // Add more specific assertions if needed
     }
 
     @Test
     public void testFindById() {
-        // Arrange
+        // when
         Integer visitId = 1;
         VisitEntity visitEntity = new VisitEntity();
         visitEntity.setVisitId(visitId);
@@ -63,14 +63,13 @@ public class VisitRepositoryTest {
         VisitDTO expectedVisitDTO = new VisitDTO();
         expectedVisitDTO.setVisitId(visitId);
 
-        Mockito.when(visitMapper.mapFromEntityToDTO(visitEntity)).thenReturn(expectedVisitDTO);
+        Mockito.when(visitMapper.mapFromEntity(visitEntity)).thenReturn(expectedVisitDTO);
 
-        // Act
-        Optional<VisitDTO> result = visitRepository.findById(visitId);
+        // then
+        VisitDTO result = visitRepository.findById(visitId);
 
-        // Assert
-        Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(visitId, result.get().getVisitId());
+        // given
+        Assertions.assertEquals(visitId, result.getVisitId());
         // Add more specific assertions if needed
     }
 

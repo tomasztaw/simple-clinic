@@ -1,51 +1,52 @@
 package pl.taw.infrastructure.database.repository.mapper;
 
-import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
+import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
-import pl.taw.domain.Visit;
+import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface VisitMapper {
 
-    @Mapping(target = "doctor", ignore = true)
-    @Mapping(target = "patient", ignore = true)
-    Visit mapFromEntity(VisitEntity entity);
+    VisitMapper INSTANCE = Mappers.getMapper(VisitMapper.class);
 
-    @Mapping(target = "doctor", ignore = true)
-    @Mapping(target = "patient", ignore = true)
-    VisitEntity mapToEntity(Visit visit);
-// ################################################
-//    @Mapping(target = "doctor", ignore = true)
-//    @Mapping(target = "patient", ignore = true)
-//    VisitDTO mapFromEntityToDTO(VisitEntity visitEntity);
+    VisitDTO mapFromEntity(VisitEntity visitEntity);
 
-//    @Mapping(target = "doctor", ignore = true)
-//    @Mapping(target = "patient", ignore = true)
-//    VisitEntity mapFromDtoToEntity(VisitDTO visitDTO);
-// ################################################
+    VisitEntity mapToEntity(VisitDTO visitDTO);
 
-    @Mapping(source = "doctor.doctorId", target = "doctorId")
-    @Mapping(source = "patient.patientId", target = "patientId")
-    VisitDTO mapFromEntityToDTO(VisitEntity visitEntity);
 
-    @Mapping(target = "doctor.doctorId", source = "doctorId")
-    @Mapping(target = "patient.patientId", source = "patientId")
-    VisitEntity mapFromDtoToEntity(VisitDTO visitDTO);
+    default DoctorDTO doctorEntityToDoctorDTO(DoctorEntity doctorEntity) {
+        if (doctorEntity == null) {
+            return null;
+        }
+        return DoctorDTO.builder()
+                .doctorId(doctorEntity.getDoctorId())
+                .name(doctorEntity.getName())
+                .surname(doctorEntity.getSurname())
+                .title(doctorEntity.getTitle())
+                .phone(doctorEntity.getPhone())
+                .email(doctorEntity.getEmail())
+                .build();
+    }
 
-    default VisitDTO convert(VisitEntity visitEntity) {
-        return VisitDTO.builder()
-                .visitId(visitEntity.getVisitId())
-                .doctorId(visitEntity.getDoctorId())
-                .patientId(visitEntity.getPatientId())
-                .dateTime(visitEntity.getDateTime())
-                .note(visitEntity.getNote())
-                .status(visitEntity.getStatus())
-//                .doctorDTO(visitEntity.getDoctor())
-//                .patientDTO(visitEntity.getPatient())
+    default PatientDTO patientEntityToPatientDTO(PatientEntity patientEntity) {
+        if (patientEntity == null) {
+            return null;
+        }
+        return PatientDTO.builder()
+                .patientId(patientEntity.getPatientId())
+                .name(patientEntity.getName())
+                .surname(patientEntity.getSurname())
+                .pesel(patientEntity.getPesel())
+                .phone(patientEntity.getPhone())
+                .email(patientEntity.getEmail())
                 .build();
     }
 
