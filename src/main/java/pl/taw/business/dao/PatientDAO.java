@@ -14,6 +14,8 @@ public interface PatientDAO {
 
     PatientEntity findEntityById(Integer patientId);
 
+    PatientDTO findByPesel(String pesel);
+
     PatientEntity saveAndReturn(PatientEntity patientEntity);
 
     void save(PatientEntity patientEntity);

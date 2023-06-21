@@ -63,8 +63,9 @@
 
     <div class="header">
       <div class="header-logo">
-        <!-- Tutaj wstaw kod dla logo -->
-        <img th:src="@{/images/2135.jpg}" alt="Logo">
+          <a href="/" th:href="@{/}">
+              <img th:src="@{/images/2135.jpg}" alt="Logo">
+          </a>
       </div>
       <!-- Możesz dodać dodatkowe elementy w nagłówku -->
       <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
@@ -85,21 +86,26 @@
             <ul>
               <li>Id: <span th:text="${visit.visitId}"></span></li>
               <li>Pacjent: <span th:text="${visit.patient.name + ' ' + visit.patient.surname}"></span></li>
-              <li>Data: <span th:text="${#temporals.format(visit.startTime, 'dd MM yyyy HH:mm')}"></span></li>
+              <li>Data: <span th:text="${#temporals.format(visit.dateTime, 'dd MM yyyy HH:mm')}"></span></li>
               <li>Notatka: <span th:text="${visit.note}"></span></li>
               <li>Status: <span th:text="${visit.status}"></span></li>
             </ul>
             <div class="visit-buttons">
-              <a th:if="${visit.opinion != null}" th:href="@{/opinions/edit/{opinionId}(opinionId=${visit.opinion.opinionId})}">
-                <button class="btn btn-primary">Zmodyfikuj opinię</button>
-              </a>
+<!--              <a th:if="${visit.opinion != null}" th:href="@{/opinions/edit/{opinionId}(opinionId=${visit.opinion.opinionId})}">-->
+<!--                <button class="btn btn-primary">Zmodyfikuj opinię</button>-->
+<!--              </a>-->
 
 <!--              <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/{visitId}(visitId=${visit.visitId})}">-->
-              <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/}">
-                <button class="btn btn-primary">Dodaj opinię</button>
-              </a>
 
-              <button class="btn btn-danger">Sprawdź receptę</button>
+<!--              <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/}">-->
+<!--                <button class="btn btn-primary">Dodaj opinię</button>-->
+<!--              </a>-->
+
+                <button class="btn btn-danger">Sprawdź receptę (nie wiadomo)</button>
+
+                <button class="btn btn-primary">Aktualizuj notatkę (ciężko)</button>
+
+
             </div>
           </div>
           <br>

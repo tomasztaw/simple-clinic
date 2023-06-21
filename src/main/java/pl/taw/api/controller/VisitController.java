@@ -33,6 +33,7 @@ public class VisitController {
     public static final String VISIT_ID = "/{visitId}";
     public static final String ADD = "/add";
     public static final String UPDATE = "/update";
+    public static final String UPDATE_ID = "/update/{visitId}";
     public static final String DELETE_BY_ID = "/delete/{visitId}";
     public static final String EDIT = "/edit";
     public static final String DOCTOR_ID = "/doctor/{doctorId}/all";
@@ -65,6 +66,28 @@ public class VisitController {
         return "visit/visit-show";
     }
 
+    @GetMapping(DOCTOR_ID)
+    public String showVisitsByDoctor(@PathVariable("doctorId") Integer doctorId, Model model) {
+        List<VisitDTO> visits = visitService.findAllVisitByDoctor(doctorId);
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
+
+        model.addAttribute("visits", visits);
+        model.addAttribute("doctor", doctor);
+
+        return "doctor/doctor-visits";
+    }
+
+    @GetMapping(PATIENT_ID)
+    public String showVisitsByPatient(@PathVariable("patientId") Integer patientId, Model model) {
+        List<VisitDTO> visits = visitService.findAllByPatient(patientId);
+        PatientDTO patient = patientDAO.findById(patientId);
+
+        model.addAttribute("visits", visits);
+        model.addAttribute("patient", patient);
+
+        return "patient/patient-visits";
+    }
+
     @PostMapping(ADD)
     public String addVisit(
             @RequestParam(value = "doctorId") Integer doctorId,
@@ -85,6 +108,32 @@ public class VisitController {
                 .build();
         visitDAO.save(newVisit);
         // TODO sprawdzić czy jeżeli będę tworzył nową wizytę to doktor i pacjent będą obecni w widoku
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
+    @PutMapping(UPDATE_ID)
+    public String updateVisitById(
+            @PathVariable(value = "visitId") Integer visitId,
+            @RequestParam(value = "doctorId") Integer doctorId,
+            @RequestParam(value = "patientId") Integer patientId,
+            @RequestParam(value = "dateTime") LocalDateTime dateTime,
+            @RequestParam(value = "note") String note,
+            @RequestParam(value = "status") String status,
+            HttpServletRequest request
+    ) {
+        DoctorEntity doctor = doctorDAO.findEntityById(doctorId);
+        PatientEntity patient = patientDAO.findEntityById(patientId);
+        VisitEntity visitEntity = visitDAO.findEntityById(visitId);
+
+        visitEntity.setDoctor(doctor);
+        visitEntity.setPatient(patient);
+        visitEntity.setDateTime(dateTime);
+        visitEntity.setNote(note);
+        visitEntity.setStatus(status);
+
+        visitDAO.save(visitEntity);
+
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
@@ -111,6 +160,16 @@ public class VisitController {
         return "redirect:" + referer;
     }
 
+    @PatchMapping("/{visitId}/update-note")
+    public String updateVisitNote(
+            @PathVariable("visitId") Integer visitId, @RequestBody String newNote, HttpServletRequest request) {
+        VisitEntity visitForUpdate = visitDAO.findEntityById(visitId);
+        visitForUpdate.setNote(newNote);
+        visitDAO.save(visitForUpdate);
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
     @DeleteMapping(DELETE_BY_ID)
     public String deleteVisitById(@PathVariable Integer visitId, HttpServletRequest request) {
         VisitEntity visitForDelete = visitDAO.findEntityById(visitId);
@@ -118,29 +177,6 @@ public class VisitController {
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
-
-    @GetMapping(DOCTOR_ID)
-    public String showVisitsByDoctor(@PathVariable("doctorId") Integer doctorId, Model model) {
-        List<VisitDTO> visits = visitService.findAllVisitByDoctor(doctorId);
-        DoctorDTO doctor = doctorDAO.findById(doctorId);
-
-        model.addAttribute("visits", visits);
-        model.addAttribute("doctor", doctor);
-
-        return "doctor/doctor-visits";
-    }
-
-    @GetMapping(PATIENT_ID)
-    public String showVisitsByPatient(@PathVariable("patientId") Integer patientId, Model model) {
-        List<VisitDTO> visits = visitService.findAllByPatient(patientId);
-        PatientDTO patient = patientDAO.findById(patientId);
-
-        model.addAttribute("visits", visits);
-        model.addAttribute("patient", patient);
-
-        return "patient/patient-visits";
-    }
-
 
     // #########################################################
 
