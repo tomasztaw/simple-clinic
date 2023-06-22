@@ -10,7 +10,6 @@ import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
-import pl.taw.business.dao.AlterVisitDAO;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
@@ -34,22 +33,17 @@ public class VisitController {
     public static final String ADD = "/add";
     public static final String UPDATE = "/update";
     public static final String UPDATE_ID = "/update/{visitId}";
+    public static final String UPDATE_NOTE = "/{visitId}/update-note";
     public static final String DELETE_BY_ID = "/delete/{visitId}";
     public static final String EDIT = "/edit";
     public static final String DOCTOR_ID = "/doctor/{doctorId}/all";
     public static final String PATIENT_ID = "/patient/{patientId}/all";
 
     private final VisitDAO visitDAO;
-
     private final VisitService visitService;
-
     private final DoctorDAO doctorDAO;
-
     private final PatientDAO patientDAO;
 
-
-
-    private final AlterVisitDAO alterVisitDAO;
 
     @GetMapping(PANEL)
     public String showVisitPanel(Model model) {
@@ -79,7 +73,7 @@ public class VisitController {
 
     @GetMapping(PATIENT_ID)
     public String showVisitsByPatient(@PathVariable("patientId") Integer patientId, Model model) {
-        List<VisitDTO> visits = visitService.findAllByPatient(patientId);
+        List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
         PatientDTO patient = patientDAO.findById(patientId);
 
         model.addAttribute("visits", visits);
@@ -160,7 +154,7 @@ public class VisitController {
         return "redirect:" + referer;
     }
 
-    @PatchMapping("/{visitId}/update-note")
+    @PatchMapping(UPDATE_NOTE)
     public String updateVisitNote(
             @PathVariable("visitId") Integer visitId, @RequestBody String newNote, HttpServletRequest request) {
         VisitEntity visitForUpdate = visitDAO.findEntityById(visitId);

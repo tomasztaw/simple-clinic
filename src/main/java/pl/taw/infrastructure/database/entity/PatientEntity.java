@@ -40,7 +40,4 @@ public class PatientEntity {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE)
     private List<VisitEntity> visits;
 
-    @OneToMany(mappedBy = "patient", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<AlterVisitEntity> alterVisits;
-
 }

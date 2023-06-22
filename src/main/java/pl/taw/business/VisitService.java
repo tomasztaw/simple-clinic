@@ -1,7 +1,6 @@
 package pl.taw.business;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.repository.VisitRepository;
@@ -19,7 +18,7 @@ public class VisitService {
         return visitRepository.findAllByDoctor(doctorId);
     }
 
-    public List<VisitDTO> findAllByPatient(Integer patientId) {
+    public List<VisitDTO> findAllVisitByPatient(Integer patientId) {
         return visitRepository.findAllByPatient(patientId);
     }
 

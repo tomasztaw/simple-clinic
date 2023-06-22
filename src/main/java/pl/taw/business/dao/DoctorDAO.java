@@ -18,4 +18,6 @@ public interface DoctorDAO {
     void save(DoctorEntity doctorEntity);
 
     void delete(DoctorEntity doctorEntity);
+
+    List<DoctorDTO> findBySpecialization(String specialization);
 }

@@ -1,11 +1,9 @@
 package pl.taw.api.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
@@ -57,8 +55,7 @@ public class PatientController {
             int size = patientDAO.findAll().size();
             Integer patientId = random.nextInt(size) + 1;
 
-            return "redirect:/patients/show/" + patientId;
-//            return "redirect:/dashboard";
+            return "redirect:/patients/dashboard/" + patientId;
         } else {
             model.addAttribute("error", "Invalid username or password");
             return "redirect:/login";
@@ -89,36 +86,19 @@ public class PatientController {
     @GetMapping(HISTORY)
     public String showHistory(@PathVariable("patientId") Integer patientId, Model model) {
         PatientDTO patient = patientDAO.findById(patientId);
-        List<VisitDTO> visits = visitService.findAllByPatient(patientId);
+        List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
 
         model.addAttribute("patient", patient);
         model.addAttribute("visits", visits);
         return "patient/patient-visits";
     }
 
-    // dodanie dla widoku aktualizacji telefonu - nie działa
-//    @GetMapping(PATIENT_UPDATE_PHONE_VIEW) // "/phone-view/{patientId}"
     @PatchMapping(PATIENT_UPDATE_PHONE_VIEW) // "/phone-view/{patientId}"
     public String showUpdatePhoneView(
             @PathVariable("patientId") Integer patientId, Model model) {
         PatientDTO patient = patientDAO.findById(patientId);
         model.addAttribute("patient", patient);
         return "update-phone";
-    }
-
-    @PatchMapping(PATIENT_UPDATE_PHONE + "/nie-ma-takiej") // "/{patientId}/phone"
-    public String updatePatientPhoneViewSTAREXXX(
-            @PathVariable("patientId") Integer patientId,
-            @RequestParam(required = true, value = "newPhone") String newPhone,
-            HttpServletRequest request) {
-        PatientEntity patient = patientDAO.findEntityById(patientId);
-        patient.setPhone(newPhone);
-        patientDAO.save(patient);
-
-//        return "redirect:/patients/patient-dashboard";
-//        return "patient/patient-dashboard/" + patientId;
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
     }
 
     @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
@@ -155,8 +135,7 @@ public class PatientController {
             @RequestParam(value = "pesel") String pesel,
             @RequestParam(value = "phone") String phone,
             @RequestParam(value = "email") String email,
-            HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
         PatientEntity createdPatient = PatientEntity.builder()
                 .name(name)
                 .surname(surname)
@@ -173,8 +152,7 @@ public class PatientController {
     @PutMapping(UPDATE)
     public String updatePatient(
             @ModelAttribute("updatePatient") PatientDTO updatePatientDTO,
-            HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
         PatientEntity existingPatient = patientDAO.findEntityById(updatePatientDTO.getPatientId());
         existingPatient.setName(updatePatientDTO.getName());
         existingPatient.setSurname(updatePatientDTO.getSurname());
@@ -193,7 +171,7 @@ public class PatientController {
             Model model
     ) {
         PatientDTO patient = patientDAO.findById(patientId);
-        List<VisitDTO> visits = visitService.findAllByPatient(patientId);
+        List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
 //        List<OpinionDTO> opinions = opinionDAO.findByPatientId(patientId);
 //        List<PrescriptionDTO> prescriptions = prescriptionDAO.findByPatientId(patientId);
         model.addAttribute("patient", patient);

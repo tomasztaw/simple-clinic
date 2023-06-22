@@ -32,3 +32,6 @@ spring:
 
   security:
     enabled: false
+
+  flyway:
+    baseline-on-migrate=true:
