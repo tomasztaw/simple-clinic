@@ -22,4 +22,15 @@ public class VisitService {
         return visitRepository.findAllByPatient(patientId);
     }
 
+    public List<VisitDTO> findAllVisitForBoth(Integer doctorId, Integer patientId) {
+        return visitRepository.findAll().stream()
+                .filter(visit -> doctorId.equals(visit.getDoctor().getDoctorId()))
+                .filter(visit -> patientId.equals(visit.getPatient().getPatientId()))
+                .toList();
+    }
+
+    public boolean hasPatientSeenThisDoctor(Integer doctorId, Integer patientId) {
+        return findAllVisitForBoth(doctorId, patientId).size() > 0;
+    }
+
 }

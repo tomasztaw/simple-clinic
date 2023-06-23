@@ -34,7 +34,7 @@ public class PatientController {
     public static final String UPDATE = "/update";
     public static final String SHOW = "/show/{patientId}";
     public static final String DELETE = "/delete/{patientId}";
-
+    public static final String REGISTER = "/register";
 
     private final PatientJpaRepository patientJpaRepository;
     private final PatientDAO patientDAO;
@@ -53,13 +53,18 @@ public class PatientController {
             // losowanie pacjent
             Random random = new Random();
             int size = patientDAO.findAll().size();
-            Integer patientId = random.nextInt(size) + 1;
+            int patientId = random.nextInt(size) + 1;
 
             return "redirect:/patients/dashboard/" + patientId;
         } else {
             model.addAttribute("error", "Invalid username or password");
             return "redirect:/login";
         }
+    }
+
+    @GetMapping(REGISTER)
+    public String registerPatient() {
+        return "register";
     }
 
     // wyświetlanie na sztywno pacjenta o id: 5
@@ -120,7 +125,7 @@ public class PatientController {
 
     // ok
     @GetMapping(PANEL)
-    public String panel(Model model) {
+    public String patientsPanel(Model model) {
         List<PatientDTO> patients = patientDAO.findAll();
         model.addAttribute("patients", patients);
         model.addAttribute("updatePatient", new PatientDTO());
@@ -135,6 +140,7 @@ public class PatientController {
             @RequestParam(value = "pesel") String pesel,
             @RequestParam(value = "phone") String phone,
             @RequestParam(value = "email") String email,
+            @RequestParam("context") String context,
             HttpServletRequest request) {
         PatientEntity createdPatient = PatientEntity.builder()
                 .name(name)
@@ -144,6 +150,10 @@ public class PatientController {
                 .email(email)
                 .build();
         patientDAO.save(createdPatient);
+        if ("login".equals(context)) {
+            int patientId = patientDAO.findByPesel(pesel).getPatientId();
+            return "redirect:dashboard/" + patientId;
+        }
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }

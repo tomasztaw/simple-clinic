@@ -7,6 +7,17 @@
           rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
           crossorigin="anonymous">
     <title>Pacjent</title>
+
+    <style>
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -36,6 +47,7 @@
         <tr>
             <th>Id wizyty</th>
             <th>Id lekarza</th>
+            <th>Lekarz</th>
             <th>Data wizyty</th>
             <th>Notatka</th>
             <th>Status</th>
@@ -45,6 +57,11 @@
         <tr th:each="visit : ${visits}">
             <td th:text="${visit.visitId}"></td>
             <td th:text="${visit.doctor.doctorId}"></td>
+            <td>
+                <a th:href="@{/doctors/show/{doctorId}(doctorId=${visit.doctor.doctorId})}">
+                    <span th:text="${visit.doctor.name + ' ' + visit.doctor.surname + ' ' + visit.doctor.title}"></span>
+                </a>
+            </td>
             <td th:text="${#temporals.format(visit.dateTime, 'dd MM yyyy HH:mm')}"></td>
             <td th:text="${visit.note}"></td>
             <td th:text="${visit.status}"></td>
@@ -78,28 +95,28 @@
         </tr>
         </thead>
         <tbody>
-<!--        <tr th:each="opinion : ${opinions}">-->
-<!--            <td th:text="${opinion.opinionId}"></td>-->
-<!--            <td th:text="${opinion.doctorId}"></td>-->
-<!--            <td th:text="${opinion.comment}"></td>-->
-<!--            <td th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></td>-->
-<!--            &lt;!&ndash;      <td th:text="${opinion.visitId}"></td>&ndash;&gt;-->
-<!--            &lt;!&ndash;      <td th:text="${opinion.visit}"></td>&ndash;&gt;-->
-<!--            <td>-->
-<!--                &lt;!&ndash;        <form action="#" th:action="@{/patients/show/{patientId}(patientId=${patient.patientId})}"&ndash;&gt;-->
-<!--                <form action="#" th:action="@{/}"-->
-<!--                      method="GET">-->
-<!--                    <button type="submit" class="btn btn-info">Aktualizuj</button>-->
-<!--                </form>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--                &lt;!&ndash;        th:action="@{/patients/usun/{patientId}(patientId=${patient.patientId})}"&ndash;&gt;-->
-<!--                <form action="#" th:action="@{/opinions/delete/{opinionId}(opinionId=${opinion.opinionId})}"-->
-<!--                      th:method="DELETE">-->
-<!--                    <button type="submit" class="btn btn-danger">Usuń opinię</button>-->
-<!--                </form>-->
-<!--            </td>-->
-<!--        </tr>-->
+        <!--        <tr th:each="opinion : ${opinions}">-->
+        <!--            <td th:text="${opinion.opinionId}"></td>-->
+        <!--            <td th:text="${opinion.doctorId}"></td>-->
+        <!--            <td th:text="${opinion.comment}"></td>-->
+        <!--            <td th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></td>-->
+        <!--            &lt;!&ndash;      <td th:text="${opinion.visitId}"></td>&ndash;&gt;-->
+        <!--            &lt;!&ndash;      <td th:text="${opinion.visit}"></td>&ndash;&gt;-->
+        <!--            <td>-->
+        <!--                &lt;!&ndash;        <form action="#" th:action="@{/patients/show/{patientId}(patientId=${patient.patientId})}"&ndash;&gt;-->
+        <!--                <form action="#" th:action="@{/}"-->
+        <!--                      method="GET">-->
+        <!--                    <button type="submit" class="btn btn-info">Aktualizuj</button>-->
+        <!--                </form>-->
+        <!--            </td>-->
+        <!--            <td>-->
+        <!--                &lt;!&ndash;        th:action="@{/patients/usun/{patientId}(patientId=${patient.patientId})}"&ndash;&gt;-->
+        <!--                <form action="#" th:action="@{/opinions/delete/{opinionId}(opinionId=${opinion.opinionId})}"-->
+        <!--                      th:method="DELETE">-->
+        <!--                    <button type="submit" class="btn btn-danger">Usuń opinię</button>-->
+        <!--                </form>-->
+        <!--            </td>-->
+        <!--        </tr>-->
         </tbody>
     </table>
 
@@ -116,20 +133,20 @@
         </tr>
         </thead>
         <tbody>
-<!--        <tr th:each="prescription : ${prescriptions}">-->
-<!--            <td th:text="${prescription.prescriptionId}"></td>-->
-<!--            <td th:text="${prescription.doctorId}"></td>-->
-<!--            <td th:text="${prescription.medicationName}"></td>-->
-<!--            <td th:text="${prescription.dosage}"></td>-->
-<!--            <td th:text="${prescription.instructions}"></td>-->
-<!--            <td th:text="${#temporals.format(prescription.createdAt, 'dd MM yyyy HH:mm')}"></td>-->
-<!--            <td>-->
-<!--                <form action="#" th:action="@{/doctors/show/{doctorId}(doctorId=${prescription.doctorId})}"-->
-<!--                      method="GET">-->
-<!--                    <button type="submit" class="btn btn-info">Pokaż lekarza</button>-->
-<!--                </form>-->
-<!--            </td>-->
-<!--        </tr>-->
+        <!--        <tr th:each="prescription : ${prescriptions}">-->
+        <!--            <td th:text="${prescription.prescriptionId}"></td>-->
+        <!--            <td th:text="${prescription.doctorId}"></td>-->
+        <!--            <td th:text="${prescription.medicationName}"></td>-->
+        <!--            <td th:text="${prescription.dosage}"></td>-->
+        <!--            <td th:text="${prescription.instructions}"></td>-->
+        <!--            <td th:text="${#temporals.format(prescription.createdAt, 'dd MM yyyy HH:mm')}"></td>-->
+        <!--            <td>-->
+        <!--                <form action="#" th:action="@{/doctors/show/{doctorId}(doctorId=${prescription.doctorId})}"-->
+        <!--                      method="GET">-->
+        <!--                    <button type="submit" class="btn btn-info">Pokaż lekarza</button>-->
+        <!--                </form>-->
+        <!--            </td>-->
+        <!--        </tr>-->
         </tbody>
     </table>
 

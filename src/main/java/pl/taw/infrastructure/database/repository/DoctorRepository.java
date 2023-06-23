@@ -28,7 +28,7 @@ public class DoctorRepository implements DoctorDAO {
     @Override
     public List<DoctorDTO> findBySpecialization(String specialization) {
         return doctorJpaRepository.findAll().stream()
-                .filter(doctor -> doctor.getTitle().equals(specialization))
+                .filter(doctor -> doctor.getTitle().toLowerCase().equals(specialization))
                 .map(doctorMapper::mapFromEntity)
                 .toList();
     }

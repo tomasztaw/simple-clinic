@@ -31,7 +31,6 @@ public class PatientRestController {
     public static final String DELETE_ID = "/{patientId}/delete";
 
 
-    private final PatientJpaRepository patientJpaRepository;
     private final PatientDAO patientDAO;
     private final VisitService visitService;
 

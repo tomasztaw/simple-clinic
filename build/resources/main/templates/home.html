@@ -21,6 +21,7 @@
         </div>
         <div class="login-button">
             <a th:href="@{/patients/login}" class="btn btn-primary">Zaloguj</a>
+            <a th:href="@{/patients/register}" class="btn btn-primary">Zarejestruj</a>
         </div>
     </header>
 
@@ -31,7 +32,7 @@
 
         <div class="btn-container">
             <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Go to the doctors page</a>
-            <a th:href="@{/patients/dashboard}" class="btn btn-primary btn-lg">Go to the patients page</a>
+            <a th:href="@{/patients/dashboard/5}" class="btn btn-primary btn-lg">Go to the patients page</a>
         </div>
         <div class="btn-container">
             <a th:href="@{/doctors/panel}" class="btn btn-primary btn-lg">Panel z lekarzami</a>
@@ -39,19 +40,13 @@
         </div>
         <div class="btn-container">
             <a th:href="@{/visits/panel}" class="btn btn-primary btn-lg">Panel z wizytami</a>
-            <a th:href="@{/opinions/panel}" class="btn btn-primary btn-lg">Panel z opiniami</a>
+            <a th:href="@{/opinions/panel}" class="btn btn-danger btn-lg">Panel z opiniami</a>
         </div>
         <div class="btn-container">
-            <a th:href="@{/reservations/index}" class="btn btn-primary btn-lg">Kalendarz</a>
-            <a th:href="@{/reservations/calendar}" class="btn btn-primary btn-lg">Kalendarz full</a>
+            <a th:href="@{/reservations/index}" class="btn btn-danger btn-lg">Kalendarz</a>
+            <a th:href="@{/reservations/calendar}" class="btn btn-danger btn-lg">Kalendarz full</a>
         </div>
     </div>
-
-    <a th:href="@{/opinions/dodaj}" class="btn btn-primary btn-lg">dodaj opinie!?#@!</a>
-
-    <a th:href="@{/patients/proste-dodaj}" class="btn btn-primary btn-lg">!?#@! Dodaj Pacjenta !?#@!</a>
-
-
 
     <div class="footer">
         <p>© 2023 Twoja Stopka</p>

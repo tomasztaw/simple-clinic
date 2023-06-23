@@ -25,6 +25,14 @@ CREATE TABLE visits (
   status     VARCHAR(64)                                  NOT NULL
 );
 
+CREATE TABLE doctors_schedule (
+    id            SERIAL PRIMARY KEY,
+    doctor_id     INT    REFERENCES doctors (doctor_id) NOT NULL,
+    day_of_week   INT                                   NOT NULL,
+    start_time_ds TIME                                  NOT NULL,
+    end_time_ds   TIME                                  NOT NULL
+);
+
 --CREATE TABLE opinions (
 --    opinion_id SERIAL    PRIMARY KEY,
 --    doctor_id  INT       REFERENCES doctors (doctor_id)   NOT NULL,
@@ -55,10 +63,3 @@ CREATE TABLE visits (
 --    occupied       BOOLEAN DEFAULT false
 --);
 --
---CREATE TABLE doctors_schedule (
---    id            SERIAL PRIMARY KEY,
---    doctor_id     INT    REFERENCES doctors (doctor_id) NOT NULL,
---    day_of_week   INT                                   NOT NULL,
---    start_time_ds TIME                                  NOT NULL,
---    end_time_ds   TIME                                  NOT NULL
---);

@@ -48,6 +48,15 @@
     .actions button {
       margin-right: 10px;
     }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
   </style>
 </head>
 <body>
@@ -75,7 +84,11 @@
       <tr>
         <td th:text="${visit.visitId}"></td>
         <td th:text="${visit.doctor.doctorId}"></td>
-        <td th:text="${visit.doctor.name + ' ' + visit.doctor.surname + ' ' + visit.doctor.title}"></td>
+        <td>
+          <a th:href="@{/doctors/show/{doctorId}(doctorId=${visit.doctor.doctorId})}">
+            <span th:text="${visit.doctor.name + ' ' + visit.doctor.surname + ' ' + visit.doctor.title}"></span>
+          </a>
+        </td>
         <td th:text="${visit.patient.patientId}"></td>
         <td th:text="${visit.patient.name + ' ' + visit.patient.surname}"></td>
         <td th:text="${#temporals.format(visit.dateTime, 'dd MM yyyy HH:mm')}"></td>

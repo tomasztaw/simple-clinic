@@ -40,5 +40,8 @@ public class DoctorEntity {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.REMOVE)
     private List<VisitEntity> visits;
 
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<DoctorScheduleEntity> schedules;
+
 
 }

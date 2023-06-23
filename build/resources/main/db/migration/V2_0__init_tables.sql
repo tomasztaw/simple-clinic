@@ -50,41 +50,41 @@ VALUES (1, 1, '2023-06-01 08:30:00', 'Pacjent bardzo chory', 'odbyta'),
 --(4, 5, 'medicOOP', 'dawka 3 x 1', 'rano, popołudniu i wieczorem', '2023-06-06 12:40:00'),
 --(2, 5, 'Maść na bul dupy', 'dawka 3 x 1', 'przed snem', '2023-06-08 08:10:00');
 --
---INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
---VALUES (1, 1, '08:00', '14:00'),
---(1, 2, '09:00', '12:00'),
---(1, 3, '08:00', '14:00'),
---(1, 4, '09:00', '12:00'),
---(1, 5, '08:00', '14:00');
---
---INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
---VALUES (2, 1, '08:00', '14:00'),
---(2, 2, '08:00', '14:00'),
---(2, 3, '08:00', '14:00'),
---(2, 4, '08:00', '14:00'),
---(2, 5, '08:00', '14:00');
---
---INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
---VALUES (3, 1, '08:00', '14:00'),
---(3, 2, '08:00', '14:00'),
---(3, 3, '08:00', '14:00'),
---(3, 4, '08:00', '14:00'),
---(3, 5, '08:00', '14:00');
---
---INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
---VALUES (4, 1, '08:00', '14:00'),
---(4, 3, '08:00', '14:00'),
---(4, 5, '08:00', '14:00');
---
---INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
---VALUES (5, 2, '12:00', '17:00'),
---(5, 4, '12:00', '17:00');
---
---INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
---VALUES (6, 4, '09:00', '15:00'),
---(6, 5, '08:00', '15:00');
---
---INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
---VALUES (7, 1, '10:00', '17:00'),
---(7, 3, '10:00', '17:00'),
---(7, 5, '10:00', '17:00');
+INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
+VALUES (1, 1, '08:00', '13:00'),
+(1, 2, '09:00', '12:00'),
+(1, 3, '08:00', '13:00'),
+(1, 4, '09:00', '12:00'),
+(1, 5, '08:00', '13:00');
+
+INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
+VALUES (2, 1, '09:00', '14:00'),
+(2, 2, '09:00', '14:00'),
+(2, 3, '09:00', '14:00'),
+(2, 4, '09:00', '14:00'),
+(2, 5, '09:00', '14:00');
+
+INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
+VALUES (3, 1, '08:00', '12:00'),
+(3, 2, '08:00', '12:00'),
+(3, 3, '08:00', '12:00'),
+(3, 4, '08:00', '12:00'),
+(3, 5, '08:00', '12:00');
+
+INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
+VALUES (4, 1, '08:00', '11:00'),
+(4, 3, '08:00', '11:00'),
+(4, 5, '08:00', '11:00');
+
+INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
+VALUES (5, 2, '12:00', '15:00'),
+(5, 4, '12:00', '15:00');
+
+INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
+VALUES (6, 4, '09:00', '15:00'),
+(6, 5, '08:00', '15:00');
+
+INSERT INTO doctors_schedule (doctor_id, day_of_week, start_time_ds, end_time_ds)
+VALUES (7, 1, '10:00', '17:00'),
+(7, 3, '10:00', '17:00'),
+(7, 5, '10:00', '17:00');
