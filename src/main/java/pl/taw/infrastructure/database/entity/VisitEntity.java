@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@With
 @Getter
 @Setter
 @EqualsAndHashCode(of = "visitId")
@@ -38,14 +39,7 @@ public class VisitEntity {
     @Column(name = "status")
     private String status;
 
-    // relacje
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
-//    @JoinColumn(name = "doctor_id", insertable = false, updatable = false)
-//    private DoctorEntity doctor;
-//
-//    // przy usuwaniu wizyty, doktor/pacjent zostaje
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
-//    @JoinColumn(name = "patient_id", insertable = false, updatable = false)
-//    private PatientEntity patient;
+    @OneToOne(mappedBy = "visit", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private OpinionEntity opinion;
 
 }

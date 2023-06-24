@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.List;
 
+@With
 @Getter
 @Setter
 @EqualsAndHashCode(of = "patientId")
@@ -37,7 +38,11 @@ public class PatientEntity {
     private String email;
 
     // przy usunięciu pacjent, usuwane są też wizyty
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<VisitEntity> visits;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<OpinionEntity> createdOpinions;
+
 
 }

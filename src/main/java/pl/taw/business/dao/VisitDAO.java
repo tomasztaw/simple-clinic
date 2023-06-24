@@ -1,5 +1,6 @@
 package pl.taw.business.dao;
 
+import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
@@ -18,4 +19,9 @@ public interface VisitDAO {
     void save(VisitEntity visitEntity);
 
     void delete(VisitEntity visitEntity);
+
+    List<VisitDTO> findAllByDoctor(Integer doctorId);
+
+    List<VisitDTO> findAllByPatient(Integer patientId);
+
 }

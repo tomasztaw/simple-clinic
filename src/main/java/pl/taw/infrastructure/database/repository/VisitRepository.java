@@ -57,6 +57,7 @@ public class VisitRepository implements VisitDAO {
         visitJpaRepository.delete(visitEntity);
     }
 
+    @Override
     public List<VisitDTO> findAllByDoctor(Integer doctorId) {
         return  visitJpaRepository.findAll().stream()
                 .filter(visit -> visit.getDoctor().getDoctorId().equals(doctorId))
@@ -64,6 +65,7 @@ public class VisitRepository implements VisitDAO {
                 .toList();
     }
 
+    @Override
     public List<VisitDTO> findAllByPatient(Integer patientId) {
         return  visitJpaRepository.findAll().stream()
                 .filter(visit -> visit.getPatient().getPatientId().equals(patientId))

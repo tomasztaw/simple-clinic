@@ -33,14 +33,14 @@ CREATE TABLE doctors_schedule (
     end_time_ds   TIME                                  NOT NULL
 );
 
---CREATE TABLE opinions (
---    opinion_id SERIAL    PRIMARY KEY,
---    doctor_id  INT       REFERENCES doctors (doctor_id)   NOT NULL,
---    patient_id INT       REFERENCES patients (patient_id) NOT NULL,
---    visit_id   INT       REFERENCES visits (visit_id),
---    comment    TEXT                                       NOT NULL,
---    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
---);
+CREATE TABLE opinions (
+    opinion_id SERIAL    PRIMARY KEY,
+    doctor_id  INT       REFERENCES doctors (doctor_id)   NOT NULL,
+    patient_id INT       REFERENCES patients (patient_id) NOT NULL,
+    visit_id   INT       REFERENCES visits (visit_id),
+    comment    TEXT                                       NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 --
 --CREATE TABLE prescriptions (
 --  prescription_id   SERIAL    PRIMARY KEY,
