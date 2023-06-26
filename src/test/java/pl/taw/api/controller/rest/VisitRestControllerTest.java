@@ -49,30 +49,30 @@ class VisitRestControllerTest {
     void shouldReturnExistingVisit() {
         // given
         Integer visitId = 1;
-        VisitEntity visit = new VisitEntity();
-        when(visitDAO.findEntityById(visitId)).thenReturn(visit);
+        VisitDTO visit = new VisitDTO();
+        when(visitDAO.findById(visitId)).thenReturn(visit);
 
         // when
-        ResponseEntity<VisitEntity> response = visitRestController.getVisitById(visitId);
+        ResponseEntity<VisitDTO> response = visitRestController.getVisitById(visitId);
 
         // then
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(visit, response.getBody());
-        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).findById(visitId);
     }
 
     @Test
     void shouldReturnNotFoundWhenVisitNonExist() {
         // given
         Integer visitId = 1;
-        when(visitDAO.findEntityById(visitId)).thenReturn(null);
+        when(visitDAO.findById(visitId)).thenReturn(null);
 
         // when
-        ResponseEntity<VisitEntity> response = visitRestController.getVisitById(visitId);
+        ResponseEntity<VisitDTO> response = visitRestController.getVisitById(visitId);
 
         // then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).findById(visitId);
     }
 
     @Test

@@ -5,15 +5,17 @@ import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.entity.OpinionEntity;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-24T16:22:26+0200",
+    date = "2023-06-25T13:33:24+0200",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (GraalVM Community)"
 )
 @Component
@@ -28,11 +30,14 @@ public class VisitMapperImpl implements VisitMapper {
         VisitDTO.VisitDTOBuilder visitDTO = VisitDTO.builder();
 
         visitDTO.visitId( visitEntity.getVisitId() );
+        visitDTO.doctorId( visitEntity.getDoctorId() );
         visitDTO.doctor( doctorEntityToDoctorDTO( visitEntity.getDoctor() ) );
+        visitDTO.patientId( visitEntity.getPatientId() );
         visitDTO.patient( patientEntityToPatientDTO( visitEntity.getPatient() ) );
         visitDTO.dateTime( visitEntity.getDateTime() );
         visitDTO.note( visitEntity.getNote() );
         visitDTO.status( visitEntity.getStatus() );
+        visitDTO.opinion( opinionEntityToOpinionDTO( visitEntity.getOpinion() ) );
 
         return visitDTO.build();
     }
@@ -46,11 +51,14 @@ public class VisitMapperImpl implements VisitMapper {
         VisitEntity.VisitEntityBuilder visitEntity = VisitEntity.builder();
 
         visitEntity.visitId( visitDTO.getVisitId() );
+        visitEntity.doctorId( visitDTO.getDoctorId() );
         visitEntity.doctor( doctorDTOToDoctorEntity( visitDTO.getDoctor() ) );
+        visitEntity.patientId( visitDTO.getPatientId() );
         visitEntity.patient( patientDTOToPatientEntity( visitDTO.getPatient() ) );
         visitEntity.note( visitDTO.getNote() );
         visitEntity.dateTime( visitDTO.getDateTime() );
         visitEntity.status( visitDTO.getStatus() );
+        visitEntity.opinion( opinionDTOToOpinionEntity( visitDTO.getOpinion() ) );
 
         return visitEntity.build();
     }
@@ -102,5 +110,25 @@ public class VisitMapperImpl implements VisitMapper {
         patientEntity.visits( visitDTOListToVisitEntityList( patientDTO.getVisits() ) );
 
         return patientEntity.build();
+    }
+
+    protected OpinionEntity opinionDTOToOpinionEntity(OpinionDTO opinionDTO) {
+        if ( opinionDTO == null ) {
+            return null;
+        }
+
+        OpinionEntity.OpinionEntityBuilder opinionEntity = OpinionEntity.builder();
+
+        opinionEntity.opinionId( opinionDTO.getOpinionId() );
+        opinionEntity.doctorId( opinionDTO.getDoctorId() );
+        opinionEntity.patientId( opinionDTO.getPatientId() );
+        opinionEntity.visitId( opinionDTO.getVisitId() );
+        opinionEntity.comment( opinionDTO.getComment() );
+        opinionEntity.createdAt( opinionDTO.getCreatedAt() );
+        opinionEntity.doctor( doctorDTOToDoctorEntity( opinionDTO.getDoctor() ) );
+        opinionEntity.patient( patientDTOToPatientEntity( opinionDTO.getPatient() ) );
+        opinionEntity.visit( mapToEntity( opinionDTO.getVisit() ) );
+
+        return opinionEntity.build();
     }
 }

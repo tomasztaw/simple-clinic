@@ -41,6 +41,16 @@ CREATE TABLE opinions (
     comment    TEXT                                       NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE reservations (
+    reservation_id SERIAL  PRIMARY KEY,
+    doctor_id      INT     REFERENCES doctors (doctor_id)   NOT NULL,
+    patient_id     INT     REFERENCES patients (patient_id) NOT NULL,
+    day            DATE                                     NOT NULL,
+    start_time_r   TIME                                     NOT NULL,
+    occupied       BOOLEAN DEFAULT false
+);
+
 --
 --CREATE TABLE prescriptions (
 --  prescription_id   SERIAL    PRIMARY KEY,
@@ -52,14 +62,5 @@ CREATE TABLE opinions (
 --  instructions      TEXT,
 --  created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 --);
---
---CREATE TABLE reservations (
---    id             SERIAL  PRIMARY KEY,
---    doctor_id      INT     REFERENCES doctors (doctor_id)   NOT NULL,
---    patient_id     INT     REFERENCES patients (patient_id) NOT NULL,
---    day            DATE                                     NOT NULL,
---    start_time_r   TIME                                     NOT NULL,
---    end_time_r     TIME                                     NOT NULL,
---    occupied       BOOLEAN DEFAULT false
---);
---
+
+

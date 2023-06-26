@@ -3,22 +3,24 @@ package pl.taw.infrastructure.database.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @With
 @Entity
 @Builder
-@ToString(of = {"opinionId", "doctorId", "patientId", "comment", "createdAt"})
+@ToString(of = {"reservationId", "doctorId", "day", "startTimeR", "occupied"})
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "opinions")
-public class OpinionEntity {
+@Table(name = "reservations")
+public class ReservationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "opinion_id")
-    private Integer opinionId;
+    @Column(name = "reservation_id")
+    private Integer reservationId;
 
     @Column(name = "doctor_id")
     private Integer doctorId;
@@ -26,16 +28,15 @@ public class OpinionEntity {
     @Column(name = "patient_id")
     private Integer patientId;
 
-    @Column(name = "visit_id")
-    private Integer visitId;
+    @Column(name = "day")
+    private LocalDate day;
 
-    @Column(name = "comment")
-    private String comment;
+    @Column(name = "start_time_r")
+    private LocalDateTime startTimeR;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "occupied")
+    private Boolean occupied;
 
-    // relacje
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", insertable = false, updatable = false)
     private DoctorEntity doctor;
@@ -43,12 +44,5 @@ public class OpinionEntity {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", insertable = false, updatable = false)
     private PatientEntity patient;
-
-    // id wizyty na początku zawsze będzie null, dlatego nie ustawiłem jako klucz obcy
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "visit_id", referencedColumnName = "visit_id", insertable = false, updatable = false)
-    private VisitEntity visit;
-
-
 
 }

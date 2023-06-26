@@ -21,4 +21,6 @@ public class OpinionDTO {
     private DoctorDTO doctor;
     private PatientDTO patient;
     private VisitDTO visit;
+
+    private boolean isMapped;
 }

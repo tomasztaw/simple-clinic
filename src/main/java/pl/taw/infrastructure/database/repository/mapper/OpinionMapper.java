@@ -2,7 +2,6 @@ package pl.taw.infrastructure.database.repository.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import pl.taw.api.dto.DoctorDTO;
@@ -21,12 +20,12 @@ public interface OpinionMapper {
 
     @Mapping(target = "doctor", source = "doctor")
     @Mapping(target = "patient", source = "patient")
-    @Mapping(target = "visit", source = "visit")
+    @Mapping(target = "visit", ignore = true)
     OpinionDTO mapFromEntity(OpinionEntity opinionEntity);
 
     @Mapping(target = "doctor", source = "doctor")
     @Mapping(target = "patient", source = "patient")
-    @Mapping(target = "visit", source = "visit")
+    @Mapping(target = "visit", ignore = true)
     OpinionEntity mapToEntity(OpinionDTO opinionDTO);
 
     default DoctorDTO mapDoctorWithoutOpinions(DoctorEntity doctor) {
@@ -54,8 +53,10 @@ public interface OpinionMapper {
     default VisitDTO mapVisitWithoutOpinion(VisitEntity visitEntity) {
         return VisitDTO.builder()
                 .visitId(visitEntity.getVisitId())
-                .doctor(mapDoctorWithoutOpinions(visitEntity.getDoctor()))
-                .patient(mapPatientWithoutOpinions(visitEntity.getPatient()))
+//                .doctor(mapDoctorWithoutOpinions(visitEntity.getDoctor()))
+                .doctorId(visitEntity.getDoctorId())
+//                .patient(mapPatientWithoutOpinions(visitEntity.getPatient()))
+                .patientId(visitEntity.getPatientId())
                 .note(visitEntity.getNote())
                 .dateTime(visitEntity.getDateTime())
                 .status(visitEntity.getStatus())

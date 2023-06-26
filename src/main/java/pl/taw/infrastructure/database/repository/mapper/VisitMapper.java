@@ -1,14 +1,13 @@
 package pl.taw.infrastructure.database.repository.mapper;
 
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.entity.OpinionEntity;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
@@ -17,6 +16,8 @@ public interface VisitMapper {
 
     VisitMapper INSTANCE = Mappers.getMapper(VisitMapper.class);
 
+//    @Mapping(target = "opinion", ignore = true)
+//    @Mapping(target = "doctor", ignore = true)
     VisitDTO mapFromEntity(VisitEntity visitEntity);
 
     VisitEntity mapToEntity(VisitDTO visitDTO);
@@ -47,6 +48,20 @@ public interface VisitMapper {
                 .pesel(patientEntity.getPesel())
                 .phone(patientEntity.getPhone())
                 .email(patientEntity.getEmail())
+                .build();
+    }
+
+    default OpinionDTO opinionEntityToOpinionDTO(OpinionEntity opinionEntity) {
+        if (opinionEntity == null) {
+            return null;
+        }
+        return OpinionDTO.builder()
+                .opinionId(opinionEntity.getOpinionId())
+                .doctorId(opinionEntity.getDoctorId())
+                .patientId(opinionEntity.getPatientId())
+                .visitId(opinionEntity.getVisit().getVisitId())
+                .comment(opinionEntity.getComment())
+                .createdAt(opinionEntity.getCreatedAt())
                 .build();
     }
 

@@ -7,10 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
+import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
@@ -43,6 +45,7 @@ public class VisitController {
     private final VisitService visitService;
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
+    private final OpinionDAO opinionDAO;
 
 
     @GetMapping(PANEL)
@@ -56,7 +59,9 @@ public class VisitController {
     @GetMapping(SHOW)
     public String showVisit(@PathVariable("visitId") Integer visitId, Model model) {
         VisitDTO visit = visitDAO.findById(visitId);
+        OpinionDTO opinion = opinionDAO.findById(visit.getOpinion().getOpinionId());
         model.addAttribute("visit", visit);
+        model.addAttribute("opinion", opinion);
         return "visit/visit-show";
     }
 
@@ -181,13 +186,14 @@ public class VisitController {
         return "visitList"; // TODO zrobić widok wyświetlający wszystkie wizyt
     }
 
-    @GetMapping("/{visitId}") // VISIT_ID
-    public ModelAndView getVisitById(@PathVariable("visitId") Integer visitId) {
-        ModelAndView modelAndView = new ModelAndView("visitDetails");
-        VisitEntity visit = visitDAO.findEntityById(visitId);
-        modelAndView.addObject(visit);
-        return modelAndView;
+    @GetMapping(VISIT_ID)
+    @ResponseBody
+    public VisitDTO getVisitById(@PathVariable("visitId") Integer visitId) {
+        VisitDTO visit = visitDAO.findById(visitId);
+        return visit;
     }
+
+
 
     @GetMapping("/new")
     public ModelAndView showCreateForm() {

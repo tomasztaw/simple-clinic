@@ -35,8 +35,8 @@ public class VisitRestController {
     }
 
     @GetMapping(VISIT_ID)
-    public ResponseEntity<VisitEntity> getVisitById(@PathVariable("visitId") Integer visitId) {
-        VisitEntity visit = visitDAO.findEntityById(visitId);
+    public ResponseEntity<VisitDTO> getVisitById(@PathVariable("visitId") Integer visitId) {
+        VisitDTO visit = visitDAO.findById(visitId);
         return visit != null ? ResponseEntity.ok(visit) : ResponseEntity.notFound().build();
     }
 

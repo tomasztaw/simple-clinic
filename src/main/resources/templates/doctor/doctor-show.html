@@ -88,6 +88,12 @@
 
     <div class="media-body">
       <h2>Opis</h2>
+
+      <p th:text="${@org.springframework.util.FileCopyUtils.copyToString(T(java.nio.file.Files).newBufferedReader(T(java.nio.file.Paths).get(
+      '${doctors.descriptions.folder}' + '${doctors.descriptions.prefix}' + lekarz.plikOpisu)))}"></p>
+
+
+
       <p>Witamy na profilu lekarza Alojzego Kowalskiego, specjalisty laryngologa!
         Dr Alojzy Kowalski jest doświadczonym lekarzem o szerokim zakresie wiedzy i umiejętności w dziedzinie laryngologii. Z oddaniem i empatią dba o zdrowie i dobro swoich pacjentów, oferując kompleksową opiekę medyczną.
         Dr Kowalski posiada bogate doświadczenie w diagnostyce, leczeniu i zapobieganiu różnym schorzeniom układu oddechowego, gardła, nosa i uszu. Jego specjalizacją są m.in. choroby zatok, przewlekłe zapalenia gardła, zaburzenia słuchu, alergie oraz chirurgia nosa i gardła.

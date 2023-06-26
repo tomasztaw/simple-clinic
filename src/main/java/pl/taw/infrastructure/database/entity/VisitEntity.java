@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "visitId")
-@ToString(of = {"visitId", "doctor", "patient", "note", "dateTime", "status"})
+@ToString(of = {"visitId", "doctorId", "patientId", "note", "dateTime", "status"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,12 +22,20 @@ public class VisitEntity {
     @Column(name = "visit_id")
     private Integer visitId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "doctor_id", nullable = true)
-    private DoctorEntity doctor;
+    @Column(name = "doctor_id")
+    private Integer doctorId;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "patient_id", nullable = true)
+//    @JoinColumn(name = "doctor_id", nullable = true)
+    @JoinColumn(name = "doctor_id", nullable = true, referencedColumnName = "doctor_id", insertable = false, updatable = false)
+    private DoctorEntity doctor;
+
+    @Column(name = "patient_id")
+    private Integer patientId;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+//    @JoinColumn(name = "patient_id", nullable = true)
+    @JoinColumn(name = "patient_id", nullable = true, referencedColumnName = "patient_id", insertable = false, updatable = false)
     private PatientEntity patient;
 
     @Column(name = "note")
