@@ -18,9 +18,18 @@ import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.repository.jpa.DoctorJpaRepository;
 import pl.taw.infrastructure.database.repository.mapper.DoctorMapper;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Controller
@@ -138,7 +147,21 @@ public class DoctorController {
         model.addAttribute("doctor", doctor);
         List<WorkingHours> workingHours = doctorService.getWorkingHours(doctorId);
         model.addAttribute("workingHours", workingHours);
-
+        String doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
+//        String defaultDescription = "src/main/resources/desc/doctorDesc0.txt";
+        String defaultDescription = "src/main/resources/desc/default.rtf";
+        Path filePath = Paths.get(doctorDescFile);
+        String description;
+        try {
+            if (Files.exists(filePath) && Files.isRegularFile(filePath)) {
+                description = new String(Files.readAllBytes(filePath));
+            } else {
+                description = new String(Files.readAllBytes(Paths.get(defaultDescription)));
+            }
+            model.addAttribute("description", description);
+        } catch (IOException e) {
+            throw new RuntimeException("Brak pliku");
+        }
         return "doctor/doctor-show";
     }
 
@@ -243,8 +266,28 @@ public class DoctorController {
     public String getDoctorSchedule(@PathVariable Integer doctorId, Model model) {
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDate today = LocalDate.now();
+        String todayFormat = today.format(DateTimeFormatter.ofPattern("dd MM yyyy"));
+        DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
+        String dzisiaj = WorkingHours.DayOfTheWeek.fromInt(today.getDayOfWeek().getValue()).getName();
+
         model.addAttribute("workingHoursList", workingHoursList);
         model.addAttribute("doctor", doctor);
-        return "doctor-schedule-date";
+
+        model.addAttribute("currentTime", currentTime);
+        model.addAttribute("todayFormat", todayFormat);
+        model.addAttribute("currentDayOfWeek", currentDayOfWeek);
+        model.addAttribute("dzisiaj", dzisiaj);
+
+        return "doctor/doctor-schedule";
     }
+
+    // odczytywanie plików tekstowych z opisem lekarzy
+    private String readDescriptionFromFile(String fileName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(fileName)));
+    }
+
+
 }

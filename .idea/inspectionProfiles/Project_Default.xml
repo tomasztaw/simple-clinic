@@ -7,7 +7,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="16">
+          <list size="17">
             <item index="0" class="java.lang.String" itemvalue="th:each" />
             <item index="1" class="java.lang.String" itemvalue="th:text" />
             <item index="2" class="java.lang.String" itemvalue="th:if" />
@@ -24,6 +24,7 @@
             <item index="13" class="java.lang.String" itemvalue="th:onclick" />
             <item index="14" class="java.lang.String" itemvalue="th:data-visit-id" />
             <item index="15" class="java.lang.String" itemvalue="th:value" />
+            <item index="16" class="java.lang.String" itemvalue="th:utext" />
           </list>
         </value>
       </option>

@@ -41,17 +41,6 @@ public class DoctorService {
 
     private List<WorkingHours> convertToWorkingHoursList(List<DoctorScheduleDTO> doctorSchedules) {
         List<WorkingHours> workingHoursList = new ArrayList<>();
-        LocalDate currentDate = LocalDate.now();
-        LocalTime currentTime = LocalTime.now();
-
-        int currentDayOfWeek = currentDate.getDayOfWeek().getValue();
-        int additionalWeeks = 0;
-
-//        if (currentDayOfWeek >= WorkingHours.DayOfTheWeek.fromInt(currentDate.getDayOfWeek().getValue())) {
-//            additionalWeeks = 1;
-//        }
-
-        LocalDate endDate = currentDate.plusWeeks(additionalWeeks).with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
 
         for (DoctorScheduleDTO doctorSchedule : doctorSchedules) {
             WorkingHours workingHours = new WorkingHours();
@@ -59,10 +48,6 @@ public class DoctorService {
             workingHours.setStartTime(doctorSchedule.getStartTimeDs());
             workingHours.setEndTime(doctorSchedule.getEndTimeDs());
 
-            // Jeśli dzisiejsza data odpowiada dniowi z harmonogramu, ustaw bieżący czas jako początek godzin pracy
-//            if (currentDate.getDayOfWeek().getValue() == doctorSchedule.getDayOfTheWeek()) {
-//                workingHours.setStartTime(currentTime);
-//            }
 
             workingHours.setAppointmentTimes(generateAppointmentTimes(
                     workingHours.getStartTime(),
@@ -72,19 +57,8 @@ public class DoctorService {
             workingHoursList.add(workingHours);
         }
 
-        // Filtrowanie harmonogramu do końca przyszłego tygodnia, jeśli dzisiaj jest czwartek
-        if (currentDayOfWeek == DayOfWeek.THURSDAY.getValue()) {
-            workingHoursList.removeIf(workingHours ->
-                    workingHours.getDayOfTheWeek().getNumber() > DayOfWeek.SUNDAY.getValue() ||
-                            workingHours.getDayOfTheWeek().getNumber() < currentDayOfWeek ||
-                            (workingHours.getDayOfTheWeek().getNumber() == currentDayOfWeek &&
-                                    workingHours.getStartTime().isBefore(currentTime))
-            );
-        }
-
         return workingHoursList;
     }
-
 
     private List<String> generateAppointmentTimes(LocalTime startTime, LocalTime endTime, int intervalMinutes) {
         List<String> appointmentTimes = new ArrayList<>();
