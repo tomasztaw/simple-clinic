@@ -13,9 +13,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -25,6 +26,140 @@ public class ReservationService {
     private final ReservationDAO reservationDAO;
     private final DoctorScheduleDAO doctorScheduleDAO;
     private final DoctorService doctorService;
+
+
+    // Próba uproszczenia mapy
+    public Map<String, WorkingHours> simpleMap(List<WorkingHours> doctorWorkingHours) {
+
+        Map<String, WorkingHours> result = new LinkedHashMap<>();
+
+        // dzisiejszy dzień
+        LocalDate today = LocalDate.now();
+
+        // pozostałe dni nie wliczając dzisiaj
+        List<WorkingHours.DayOfTheWeek> nextDays = doctorWorkingHours.stream()
+                .map(WorkingHours::getDayOfTheWeek)
+                .dropWhile(day -> day.getNumber() <= today.getDayOfWeek().getValue())
+                .toList();
+
+        // następne dni z datą
+        Map<String, LocalDate> currentWeekLeftDays = new LinkedHashMap<>();
+        for (DayOfWeek day : DayOfWeek.values()) {
+            if (day.getValue() > today.getDayOfWeek().getValue() && day.getValue() < 6) {
+                currentWeekLeftDays.put(day.name(), today.with(DayOfWeek.valueOf(day.name())));
+            }
+        }
+
+        List<WorkingHours> list = doctorWorkingHours.stream()
+                .filter(day -> day.getDayOfTheWeek().getNumber() > today.getDayOfWeek().getValue())
+                .toList();
+
+        List<String> dayAndDate = currentWeekLeftDays.entrySet().stream()
+                .map(entry -> entry.getKey() + " " + entry.getValue())
+                .toList();
+
+        Map<String, WorkingHours> resultMap = IntStream.range(0, Math.min(list.size(), dayAndDate.size()))
+                .boxed()
+                .collect(Collectors.toMap(dayAndDate::get, list::get, (a, b) -> b, LinkedHashMap::new));
+
+        return resultMap;
+    }
+
+
+
+    // Mapa zawiera wszystkie potrzebne informacje, ale nie mogę w odpowiedni sposób jej wyświetlić
+    public Map<Map<String, LocalDate>, List<WorkingHours>> getWorkingHoursForCurrentWeek(List<WorkingHours> doctorWorkingHours) {
+
+        List<WorkingHours> result = new ArrayList<>();
+
+        // dzisiejszy dzień
+        LocalDate today = LocalDate.now();
+
+        // pozostałe dni nie wliczając dzisiaj
+        List<WorkingHours.DayOfTheWeek> nextDays = doctorWorkingHours.stream()
+                .map(WorkingHours::getDayOfTheWeek)
+                .dropWhile(day -> day.getNumber() <= today.getDayOfWeek().getValue())
+                .toList();
+
+        // następne dni z datą
+        Map<String, LocalDate> currentWeekLeftDays = new LinkedHashMap<>();
+        for (DayOfWeek day : DayOfWeek.values()) {
+            if (day.getValue() > today.getDayOfWeek().getValue() && day.getValue() < 6) {
+                currentWeekLeftDays.put(day.name(), today.with(DayOfWeek.valueOf(day.name())));
+            }
+        }
+
+        List<WorkingHours> list = doctorWorkingHours.stream()
+                .filter(day -> day.getDayOfTheWeek().getNumber() > today.getDayOfWeek().getValue())
+                .toList();
+
+        Map<Map<String, LocalDate>, List<WorkingHours>> resultMap = new HashMap<>();
+        resultMap.put(currentWeekLeftDays, list);
+
+        return resultMap;
+    }
+
+    public String isDoctorWorkingToDay(List<WorkingHours> doctorWorkingHours) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter hoursFormat = DateTimeFormatter.ofPattern("HH:mm");
+        String currentHour = currentTime.format(hoursFormat);
+
+        for (WorkingHours workingDay : doctorWorkingHours) {
+            // jeżeli dzisiaj pracuje i jest przed końcem jego zmiany
+            if (workingDay.getDayOfTheWeek().getNumber() == currentTime.getDayOfWeek().getValue()
+                    && currentTime.toLocalTime().isBefore(workingDay.getEndTime())) {
+
+                // znajdź pierwszą pasującą godzinę
+                var firstTime = doctorWorkingHours.stream()
+                        .map(WorkingHours::getAppointmentTimes)
+                        .flatMap(Collection::stream)
+                        .dropWhile(item -> item.compareTo(currentHour) <= 0)
+                        .findFirst();
+
+                // lista pasujących terminów dzisiaj
+                var availableSlotOfTimesToday = doctorWorkingHours.stream()
+                        .filter(hours -> hours.getDayOfTheWeek().getNumber() == currentTime.getDayOfWeek().getValue())
+                        .map(WorkingHours::getAppointmentTimes)
+                        .flatMap(Collection::stream)
+                        .dropWhile(slot -> slot.compareTo(currentHour) <= 0)
+                        .toList();
+
+                // do której lekarz dzisiaj pracuje
+                var endOfShiftForToday = doctorWorkingHours.stream()
+                        .filter(day -> day.getDayOfTheWeek().getNumber() == currentTime.getDayOfWeek().getValue())
+                        .map(WorkingHours::getEndTime)
+                        .findFirst()
+                        .orElseThrow();
+
+                String endTime = endOfShiftForToday.format(hoursFormat);
+
+                String answer = String.format("""
+                        Lekarz pracuje dzisiaj do %s.
+                        Dostępne terminy to %s""", endTime, availableSlotOfTimesToday);
+
+                // zwróć dostępne terminy
+                return answer;
+            }
+        }
+        // zwróć najbliższy dostępny dzień z terminami
+        return "Lekarz nie pracuje dzisiaj";
+    }
+
+    public List<WorkingHours> getNextAvailableDay(List<WorkingHours> doctorWorkingHours) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter hoursFormat = DateTimeFormatter.ofPattern("HH:mm");
+        String currentHour = currentTime.format(hoursFormat);
+
+//        DayOfWeek nextDay = doctorWorkingHours.indexOf(currentTime.getDayOfWeek().getValue() + 1);
+        int nextDayInt = doctorWorkingHours.indexOf(currentTime.getDayOfWeek().getValue() + 1);
+
+        List<WorkingHours.DayOfTheWeek> daysInWeek = doctorWorkingHours.stream()
+                .map(WorkingHours::getDayOfTheWeek)
+                .toList();
+
+
+        return null;
+    }
 
     public LocalDate getNearestDayOfDoctorWorking(Integer doctorId) {
         LocalDateTime currentTime = LocalDateTime.now();

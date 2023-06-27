@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Doctor Schedule</title>
+</head>
+<body>
+<h1>Doctor Schedule</h1>
+<h1 th:text="${doctor.name + ' ' + doctor.surname + ' ' + doctor.title}"></h1>
+
+<ul>
+    <li th:each="entry : ${simpleMap}">
+        <h3 th:text="${entry.key}"></h3>
+
+        <p>Godziny pracy <span th:text="${entry.value.startTime + ' - ' + entry.value.endTime}"></span></p>
+
+        <p>Dostępne terminy:</p>
+
+        <ul>
+            <li>
+                <ul th:each="workingHours : ${entry.value}">
+                    <li th:each="time : ${workingHours.appointmentTimes}">
+                        <span th:text="${time}"></span>
+                        <button class="btn btn-danger">Rezerwuj (nie działa)</button>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+
+
+<!--<ul>-->
+<!--    <li th:each="entry : ${simpleMap}">-->
+<!--        <h3 th:text="${entry.key}"></h3>-->
+<!--        <p>Godziny pracy <span th:text="${entry.value.startTime + ' - ' + entry.value.endTime}"></span></p>-->
+<!--        <p>Dostępne terminy:</p>-->
+<!--        <ul>-->
+<!--            <li th:each="workingHours : ${entry.value}">-->
+<!--                <ul>-->
+<!--                    <li th:each="time : ${workingHours.appointmentTimes}" th:text="${time}"></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </li>-->
+<!--</ul>-->
+
+
+</body>
+</html>

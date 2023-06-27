@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.business.DoctorService;
+import pl.taw.business.ReservationService;
+import pl.taw.business.ScheduleEntry;
 import pl.taw.business.WorkingHours;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
@@ -27,8 +29,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -53,8 +54,9 @@ public class DoctorController {
     public static final String DOCTOR_UPDATE_TITLE = "/{doctorId}/title";
 
 
-    private DoctorDAO doctorDAO;
-    private DoctorService doctorService;
+    private final DoctorDAO doctorDAO;
+    private final DoctorService doctorService;
+    private final ReservationService reservationService;
 
 
     @GetMapping(PANEL)
@@ -270,8 +272,37 @@ public class DoctorController {
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDate today = LocalDate.now();
         String todayFormat = today.format(DateTimeFormatter.ofPattern("dd MM yyyy"));
+        DateTimeFormatter hoursFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        String czas = currentTime.format(hoursFormatter);
         DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
         String dzisiaj = WorkingHours.DayOfTheWeek.fromInt(today.getDayOfWeek().getValue()).getName();
+
+        String czyPracuje = reservationService.isDoctorWorkingToDay(workingHoursList);
+
+        List<WorkingHours.DayOfTheWeek> daysInWeek = workingHoursList.stream()
+                .map(WorkingHours::getDayOfTheWeek)
+                .toList();
+
+        List<WorkingHours.DayOfTheWeek> nextDays = workingHoursList.stream()
+                .map(WorkingHours::getDayOfTheWeek)
+                .dropWhile(day -> day.getNumber() <= currentDayOfWeek.getValue())
+                .toList();
+
+        List<LocalDate> dateOfDaysInCurrentWeek = new ArrayList<>();
+
+        Map<String, LocalDate> currentWeekDates = new HashMap<>();
+
+        Map<String, LocalDate> currentWeekLeftDays = new LinkedHashMap<>();
+
+        for (DayOfWeek day : DayOfWeek.values()) {
+            dateOfDaysInCurrentWeek.add(today.with(DayOfWeek.of(day.getValue())));
+
+            currentWeekDates.put(day.name(), today.with(DayOfWeek.valueOf(day.name())));
+
+            if (day.getValue() > currentTime.getDayOfWeek().getValue() && day.getValue() < 6) {
+                currentWeekLeftDays.put(day.name(), today.with(DayOfWeek.valueOf(day.name())));
+            }
+        }
 
         model.addAttribute("workingHoursList", workingHoursList);
         model.addAttribute("doctor", doctor);
@@ -280,8 +311,80 @@ public class DoctorController {
         model.addAttribute("todayFormat", todayFormat);
         model.addAttribute("currentDayOfWeek", currentDayOfWeek);
         model.addAttribute("dzisiaj", dzisiaj);
+        model.addAttribute("czas", czas);
+
+        model.addAttribute("czyPracuje", czyPracuje);
+        model.addAttribute("daysInWeek", daysInWeek);
+        model.addAttribute("nextDays", nextDays);
+
+        model.addAttribute("dateOfDaysInCurrentWeek", dateOfDaysInCurrentWeek);
+        model.addAttribute("currentWeekDates", currentWeekDates);
+        model.addAttribute("currentWeekLeftDays", currentWeekLeftDays);
 
         return "doctor/doctor-schedule";
+    }
+
+    // widok dla obecnego tygodnia
+    @GetMapping("/obecny/{doctorId}")
+    public String getDoctorScheduleForCurrentWeek(@PathVariable Integer doctorId, Model model) {
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
+        List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
+
+        Map<Map<String, LocalDate>, List<WorkingHours>> workHours = reservationService.getWorkingHoursForCurrentWeek(workingHoursList);
+
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("workHours", workHours);
+
+        return "/doctor/doctor-schedule-2";
+    }
+
+    @GetMapping("/trzy/{doctorId}")
+    public String getDoctorScheduleForCurrentWeekByEntry(@PathVariable Integer doctorId, Model model) {
+
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
+        List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
+        Map<Map<String, LocalDate>, List<WorkingHours>> resultMap = reservationService.getWorkingHoursForCurrentWeek(workingHoursList);
+
+
+        List<ScheduleEntry> scheduleEntries = new ArrayList<>();
+        for (Map.Entry<Map<String, LocalDate>, List<WorkingHours>> entry : resultMap.entrySet()) {
+            Map<String, LocalDate> dates = entry.getKey();
+            List<WorkingHours> workingHours = entry.getValue();
+
+            for (Map.Entry<String, LocalDate> dateEntry : dates.entrySet()) {
+                String dayOfWeek = dateEntry.getKey();
+                LocalDate date = dateEntry.getValue();
+
+                ScheduleEntry scheduleEntry = new ScheduleEntry();
+                scheduleEntry.setDayOfWeek(dayOfWeek);
+                scheduleEntry.setDate(date);
+                scheduleEntry.setWorkingHours(workingHours);
+
+                scheduleEntries.add(scheduleEntry);
+            }
+        }
+
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("scheduleEntries", scheduleEntries);
+
+        return "/doctor/doctor-schedule-3";
+    }
+
+
+    @GetMapping("/cztery/{doctorId}")
+    public String getDoctorScheduleSimpleMap(@PathVariable Integer doctorId, Model model) {
+
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
+        List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
+        Map<Map<String, LocalDate>, List<WorkingHours>> resultMap = reservationService.getWorkingHoursForCurrentWeek(workingHoursList);
+
+        Map<String, WorkingHours> simpleMap = reservationService.simpleMap(workingHoursList);
+
+
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("simpleMap", simpleMap);
+
+        return "/doctor/doctor-schedule-3";
     }
 
     // odczytywanie plików tekstowych z opisem lekarzy

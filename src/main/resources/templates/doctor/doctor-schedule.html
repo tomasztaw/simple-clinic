@@ -7,6 +7,60 @@
     <title>Doctor Schedule</title>
 </head>
 <body>
+<h2>Dzisiaj jest:</h2>
+<h3 th:text="${currentDayOfWeek}"></h3>
+<h3 th:text="${today}"></h3>
+<h3 th:text="${dzisiaj} + ' ' + ${todayFormat}"></h3>
+<h3 th:text="${currentTime}"></h3>
+
+<p> ---------------- </p>
+
+<p th:text="'Dzisiaj jest ' + ${dzisiaj} + ' ' + ${todayFormat}"></p>
+
+
+<p th:text="'Godzina ' + ${czas}"></p>
+
+<p>Czy lekarz dzisiaj przyjmuje:</p>
+<p th:text="${czyPracuje}"></p>
+
+<p> --------------------- </p>
+
+<p>Dni w jakich lekarz pracuje</p>
+<p th:text="${daysInWeek}"></p>
+
+<p>Kolejne możliwe dni pracy lekarza w obecnym tygodniu</p>
+<ul th:each="day : ${nextDays}">
+    <li>
+        <h3 th:text="${day}"></h3>
+    </li>
+</ul>
+
+<p> --------------- </p>
+
+<p>Grafik na pozostałe dni tego tygodnia</p>
+
+<p th:text="${dateOfDaysInCurrentWeek}"></p>
+
+
+<p th:text="${currentWeekDates}"></p>
+
+<p> ============  </p>
+
+<p>Wyświetl pozostałe dni tygodnia z datą</p>
+<p th:text="${currentWeekLeftDays}"></p>
+
+<p> ================  </p>
+
+<p>Lista z dniami i datami</p>
+<ul th:each="day : ${currentWeekLeftDays}">
+    <li>
+        <h2 th:text="${day.key + ' ' + day.value}"></h2>
+    </li>
+</ul>
+
+
+<p> ########################## </p>
+
 <h1>Doctor Schedule</h1>
 <h1 th:text="${doctor.name + ' ' + doctor.surname + ' ' + doctor.title}"></h1>
 <ul th:each="workingHours : ${workingHoursList}">
@@ -19,12 +73,6 @@
         </ul>
     </li>
 </ul>
-
-<h2>Dzisiaj jest:</h2>
-<h3 th:text="${currentDayOfWeek}"></h3>
-<h3 th:text="${today}"></h3>
-<h3 th:text="${dzisiaj} + ' ' + (${todayFormat})"></h3>
-<h3 th:text="${currentTime}"></h3>
 
 </body>
 </html>

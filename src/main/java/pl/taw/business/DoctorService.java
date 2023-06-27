@@ -48,7 +48,6 @@ public class DoctorService {
             workingHours.setStartTime(doctorSchedule.getStartTimeDs());
             workingHours.setEndTime(doctorSchedule.getEndTimeDs());
 
-
             workingHours.setAppointmentTimes(generateAppointmentTimes(
                     workingHours.getStartTime(),
                     workingHours.getEndTime(),
