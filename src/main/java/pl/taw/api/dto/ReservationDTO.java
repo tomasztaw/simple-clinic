@@ -3,7 +3,7 @@ package pl.taw.api.dto;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @With
@@ -16,7 +16,9 @@ public class ReservationDTO {
     private Integer doctorId;
     private Integer patientId;
     private LocalDate day;
-    private LocalDateTime startTimeR;
+    // zamiana na LocalTime
+//    private LocalDateTime startTimeR;
+    private LocalTime startTimeR;
     private Boolean occupied;
 
 }

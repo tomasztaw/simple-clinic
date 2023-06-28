@@ -23,31 +23,16 @@
                 <ul th:each="workingHours : ${entry.value}">
                     <li th:each="time : ${workingHours.appointmentTimes}">
                         <span th:text="${time}"></span>
-                        <button class="btn btn-danger">Rezerwuj (nie działa)</button>
+                        <form th:action="@{/reservations/add/{doctorId}/{patientId}/{day}/{startTimeR}(doctorId=${doctor.doctorId}, patientId=${patientId}, day=${entry.key.substring(entry.key.indexOf(' ')+1)}, startTimeR=${time})}" method="post">
+                            <button type="submit" class="btn btn-primary btn-lg">Rezerwuj</button>
+                        </form>
                     </li>
                 </ul>
             </li>
         </ul>
     </li>
+    <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
 </ul>
-
-
-
-<!--<ul>-->
-<!--    <li th:each="entry : ${simpleMap}">-->
-<!--        <h3 th:text="${entry.key}"></h3>-->
-<!--        <p>Godziny pracy <span th:text="${entry.value.startTime + ' - ' + entry.value.endTime}"></span></p>-->
-<!--        <p>Dostępne terminy:</p>-->
-<!--        <ul>-->
-<!--            <li th:each="workingHours : ${entry.value}">-->
-<!--                <ul>-->
-<!--                    <li th:each="time : ${workingHours.appointmentTimes}" th:text="${time}"></li>-->
-<!--                </ul>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </li>-->
-<!--</ul>-->
-
 
 </body>
 </html>

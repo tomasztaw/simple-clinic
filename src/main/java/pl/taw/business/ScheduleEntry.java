@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ScheduleEntry {
 
+    // TODO - ta klasa będzie do usunięcia po posprzątaniu
+
     private String dayOfWeek;
     private LocalDate date;
     private List<WorkingHours> workingHours;

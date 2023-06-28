@@ -9,10 +9,7 @@ import pl.taw.api.dto.OpinionDTO;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
-import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.entity.OpinionEntity;
-import pl.taw.infrastructure.database.entity.PatientEntity;
-import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.util.List;
 
@@ -62,21 +59,13 @@ public class OpinionRestController {
     }
 
     @PutMapping(OPINION_ID)
-    public ResponseEntity<OpinionEntity> updateOpinion(@PathVariable("opinionId") Integer opinionId, @RequestBody OpinionEntity updateOpinion) {
+    public ResponseEntity<OpinionEntity> updateOpinion(
+            @PathVariable("opinionId") Integer opinionId,
+            @RequestBody OpinionEntity updateOpinion) {
+
         OpinionEntity existingOpinion = opinionDAO.findEntityById(opinionId);
 
         if (existingOpinion != null) {
-//            DoctorEntity doctor = null;
-//            if (existingOpinion.getDoctor() != null) {
-//                doctor = doctorDAO.findEntityById(existingOpinion.getDoctor().getDoctorId());
-//            }
-//            PatientEntity patient = null;
-//            if (existingOpinion.getPatient() != null) {
-//                patient = patientDAO.findEntityById(existingOpinion.getPatient().getPatientId());
-//            }
-
-//            existingOpinion.setDoctor(doctor);
-//            existingOpinion.setPatient(patient);
             existingOpinion.setDoctorId(updateOpinion.getDoctorId());
             existingOpinion.setPatientId(updateOpinion.getPatientId());
             existingOpinion.setVisitId(updateOpinion.getVisitId());

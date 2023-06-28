@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Doctor</title>
+  <title>Patient reservations</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -70,49 +70,56 @@
     <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
   </div>
 
-    <h2>Doctor</h2>
+    <h2>Pacjent</h2>
     <table class="table table-striped table-hover">
     <tr>
       <th>Id</th>
       <th>Imię</th>
       <th>Nazwisko</th>
-      <th>Specjalizacja</th>
+      <th>Pesel</th>
+      <th>Telefon</th>
       <th>e-mail</th>
     </tr>
     <tr>
-      <td th:text="${doctor.doctorId}"></td>
-      <td th:text="${doctor.name}"></td>
-      <td th:text="${doctor.surname}"></td>
-      <td th:text="${doctor.title}"></td>
-      <td th:text="${doctor.email}"></td>
+      <td th:text="${patient.patientId}"></td>
+      <td th:text="${patient.name}"></td>
+      <td th:text="${patient.surname}"></td>
+      <td th:text="${patient.pesel}"></td>
+      <td th:text="${patient.phone}"></td>
+      <td th:text="${patient.email}"></td>
     </tr>
   </table>
 
     <div class="media">
-    <div class="photo-container">
-      <img th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'}" alt="Opis zdjęcia">
-    </div>
+<!--    <div class="photo-container">-->
+<!--      <img th:src="@{'/images/d' + ${patient.doctorId} + '.jpeg'}" alt="Opis zdjęcia">-->
+<!--    </div>-->
 
     <div class="media-body">
 
-      <h1>Opinie o lekarzu</h1>
-      <ul th:if="${opinions.isEmpty()}">
-        <li>Brak opinii - napisz pierwszą</li>
+      <h1>Rezerwacje pacjenta</h1>
+      <ul th:if="${reservations.isEmpty()}">
+        <li>Brak rezerwacji</li>
       </ul>
-      <ul th:if="${not opinions.isEmpty()}">
-        <li th:each="opinion : ${opinions}">
+      <ul th:if="${not reservations.isEmpty()}">
+        <li th:each="reservation : ${reservations}">
           <ul>
-            <li>Id: <span th:text="${opinion.opinionId}"></span></li>
-            <li>Data: <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></span></li>
-            <li>Opinia: <span th:text="${opinion.comment}"></span></li>
-            <li>Napisana przez: <span th:text="${opinion.patient.name}"></span></li>
+            <li>Id: <span th:text="${reservation.reservationId}"></span></li>
+            <li>Id lekarza: <span th:text="${reservation.doctorId}"></span></li>
+            <li>Dzień: <span th:text="${reservation.day}"></span></li>
+            <li>Czas: <span th:text="${reservation.startTimeR}"></span></li>
+            <div class="actions">
+              <button class="btn btn-danger">Odwołaj wizytę</button>
+              <button class="btn btn-danger">Pokaż lekarza</button>
+              <button class="btn btn-danger">Pokaż wizyty u tego lekarza</button>
+            </div>
           </ul>
           <br>
         </li>
       </ul>
 
       <div class="actions">
-        <a th:href="@{/doctors/schedule/{doctorId}(doctorId=${doctorId})}" class="btn btn-primary btn-lg">Umów wizytę</a>
+        <button class="btn btn-primary">Umów wizytę</button>
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
       </div>
 

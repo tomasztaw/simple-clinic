@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.business.DoctorService;
 import pl.taw.business.ReservationService;
 import pl.taw.business.ScheduleEntry;
@@ -264,7 +265,7 @@ public class DoctorController {
     }
 
     // grafik lekarza # nie wiem jeszcze czy będzie
-    @GetMapping(SCHEDULE)
+    @GetMapping("/stare/{doctorId}")  // coś się jeszcze z tego wykorzysta !!!
     public String getDoctorSchedule(@PathVariable Integer doctorId, Model model) {
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
@@ -371,7 +372,7 @@ public class DoctorController {
     }
 
 
-    @GetMapping("/cztery/{doctorId}")
+    @GetMapping(SCHEDULE)
     public String getDoctorScheduleSimpleMap(@PathVariable Integer doctorId, Model model) {
 
         DoctorDTO doctor = doctorDAO.findById(doctorId);
@@ -383,6 +384,9 @@ public class DoctorController {
 
         model.addAttribute("doctor", doctor);
         model.addAttribute("simpleMap", simpleMap);
+
+        // na razie przypiszemy pacjenta na sztywno
+        model.addAttribute("patientId", 5);
 
         return "/doctor/doctor-schedule-3";
     }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taw.api.dto.DoctorScheduleDTO;
 import pl.taw.api.dto.ReservationDTO;
+import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.DoctorScheduleDAO;
 import pl.taw.business.dao.ReservationDAO;
 
@@ -16,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -28,7 +28,27 @@ public class ReservationService {
     private final DoctorService doctorService;
 
 
-    // Próba uproszczenia mapy
+    public List<ReservationDTO> findAllReservationsByPatient(Integer patientId) {
+        return reservationDAO.findAllByPatient(patientId);
+    }
+
+    public List<ReservationDTO> findAllReservationsByDoctor(Integer doctorId) {
+        return reservationDAO.findAllByDoctor(doctorId);
+    }
+
+    public List<ReservationDTO> findAllReservationsForBoth(Integer doctorId, Integer patientId) {
+        return reservationDAO.findAll().stream()
+                .filter(reservation -> doctorId.equals(reservation.getDoctorId()))
+                .filter(reservation -> patientId.equals(reservation.getPatientId()))
+                .toList();
+    }
+
+    public List<ReservationDTO> findAllByDay(LocalDate day) {
+        return reservationDAO.findAllByDay(day);
+    }
+
+
+    // Próba uproszczenia mapy - działa, używam
     public Map<String, WorkingHours> simpleMap(List<WorkingHours> doctorWorkingHours) {
 
         Map<String, WorkingHours> result = new LinkedHashMap<>();
@@ -99,6 +119,7 @@ public class ReservationService {
         return resultMap;
     }
 
+    // działa, ale nie wiem czy mam sens dodatkowe komplikowanie dla wyświetlenia bieżącego dnia.
     public String isDoctorWorkingToDay(List<WorkingHours> doctorWorkingHours) {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter hoursFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -157,22 +178,18 @@ public class ReservationService {
                 .map(WorkingHours::getDayOfTheWeek)
                 .toList();
 
-
         return null;
     }
 
+    // nie wiem - jakieś próby
     public LocalDate getNearestDayOfDoctorWorking(Integer doctorId) {
         LocalDateTime currentTime = LocalDateTime.now();
 
         LocalDate today = LocalDate.now();
         String todayFormat = today.format(DateTimeFormatter.ofPattern("dd MM yyyy"));
-
         DayOfWeek currentDayOfWeek = LocalDate.now().getDayOfWeek();
-
         String dzisiaj = WorkingHours.DayOfTheWeek.fromInt(today.getDayOfWeek().getValue()).getName();
-
         List<DoctorScheduleDTO> schedules = doctorScheduleDAO.findScheduleByDoctorId(doctorId);
-
 
         Optional<DoctorScheduleDTO> first = schedules.stream()
                 .filter(sch -> sch.getDayOfTheWeek().equals(currentTime.getDayOfWeek().getValue()))
@@ -188,7 +205,6 @@ public class ReservationService {
                 firstDayOfTheWeek = day.getDayOfTheWeek();
             }
         }
-
 
         return null;
     }

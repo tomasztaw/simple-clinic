@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Doctor</title>
+  <title>Doctor reservations</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -95,24 +95,24 @@
 
     <div class="media-body">
 
-      <h1>Opinie o lekarzu</h1>
-      <ul th:if="${opinions.isEmpty()}">
-        <li>Brak opinii - napisz pierwszą</li>
+      <h1>Rezerwacje lekarza</h1>
+      <ul th:if="${reservations.isEmpty()}">
+        <li>Brak rezerwacji</li>
       </ul>
-      <ul th:if="${not opinions.isEmpty()}">
-        <li th:each="opinion : ${opinions}">
+      <ul th:if="${not reservations.isEmpty()}">
+        <li th:each="reservation : ${reservations}">
           <ul>
-            <li>Id: <span th:text="${opinion.opinionId}"></span></li>
-            <li>Data: <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></span></li>
-            <li>Opinia: <span th:text="${opinion.comment}"></span></li>
-            <li>Napisana przez: <span th:text="${opinion.patient.name}"></span></li>
+            <li>Id: <span th:text="${reservation.reservationId}"></span></li>
+            <li>Id pacjenta: <span th:text="${reservation.patientId}"></span></li>
+            <li>Dzień: <span th:text="${reservation.day}"></span></li>
+            <li>Czas: <span th:text="${reservation.startTimeR}"></span></li>
           </ul>
           <br>
         </li>
       </ul>
 
       <div class="actions">
-        <a th:href="@{/doctors/schedule/{doctorId}(doctorId=${doctorId})}" class="btn btn-primary btn-lg">Umów wizytę</a>
+        <button class="btn btn-primary">Umów wizytę</button>
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
       </div>
 

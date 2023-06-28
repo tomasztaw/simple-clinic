@@ -32,7 +32,8 @@ public class ReservationEntity {
     private LocalDate day;
 
     @Column(name = "start_time_r")
-    private LocalDateTime startTimeR;
+//    private LocalDateTime startTimeR; zamiana na LocalTime
+    private LocalTime startTimeR;
 
     @Column(name = "occupied")
     private Boolean occupied;
