@@ -20,9 +20,9 @@ public class OpinionRestController {
 
     public static final String API_OPINIONS = "/api/opinions";
     public static final String COMMENTS = "/comments";
-    public static final String OPINION_ID = "/{opinionId}";
+    public static final String UPDATE_BY_ID = "/update/{opinionId}";
     public static final String ADD = "/add";
-    public static final String DELETE_ID = "/delete/{opinionId}";
+    public static final String DELETE_BY_ID = "/delete/{opinionId}";
 
     private final OpinionDAO opinionDAO;
     private final DoctorDAO doctorDAO;
@@ -42,7 +42,7 @@ public class OpinionRestController {
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping(value = OPINION_ID, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = UPDATE_BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OpinionDTO> getOpinionById(@PathVariable("opinionId") Integer opinionId) {
         OpinionDTO opinion = opinionDAO.findById(opinionId);
         if (opinion != null) {
@@ -58,7 +58,7 @@ public class OpinionRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOpinion);
     }
 
-    @PutMapping(OPINION_ID)
+    @PutMapping(UPDATE_BY_ID)
     public ResponseEntity<OpinionEntity> updateOpinion(
             @PathVariable("opinionId") Integer opinionId,
             @RequestBody OpinionEntity updateOpinion) {
@@ -80,7 +80,7 @@ public class OpinionRestController {
     }
 
 
-    @DeleteMapping(DELETE_ID)
+    @DeleteMapping(DELETE_BY_ID)
     public ResponseEntity<Void> deleteOpinionById(@PathVariable("opinionId") Integer opinionId) {
         OpinionEntity opinionForDelete = opinionDAO.findEntityById(opinionId);
         if (opinionForDelete != null) {

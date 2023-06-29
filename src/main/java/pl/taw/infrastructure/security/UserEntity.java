@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "car_dealership_user")
+@Table(name = "app_user")
 public class UserEntity {
 
     @Id
@@ -32,13 +32,16 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "active")
     private Boolean active;
 
     @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-        name = "car_dealership_user_role",
-        joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinTable(name = "app_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles;
+
 }

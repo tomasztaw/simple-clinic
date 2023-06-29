@@ -59,9 +59,13 @@ public class VisitController {
     @GetMapping(SHOW)
     public String showVisit(@PathVariable("visitId") Integer visitId, Model model) {
         VisitDTO visit = visitDAO.findById(visitId);
-        OpinionDTO opinion = opinionDAO.findById(visit.getOpinion().getOpinionId());
         model.addAttribute("visit", visit);
-        model.addAttribute("opinion", opinion);
+
+        if (visit.getOpinion() != null) {
+            OpinionDTO opinion = opinionDAO.findById(visit.getOpinion().getOpinionId());
+            model.addAttribute("opinion", opinion);
+        }
+
         return "visit/visit-show";
     }
 
@@ -96,17 +100,15 @@ public class VisitController {
             @RequestParam(value = "status") String status,
             HttpServletRequest request
     ) {
-        DoctorEntity doctorEntity = doctorDAO.findEntityById(doctorId);
-        PatientEntity patientEntity = patientDAO.findEntityById(patientId);
-        VisitEntity newVisit = VisitEntity.builder()
-                .doctor(doctorEntity)
-                .patient(patientEntity)
+        VisitEntity visit = VisitEntity.builder()
+                .doctorId(doctorId)
+                .patientId(patientId)
                 .dateTime(dateTime)
                 .note(note)
                 .status(status)
                 .build();
-        visitDAO.save(newVisit);
-        // TODO sprawdzić czy jeżeli będę tworzył nową wizytę to doktor i pacjent będą obecni w widoku
+        visitDAO.save(visit);
+
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }

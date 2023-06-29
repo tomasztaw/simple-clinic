@@ -32,6 +32,7 @@ public class OpinionController {
     public static final String EDIT = "/edit/{opinionId}";
     public static final String PANEL = "/panel";
     public static final String ADD = "/add";
+    public static final String ADD_FROM_VISIT = "/add/{visitId}/{doctorId}/{patientId}";
     public static final String SHOW = "/show/{opinionId}";
     public static final String UPDATE = "/update";
     public static final String UPDATE_BY_ID = "/update/{opinionId}";
@@ -82,6 +83,26 @@ public class OpinionController {
         opinionDAO.save(newOpinion);
         // TODO zrobić przekierowanie zależne od panelu admin/pacjent
         return "redirect:/opinions/opinion-panel";
+    }
+
+    @PostMapping(ADD_FROM_VISIT)
+    public String addOpinionFromVisit(
+            @PathVariable(value = "visitId") Integer visitId,
+            @PathVariable(value = "doctorId") Integer doctorId,
+            @PathVariable(value = "patientId") Integer patientId,
+            @RequestParam(value = "comment") String comment,
+            HttpServletRequest request) {
+        OpinionEntity newOpinion = OpinionEntity.builder()
+                .visitId(visitId)
+                .doctorId(doctorId)
+                .patientId(patientId)
+                .comment(comment)
+                .createdAt(LocalDateTime.now())
+                .build();
+        opinionDAO.save(newOpinion);
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
     @PutMapping(UPDATE)

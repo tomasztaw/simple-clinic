@@ -1,90 +1,170 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-        rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-        crossorigin="anonymous">
-  <title>Panel lekarzy</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+
+    <title>Panel lekarzy</title>
+
 </head>
 <body>
+<header class="header">
+    <div class="logo">
+        <a href="/" th:href="@{/}">
+            <img th:src="@{/images/2135.jpg}" alt="Logo" width="180" height="180">
+        </a>
+    </div>
+    <div class="welcome">
+        <h1>Panel administratora z lekarzami</h1>
+    </div>
+    <div class="login-button">
+        <a href="#" class="btn btn-primary">Zaloguj</a>
+    </div>
+</header>
+
 <div class="container">
-  <div class="page-header" id="banner">
     <h2>Dodaj lekarza</h2>
-    <form action="#" th:action="@{/doctors/add}" method="POST">
-      <div class="form-group">
-        Name: <input type="text" th:name="name"/>
-        Surname: <input type="text" th:name="surname"/>
-        Title: <input type="text" th:name="title"/>
-        Phone: <input type="text" th:name="phone"/>
-        Email: <input type="text" th:name="email"/>
-      </div>
-      <br>
-      <div class="form-group">
-        <input type="submit" value="Dodaj lekarza" name="button"/>
-      </div>
-    </form>
-  </div>
-  <br>
-  <h2>Aktualizuj dane</h2>
-  <form action="#"
-        th:action="@{/doctors/update}"
-        th:method="PUT"
-        th:object="${updateDoctor}">
-    <div class="form-group">
-      ID: <input type="text" th:field="*{doctorId}"/>
-      NAME: <input type="text" th:field="*{name}"/>
-      SURNAME: <input type="text" th:field="*{surname}"/>
-      TITLE: <input type="text" th:field="*{title}"/>
-      PHONE: <input type="text" th:field="*{phone}"/>
-      EMAIL: <input type="text" th:field="*{email}"/>
+    <div class="page-header" id="banner">
+        <form action="#" th:action="@{/doctors/add}" method="POST">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Imię:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="surname" class="form-label">Nazwisko:</label>
+                        <input type="text" class="form-control" id="surname" name="surname">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Specjalizacja:</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Telefon:</label>
+                        <input type="text" class="form-control" id="phone" name="phone">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail:</label>
+                        <input type="text" class="form-control" id="email" name="email">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Dodaj lekarza</button>
+        </form>
+        <br>
+
+        <h2>Aktualizuj dane</h2>
+        <form action="#" th:action="@{/doctors/update}" th:method="PUT" th:object="${updateDoctor}">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="doctorId" class="form-label">Id lekarza:</label>
+                        <input type="text" class="form-control" th:field="*{doctorId}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Specjalizacja:</label>
+                        <input type="text" class="form-control" th:field="*{title}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Imię:</label>
+                        <input type="text" class="form-control" th:field="*{name}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="surname" class="form-label">Nazwisko:</label>
+                        <input type="text" class="form-control" th:field="*{surname}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Telefon:</label>
+                        <input type="text" class="form-control" th:field="*{phone}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail:</label>
+                        <input type="text" class="form-control" th:field="*{email}">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Aktualizuj dane</button>
+        </form>
+        <br>
     </div>
     <br>
-    <div class="form-group">
-      <input type="submit" value="Aktualizuj lekarza" name="button"/>
+
+    <div>
+        <h2>Aktualni lekarze</h2>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Specjalizacja</th>
+                <th>Telefon</th>
+                <th>E-mail</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="doctor : ${doctors}">
+                <td th:text="${doctor.doctorId}"></td>
+                <td th:text="${doctor.name}"></td>
+                <td th:text="${doctor.surname}"></td>
+                <td th:text="${doctor.title}"></td>
+                <td th:text="${doctor.phone}"></td>
+                <td th:text="${doctor.email}"></td>
+                <td>
+                    <form action="#" th:action="@{/doctors/show/{doctorId}(doctorId=${doctor.doctorId})}"
+                          method="GET">
+                        <button type="submit" class="btn btn-info">Show</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="#"
+                          th:action="@{/visits/doctor/{doctorId}/all(doctorId=${doctor.doctorId})}"
+                          th:method="GET">
+                        <button type="submit" class="btn btn-danger">Wizyty</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-  </form>
-  <br>
-  <div>
-    <h2>Aktualni lekarze</h2>
-    <table class="table table-striped table-hover">
-      <thead>
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Title</th>
-        <th>Phone</th>
-        <th>Email</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="doctor : ${doctors}">
-        <td th:text="${doctor.doctorId}"></td>
-        <td th:text="${doctor.name}"></td>
-        <td th:text="${doctor.surname}"></td>
-        <td th:text="${doctor.title}"></td>
-        <td th:text="${doctor.phone}"></td>
-        <td th:text="${doctor.email}"></td>
-        <td>
-          <form action="#" th:action="@{/doctors/show/{doctorId}(doctorId=${doctor.doctorId})}"
-                method="GET">
-            <button type="submit" class="btn btn-info">Show</button>
-          </form>
-        </td>
-        <td>
-          <form action="#"
-                th:action="@{/visits/doctor/{doctorId}/all(doctorId=${doctor.doctorId})}"
-                th:method="GET">
-            <button type="submit" class="btn btn-danger">Wizyty</button>
-          </form>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+    <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
 </div>
+
+<div class="footer">
+    <p>© 2023 Twoja Stopka</p>
+</div>
+
 </body>
 </html>

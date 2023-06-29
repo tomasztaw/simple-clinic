@@ -76,6 +76,7 @@ public class ReservationController {
                 .patientId(patientId)
                 .day(day)
                 .startTimeR(startTimeR)
+                .occupied(true)
                 .build();
 
         reservationDAO.save(newReservation);
@@ -92,6 +93,7 @@ public class ReservationController {
         reservation.setPatientId(updateReservation.getPatientId());
         reservation.setDay(updateReservation.getDay());
         reservation.setStartTimeR(updateReservation.getStartTimeR());
+        reservation.setOccupied(true);
 
         reservationDAO.save(reservation);
         // TODO zrobić przekierowanie zależne od panelu admin/pacjent

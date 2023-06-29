@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -23,12 +25,11 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationManager authManager(
-        HttpSecurity http,
+        HttpSecurity httpSecurity,
         PasswordEncoder passwordEncoder,
-        UserDetailsService userDetailService
-    )
-        throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
+        UserDetailsService userDetailService)
+            throws Exception {
+        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
             .userDetailsService(userDetailService)
             .passwordEncoder(passwordEncoder)
             .and()
@@ -37,12 +38,12 @@ public class SecurityConfiguration {
 
     @Bean
     @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
-    SecurityFilterChain securityEnabled(HttpSecurity http) throws Exception {
-        http.csrf()
+    SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf()
             .disable()
             .authorizeHttpRequests()
             .requestMatchers("/login", "/error", "/images/oh_no.png").permitAll()
-            .requestMatchers("/mechanic/**").hasAnyAuthority("MECHANIC")
+            .requestMatchers("/images/**", "/clinic/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
             .requestMatchers("/salesman/**", "/purchase/**", "/service/**").hasAnyAuthority("SALESMAN")
             .requestMatchers("/", "/car/**", "/images/**").hasAnyAuthority("MECHANIC", "SALESMAN")
             .requestMatchers("/api/**").hasAnyAuthority("REST_API")
@@ -56,7 +57,7 @@ public class SecurityConfiguration {
             .deleteCookies("JSESSIONID")
             .permitAll();
 
-        return http.build();
+        return httpSecurity.build();
     }
 
     @Bean
