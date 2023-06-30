@@ -5,13 +5,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
-import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
-import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
-import pl.taw.infrastructure.database.entity.PatientEntity;
 
 import java.util.List;
 
@@ -21,7 +18,7 @@ import java.util.List;
 public class DoctorRestController {
 
     public static final String API_DOCTORS = "/api/doctors";
-    public static final String LOGIN = "/login";
+    public static final String LOGOWANIE = "/logowanie";
     public static final String DOCTOR_ID = "/{doctorId}";
     public static final String DASHBOARD_ID = "/dashboard/{doctorId}";
     public static final String HISTORY = "/history/{doctorId}";

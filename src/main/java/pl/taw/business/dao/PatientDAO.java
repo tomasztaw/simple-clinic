@@ -16,6 +16,8 @@ public interface PatientDAO {
 
     PatientDTO findByPesel(String pesel);
 
+    PatientDTO findByEmail(String email);
+
     PatientEntity saveAndReturn(PatientEntity patientEntity);
 
     void save(PatientEntity patientEntity);

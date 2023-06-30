@@ -15,7 +15,7 @@ import pl.taw.infrastructure.database.entity.VisitEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-25T13:33:24+0200",
+    date = "2023-06-30T20:17:34+0200",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (GraalVM Community)"
 )
 @Component

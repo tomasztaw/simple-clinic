@@ -10,7 +10,6 @@ import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
-import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
 
 import java.util.List;
 import java.util.Random;
@@ -21,7 +20,7 @@ import java.util.Random;
 public class PatientRestController {
 
     public static final String API_PATIENTS = "/api/patients";
-    public static final String LOGIN = "/login";
+    public static final String LOGOWANIE = "/logowanie";
     public static final String PATIENT_ID = "/{patientId}";
     public static final String DASHBOARD_ID = "/dashboard/{patientId}";
     public static final String HISTORY = "/history/{patientId}";
@@ -44,12 +43,12 @@ public class PatientRestController {
         }
     }
 
-    @GetMapping(LOGIN)
+    @GetMapping(LOGOWANIE)
     public ResponseEntity<String> showLoginForm() {
         return ResponseEntity.ok("login2");
     }
 
-    @PostMapping(LOGIN)
+    @PostMapping(LOGOWANIE)
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         if (username.equals("user") && password.equals("test")) {
             // Losowanie pacjenta

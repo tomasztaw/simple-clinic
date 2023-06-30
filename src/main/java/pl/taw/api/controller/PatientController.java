@@ -6,6 +6,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -18,6 +21,9 @@ import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
+import pl.taw.infrastructure.security.ClinicUserDetailsService;
+import pl.taw.infrastructure.security.UserEntity;
+import pl.taw.infrastructure.security.UserRepository;
 
 import java.net.URI;
 import java.util.List;
@@ -29,7 +35,7 @@ import java.util.Random;
 public class PatientController {
 
     public static final String PATIENTS = "/patients";
-    public static final String LOGIN = "/login";
+    public static final String LOGOWANIE = "/logowanie";
     public static final String DASHBOARD = "/dashboard";
     public static final String DASHBOARD_ID = "/dashboard/{patientId}";
     public static final String PATIENT_ID = "/{patientId}";
@@ -51,13 +57,39 @@ public class PatientController {
     // dodanie wizyt
     private final VisitService visitService;
 
-    @GetMapping(LOGIN)
+    private final UserRepository userRepository;
+
+    @GetMapping
+    public String patientPage(Authentication authentication, Model model) {
+
+
+
+//        UserEntity user = (UserEntity) authentication.getPrincipal();
+//        UserEntity user2 = (UserEntity) authentication.getDetails();
+//        ClinicUserDetailsService clinicUserDetailsService = (ClinicUserDetailsService) authentication.getPrincipal();
+//        UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
+
+        User userSS = (User) authentication.getPrincipal();
+        UserEntity userEntity = userRepository.findByUserName(userSS.getUsername());
+
+
+        PatientDTO patient = patientDAO.findByEmail(userEntity.getEmail());
+
+//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+//        Long pacjentId = userDetails.getPacjentId();
+
+        model.addAttribute("patient", patient);
+
+        return "patient/patient-page";
+    }
+
+    @GetMapping(LOGOWANIE)
     public String showLoginForm() {
         return "login2";
     }
 
 
-    @PostMapping(LOGIN)
+    @PostMapping(LOGOWANIE)
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
         if (username.equals("user") && password.equals("test")) {
             // losowanie pacjent

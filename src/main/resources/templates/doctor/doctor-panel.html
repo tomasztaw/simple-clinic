@@ -22,8 +22,11 @@
     <div class="welcome">
         <h1>Panel administratora z lekarzami</h1>
     </div>
+    <div>
+        <h3>Jesteś zalogowany jako "<span th:text="${username}"></span>"</h3>
+    </div>
     <div class="login-button">
-        <a href="#" class="btn btn-primary">Zaloguj</a>
+        <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
     </div>
 </header>
 

@@ -51,6 +51,16 @@ public class PatientRepository implements PatientDAO {
     }
 
     @Override
+    public PatientDTO findByEmail(String email) {
+        return patientJpaRepository.findAll().stream()
+                .filter(patient -> email.equals(patient.getEmail()))
+                .findFirst()
+                .map(patientMapper::mapFromEntity)
+                .orElseThrow(() -> new NotFoundException(
+                        "Could not found patientEntity with email: [%s]".formatted(email)));
+    }
+
+    @Override
     public PatientEntity saveAndReturn(PatientEntity patientEntity) {
         return patientJpaRepository.save(patientEntity);
     }

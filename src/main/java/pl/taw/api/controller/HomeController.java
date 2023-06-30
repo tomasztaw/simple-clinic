@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 
     public static final String HOME = "/";
+    public static final String WELCOME = "/welcome";
 
     @GetMapping(HOME)
     public String homePage(Model model) {
         return "home";
     }
+
+//    @GetMapping(WELCOME)
+//    public String welcomePage(Model model) {
+//        return "welcome";
+//    }
 
 }

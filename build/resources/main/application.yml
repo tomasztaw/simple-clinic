@@ -31,7 +31,8 @@ spring:
         enabled: true
 
   security:
-    enabled: false
+    enabled: true
+#    enabled: false
 
   flyway:
     baseline-on-migrate=true:
@@ -40,3 +41,11 @@ spring:
     descriptions:
       folder: desc/
       prefix: doctorDesc
+
+# Na końcu usuń!!!!
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+# Do usunięcia przed puszczeniem na produkcję

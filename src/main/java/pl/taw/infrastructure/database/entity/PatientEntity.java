@@ -2,6 +2,7 @@ package pl.taw.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.taw.infrastructure.security.UserEntity;
 
 import java.util.List;
 
@@ -44,5 +45,8 @@ public class PatientEntity {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OpinionEntity> createdOpinions;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 }
