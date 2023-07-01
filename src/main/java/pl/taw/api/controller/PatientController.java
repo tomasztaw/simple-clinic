@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,21 +61,16 @@ public class PatientController {
     @GetMapping
     public String patientPage(Authentication authentication, Model model) {
 
+        ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
+        UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
+        String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
 
+        UserEntity user = UserEntity.builder()
+                .userName(details.getUsername())
+                .email(userEmail)
+                .build();
 
-//        UserEntity user = (UserEntity) authentication.getPrincipal();
-//        UserEntity user2 = (UserEntity) authentication.getDetails();
-//        ClinicUserDetailsService clinicUserDetailsService = (ClinicUserDetailsService) authentication.getPrincipal();
-//        UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
-
-        User userSS = (User) authentication.getPrincipal();
-        UserEntity userEntity = userRepository.findByUserName(userSS.getUsername());
-
-
-        PatientDTO patient = patientDAO.findByEmail(userEntity.getEmail());
-
-//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-//        Long pacjentId = userDetails.getPacjentId();
+        PatientDTO patient = patientDAO.findByEmail(user.getEmail());
 
         model.addAttribute("patient", patient);
 

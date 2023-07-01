@@ -45,8 +45,4 @@ public class PatientEntity {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OpinionEntity> createdOpinions;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
 }

@@ -106,7 +106,7 @@ test {
 }
 
 bootJar {
-	archiveFileName = "myapp.${archiveExtension.get()}"
+	archiveFileName = "simple_clinic.${archiveExtension.get()}"
 }
 
 jar {

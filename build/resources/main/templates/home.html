@@ -48,6 +48,18 @@
         </div>
     </div>
 
+    <div th:if="${isAdmin}">
+        <h1>Witaj, Adminie!</h1>
+    </div>
+
+    <div th:if="${isDoctor}">
+        <h1>Witaj, Doktorku!</h1>
+    </div>
+
+    <div th:if="${isUser}">
+        <h1>Witaj, Pacjencie!</h1>
+    </div>
+
     <div class="footer">
         <p>© 2023 Twoja Stopka</p>
     </div>

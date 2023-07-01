@@ -72,7 +72,7 @@ public class SecurityConfiguration {
             Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
             if (roles.contains("ADMIN")) {
-                response.sendRedirect("/admin");
+                response.sendRedirect("/clinic");
             } else if (roles.contains("DOCTOR")) {
                 response.sendRedirect("/doctors");
             } else if (roles.contains("USER")) {

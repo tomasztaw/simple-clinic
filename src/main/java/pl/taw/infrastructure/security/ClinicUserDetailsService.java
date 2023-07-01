@@ -20,7 +20,7 @@ public class ClinicUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) {
         UserEntity user = userRepository.findByUserName(username);
-        List<SimpleGrantedAuthority> authorities =  getUserAuthority(user.getRoles());
+        List<SimpleGrantedAuthority> authorities = getUserAuthority(user.getRoles());
         return buildUserForAuthentication(user, authorities);
     }
 
@@ -42,4 +42,10 @@ public class ClinicUserDetailsService implements UserDetailsService {
                 .distinct()
                 .toList();
     }
+
+    public String getUserEmailAfterAuthentication(String username) {
+        UserEntity user = userRepository.findByUserName(username);
+        return user.getEmail();
+    }
+
 }
