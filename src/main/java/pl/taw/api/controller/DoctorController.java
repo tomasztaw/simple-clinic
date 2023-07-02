@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.PatientDTO;
+import pl.taw.api.dto.ReservationDTO;
 import pl.taw.business.DoctorService;
 import pl.taw.business.ReservationService;
 import pl.taw.business.ScheduleEntry;
@@ -69,10 +70,10 @@ public class DoctorController {
         model.addAttribute("doctors", doctors);
         model.addAttribute("updateDoctor", new DoctorDTO());
 
+        // !!! pamiętaj
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         model.addAttribute("username", username);
-
 
         return "doctor/doctor-panel";
     }
@@ -161,14 +162,14 @@ public class DoctorController {
         model.addAttribute("workingHours", workingHours);
         String doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
 //        String defaultDescription = "src/main/resources/desc/doctorDesc0.txt";
-        String defaultDescription = "src/main/resources/desc/default.rtf";
+        String defaultDescription = "src/main/resources/desc/default.txt";
         Path filePath = Paths.get(doctorDescFile);
         String description;
         try {
             if (Files.exists(filePath) && Files.isRegularFile(filePath)) {
-                description = new String(Files.readAllBytes(filePath));
+                description = Files.readString(filePath);
             } else {
-                description = new String(Files.readAllBytes(Paths.get(defaultDescription)));
+                description = Files.readString(Paths.get(defaultDescription));
             }
             model.addAttribute("description", description);
         } catch (IOException e) {
@@ -384,25 +385,61 @@ public class DoctorController {
     @GetMapping(SCHEDULE)
     public String getDoctorScheduleSimpleMap(@PathVariable Integer doctorId, Model model) {
 
+        LocalDate today = LocalDate.now();
+
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
         Map<Map<String, LocalDate>, List<WorkingHours>> resultMap = reservationService.getWorkingHoursForCurrentWeek(workingHoursList);
 
-        Map<String, WorkingHours> simpleMap = reservationService.simpleMap(workingHoursList);
+        List<ReservationDTO> notAvailableTimes = reservationService.findAllReservationsByDoctor(doctorId);
 
+        List<LocalDateTime> listOfRes = notAvailableTimes.stream().map(item -> LocalDateTime.of(item.getDay(), item.getStartTimeR())).toList();
+
+        Map<String, WorkingHours> simpleMapBeforeCheck;
+//        Map<String, WorkingHours> simpleMap = reservationService.simpleMap(workingHoursList);
+
+        if (today.getDayOfWeek().getValue() < 5) {
+            simpleMapBeforeCheck = reservationService.simpleMap(workingHoursList);
+        } else {
+            simpleMapBeforeCheck = reservationService.simpleMapForNextWeek(workingHoursList);
+        }
+
+        Map<String, WorkingHours> simpleMap = new LinkedHashMap<>();
+
+        for (Map.Entry<String, WorkingHours> entry : simpleMapBeforeCheck.entrySet()) {
+            String date = entry.getKey().substring(entry.getKey().indexOf(" ") + 1);
+            WorkingHours workingHours = entry.getValue();
+            WorkingHours availableDates = new WorkingHours();
+
+            List<String> times = workingHours.getAppointmentTimes();
+            List<String> availableTimes = new ArrayList<>();
+
+            for (String time : times) {
+                LocalDateTime forCheck = LocalDateTime.parse(date + " " + time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                if (!listOfRes.contains(forCheck)) {
+                    availableTimes.add(time);
+                }
+            }
+
+            availableDates.setAppointmentTimes(availableTimes);
+            if (!availableTimes.isEmpty()) {
+                simpleMap.put(entry.getKey(), availableDates);
+            }
+        }
 
         model.addAttribute("doctor", doctor);
         model.addAttribute("simpleMap", simpleMap);
 
-        // na razie przypiszemy pacjenta na sztywno
+        // na razie przypiszemy pacjenta na sztywno !!!!!!!!!!!!!!!
         model.addAttribute("patientId", 5);
 
         return "/doctor/doctor-schedule-3";
     }
 
-    // odczytywanie plików tekstowych z opisem lekarzy
+    // odczytywanie plików tekstowych z opisem lekarzy  -> chyba nie będzie potrzebne
     private String readDescriptionFromFile(String fileName) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(fileName)));
+//        return new String(Files.readAllBytes(Paths.get(fileName)));
+        return Files.readString(Paths.get(fileName));
     }
 
 

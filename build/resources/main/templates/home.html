@@ -19,10 +19,17 @@
         <div class="welcome">
             <h1>Witaj na stronie powitalnej</h1>
         </div>
+<!--        <div>-->
+<!--            <p>Jesteś zalogowany jako: <span th:text="${username}"></span></p>-->
+<!--        </div>-->
         <div class="login-button">
-            <a th:href="@{/patients/login}" class="btn btn-primary">Zaloguj</a>
-            <a th:href="@{/patients/register}" class="btn btn-primary">Zarejestruj</a>
+            <p>Jesteś zalogowany jako: <span th:text="${username}"></span></p>
+            <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
         </div>
+<!--        <div class="login-button">-->
+<!--            <a th:href="@{/patients/login}" class="btn btn-primary">Zaloguj</a>-->
+<!--            <a th:href="@{/patients/register}" class="btn btn-primary">Zarejestruj</a>-->
+<!--        </div>-->
     </header>
 
     <div class="content">

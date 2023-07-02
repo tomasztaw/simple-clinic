@@ -78,7 +78,7 @@ public class SecurityConfiguration {
             } else if (roles.contains("USER")) {
                 response.sendRedirect("/clinic/patients");
             } else {
-                response.sendRedirect("/");
+                response.sendRedirect("/welcome");
             }
         };
     }
@@ -88,7 +88,8 @@ public class SecurityConfiguration {
     SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**").permitAll()
+                .requestMatchers("/clinic/welcome").permitAll()
+                .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**", "/welcome").permitAll()
                 //.requestMatchers("/patients/**", "/doctors/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
                 .anyRequest().authenticated()
                 .and()

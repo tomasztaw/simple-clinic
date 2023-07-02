@@ -2,6 +2,7 @@ package pl.taw.api.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,10 +50,14 @@ public class VisitController {
 
 
     @GetMapping(PANEL)
-    public String showVisitPanel(Model model) {
+    public String showVisitPanel(Model model, Authentication authentication) {
         List<VisitDTO> visits = visitDAO.findAll();
         model.addAttribute("visits", visits);
         model.addAttribute("updateVisit", new VisitEntity());
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
         return "visit/visit-panel";
     }
 

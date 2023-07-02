@@ -121,6 +121,15 @@
   });
   dp.init();
 
+  dp.events.list = [
+    {
+        start: new DayPilot.Date("2023-07-02T12:00:00"),
+        end: new DayPilot.Date("2023-07-02T12:00:00").addMinutes(10),
+        id: DayPilot.guid(),
+        text: "Umowiona z nim",
+
+    }
+];
 
   const app = {
     init: () => {

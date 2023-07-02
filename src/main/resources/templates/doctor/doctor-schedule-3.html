@@ -45,8 +45,8 @@
     .actions button {
       margin-right: 10px;
     }
-  </style>
 
+    </style>
 
 
 </head>
@@ -83,7 +83,8 @@
 
     <div class="media">
         <div class="photo-container">
-            <img th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'} ? @{'/images/d' + ${doctor.doctorId} + '.jpeg'} : @{'/images/default.png'}" alt="Opis zdjęcia">
+            <img th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'} ? @{'/images/d' + ${doctor.doctorId} + '.jpeg'} : @{'/images/default.png'}"
+                 alt="Opis zdjęcia">
         </div>
 
         <div class="media-body">
@@ -102,7 +103,8 @@
                                 <div class="row" style="display: flex;">
                                     <li th:each="time : ${workingHours.appointmentTimes}" style="margin-right: 10px;">
                                         <span th:text="${time}"></span>
-                                        <form th:action="@{/reservations/add/{doctorId}/{patientId}/{day}/{startTimeR}(doctorId=${doctor.doctorId}, patientId=${patientId}, day=${entry.key.substring(entry.key.indexOf(' ')+1)}, startTimeR=${time})}" method="post">
+                                        <form th:action="@{/reservations/add/{doctorId}/{patientId}/{day}/{startTimeR}(doctorId=${doctor.doctorId}, patientId=${patientId}, day=${entry.key.substring(entry.key.indexOf(' ')+1)}, startTimeR=${time})}"
+                                              method="post">
                                             <button type="submit" class="btn btn-primary">Rezerwuj</button>
                                         </form>
                                     </li>

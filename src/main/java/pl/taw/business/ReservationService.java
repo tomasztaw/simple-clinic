@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -48,7 +49,42 @@ public class ReservationService {
     }
 
 
-    // Próba uproszczenia mapy - działa, używam
+    public Map<String, WorkingHours> simpleMapForNextWeek(List<WorkingHours> doctorWorkingHours) {
+        LocalDate today = LocalDate.now();
+        Map<String, LocalDate> nextWeekLeftDays = new LinkedHashMap<>();
+        LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+
+        List<LocalDate> weekDaysList = new ArrayList<>();
+        Map<String, LocalDate> weekDaysMap = new HashMap<>();
+
+        for (int i = 0; i < 5; i++) {
+            LocalDate day = nextMonday.plusDays(i);
+            weekDaysList.add(day);
+            weekDaysMap.put(day.getDayOfWeek().toString(), day);
+            for (WorkingHours hours : doctorWorkingHours) {
+                if (day.getDayOfWeek().getValue() == hours.getDayOfTheWeek().getNumber()) {
+                    nextWeekLeftDays.put(WorkingHours.DayOfTheWeek.fromInt(day.getDayOfWeek().getValue()).getName(), day);
+                }
+            }
+        }
+
+        List<String> dayAndDate = nextWeekLeftDays.entrySet().stream()
+//                .map(entry -> entry.getKey() + " " + entry.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
+                .map(entry -> entry.getKey() + " " + entry.getValue())
+                .toList();
+
+
+
+        // dzień tygodnia i data, godziny pracy
+        Map<String, WorkingHours> resultMap = IntStream.range(0, Math.min(doctorWorkingHours.size(), dayAndDate.size()))
+                .boxed()
+                .collect(Collectors.toMap(dayAndDate::get, doctorWorkingHours::get, (a, b) -> b, LinkedHashMap::new));
+
+        return resultMap;
+    }
+
+
+    // Próba uproszczenia mapy - działa, używam - pokazuje obecny tydzień od następnego dnia roboczego
     public Map<String, WorkingHours> simpleMap(List<WorkingHours> doctorWorkingHours) {
 
         Map<String, WorkingHours> result = new LinkedHashMap<>();

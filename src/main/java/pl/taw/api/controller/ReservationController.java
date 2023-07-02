@@ -3,6 +3,7 @@ package pl.taw.api.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +43,14 @@ public class ReservationController {
     private final PatientDAO patientDAO;
 
     @GetMapping(PANEL)
-    public String showReservationPanel(Model model) {
+    public String showReservationPanel(Model model, Authentication authentication) {
         List<ReservationDTO> reservations = reservationDAO.findAll();
         model.addAttribute("reservations", reservations);
         model.addAttribute("updateReservation", new ReservationDTO());
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
         return "reservation/reservation-panel";
     }
 
@@ -74,6 +79,7 @@ public class ReservationController {
         ReservationEntity newReservation = ReservationEntity.builder()
                 .doctorId(doctorId)
                 .patientId(patientId)
+//                .day(LocalDate.parse(day.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .day(day)
                 .startTimeR(startTimeR)
                 .occupied(true)

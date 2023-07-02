@@ -161,10 +161,14 @@ public class PatientController {
 
     // ok
     @GetMapping(PANEL)
-    public String patientsPanel(Model model) {
+    public String patientsPanel(Model model, Authentication authentication) {
         List<PatientDTO> patients = patientDAO.findAll();
         model.addAttribute("patients", patients);
         model.addAttribute("updatePatient", new PatientDTO());
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
         return "patient/patient-panel";
     }
 

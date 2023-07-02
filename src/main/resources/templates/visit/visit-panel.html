@@ -22,7 +22,8 @@
         <h1>Panel administratora dla wizyt</h1>
     </div>
     <div class="login-button">
-        <a href="#" class="btn btn-primary">Zaloguj</a>
+        <p>Jesteś zalogowany jako: <span th:text="${username}"></span></p>
+        <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
     </div>
 </header>
 

@@ -3,6 +3,7 @@ package pl.taw.api.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,8 @@ public class HomeController {
             boolean isAdmin = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
             boolean isDoctor = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("DOCTOR"));
             boolean isUser = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("USER"));
+            String username = authentication.getName();
+            model.addAttribute("username", username);
             model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("isUser", isUser);
             model.addAttribute("isDoctor", isDoctor);
