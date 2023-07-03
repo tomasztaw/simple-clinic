@@ -52,7 +52,7 @@
             </a>
         </div>
         <!-- Możesz dodać dodatkowe elementy w nagłówku -->
-        <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
+        <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
 
     </div>
 
@@ -91,18 +91,17 @@
         <div class="row">
             <div class="col">
                 <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
-<!--                <form th:action="@{/patients/phone-view/{patient.patientId}}" method="post" th:method="patch" class="mt-4">-->
                     <button type="submit" class="btn btn-primary">Zaktualizuj telefon</button>
                 </form>
             </div>
             <div class="col">
-                <a th:href="@{/patients/history/{patientId}(patientId=${patient.patientId})}" class="btn btn-info">Sprawdź historię</a>
+                <a th:href="@{/patients/history/{patientId}(patientId=${patient.patientId})}" class="btn btn-primary">Sprawdź historię</a>
             </div>
             <div class="col">
                 <a href="/clinic/reservations" class="btn btn-danger">Umów wizytę</a>
             </div>
             <div class="col">
-                <a href="/clinic/prescriptions/patient/5" class="btn btn-danger btn-lg">Twoje rezerwacje</a>
+                <a href="/clinic/prescriptions/patient/5" class="btn btn-primary btn-lg">Twoje rezerwacje</a>
             </div>
 
             <div class="col">

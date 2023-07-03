@@ -13,6 +13,7 @@
 
 </head>
 <body>
+
 <header class="header">
     <div class="logo">
         <a href="/" th:href="@{/}">
@@ -23,7 +24,7 @@
         <h1>Panel administratora z lekarzami</h1>
     </div>
     <div class="login-button">
-        <p>Jesteś zalogowany jako: <span th:text="${username}"></span></p>
+        <p>Zalogowany: <span th:text="${username}"></span></p>
         <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
     </div>
 </header>

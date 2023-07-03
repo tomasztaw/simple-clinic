@@ -28,6 +28,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public AuthenticationManager authManager(
             HttpSecurity httpSecurity,
@@ -66,7 +67,7 @@ public class SecurityConfiguration {
 //        return httpSecurity.build();
 //    }
 
-    @Bean
+    @Bean  // TODO to chyba jednak nie będzie potrzebne, każdy będzie przekierowywany na stronę główną
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
             Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
@@ -74,7 +75,8 @@ public class SecurityConfiguration {
             if (roles.contains("ADMIN")) {
                 response.sendRedirect("/clinic");
             } else if (roles.contains("DOCTOR")) {
-                response.sendRedirect("/doctors");
+//                response.sendRedirect("/doctors");
+                response.sendRedirect("/clinic");
             } else if (roles.contains("USER")) {
                 response.sendRedirect("/clinic/patients");
             } else {
@@ -89,7 +91,8 @@ public class SecurityConfiguration {
         httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/clinic/welcome").permitAll()
-                .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**", "/welcome").permitAll()
+                .requestMatchers("/register/addUser").permitAll()
+                .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**", "/register/**").permitAll()
                 //.requestMatchers("/patients/**", "/doctors/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
                 .anyRequest().authenticated()
                 .and()

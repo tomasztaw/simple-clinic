@@ -21,7 +21,7 @@
         </div>
         <div class="login-button">
             <a th:href="@{/login}" class="btn btn-primary">Zaloguj</a>
-            <a th:href="@{/patients/register}" class="btn btn-primary">Zarejestruj (do zrobienia)</a>
+            <a th:href="@{/register}" class="btn btn-primary">Zarejestruj (w trakcie)</a>
         </div>
     </header>
 
@@ -44,12 +44,14 @@
 
     <div class="btn-container">
         <a th:href="@{/login}" class="btn btn-primary btn-lg">Zaloguj</a>
-        <a th:href="@{/patients/register}" class="btn btn-primary btn-lg">Zarejestruj</a>
+        <a th:href="@{/register}" class="btn btn-primary btn-lg">Zarejestruj</a>
     </div>
 
     <div class="footer">
         <p>© 2023 Twoja Stopka</p>
     </div>
+
+    <div class="footer" th:replace="footer.html"></div>
 
 </body>
 </html>

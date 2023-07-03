@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.ReservationDTO;
 import pl.taw.business.DoctorService;
@@ -20,9 +21,13 @@ import pl.taw.business.ReservationService;
 import pl.taw.business.ScheduleEntry;
 import pl.taw.business.WorkingHours;
 import pl.taw.business.dao.DoctorDAO;
+import pl.taw.business.dao.OpinionDAO;
+import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.repository.jpa.DoctorJpaRepository;
 import pl.taw.infrastructure.database.repository.mapper.DoctorMapper;
+import pl.taw.infrastructure.security.UserEntity;
+import pl.taw.infrastructure.security.UserRepository;
 
 import java.io.IOException;
 import java.net.URI;
@@ -62,6 +67,9 @@ public class DoctorController {
     private final DoctorDAO doctorDAO;
     private final DoctorService doctorService;
     private final ReservationService reservationService;
+    private final PatientDAO patientDAO;
+    private final UserRepository userRepository;
+    private final OpinionDAO opinionDAO;
 
 
     @GetMapping(PANEL)
@@ -155,7 +163,9 @@ public class DoctorController {
     // DZIAŁA !!!
     @GetMapping(SHOW)
     public String showDoctorDetails(
-            @PathVariable Integer doctorId, Model model) {
+            @PathVariable Integer doctorId,
+            Model model,
+            Authentication authentication) {
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         model.addAttribute("doctor", doctor);
         List<WorkingHours> workingHours = doctorService.getWorkingHours(doctorId);
@@ -175,7 +185,14 @@ public class DoctorController {
         } catch (IOException e) {
             throw new RuntimeException("Brak pliku");
         }
-        return "doctor/doctor-show";
+        String username = authentication.getName();
+        model.addAttribute("username", username);
+
+        List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
+        model.addAttribute("opinions", opinions);
+
+//        return "doctor/doctor-show";
+        return "doctor/doctor-show-new";
     }
 
     @GetMapping
@@ -383,7 +400,7 @@ public class DoctorController {
 
 
     @GetMapping(SCHEDULE)
-    public String getDoctorScheduleSimpleMap(@PathVariable Integer doctorId, Model model) {
+    public String getDoctorScheduleSimpleMap(@PathVariable Integer doctorId, Model model, Authentication authentication) {
 
         LocalDate today = LocalDate.now();
 
@@ -391,6 +408,7 @@ public class DoctorController {
         List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
         Map<Map<String, LocalDate>, List<WorkingHours>> resultMap = reservationService.getWorkingHoursForCurrentWeek(workingHoursList);
 
+        // Może trzeba będzie pomyśleć nad metodą, która zwraca rezerwacje dla danego tygodnia
         List<ReservationDTO> notAvailableTimes = reservationService.findAllReservationsByDoctor(doctorId);
 
         List<LocalDateTime> listOfRes = notAvailableTimes.stream().map(item -> LocalDateTime.of(item.getDay(), item.getStartTimeR())).toList();
@@ -425,13 +443,22 @@ public class DoctorController {
             if (!availableTimes.isEmpty()) {
                 simpleMap.put(entry.getKey(), availableDates);
             }
+            availableDates.setStartTime(entry.getValue().getStartTime());
+            availableDates.setEndTime(entry.getValue().getEndTime());
         }
 
         model.addAttribute("doctor", doctor);
         model.addAttribute("simpleMap", simpleMap);
 
         // na razie przypiszemy pacjenta na sztywno !!!!!!!!!!!!!!!
-        model.addAttribute("patientId", 5);
+//        model.addAttribute("patientId", 5);
+//        UserEntity user = (UserEntity) authentication.getDetails();
+//        String email = ((UserEntity) authentication.getDetails()).getEmail();
+
+        UserEntity user = userRepository.findByUserName(authentication.getName());
+
+        PatientDTO patient = patientDAO.findByEmail(user.getEmail());
+        model.addAttribute("patientId", patient.getPatientId());
 
         return "/doctor/doctor-schedule-3";
     }

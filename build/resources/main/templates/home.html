@@ -12,34 +12,32 @@
     <title>Medical Clinic</title>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <img th:src="@{/images/2135.jpg}" alt="Logo" width="180" height="180">
-        </div>
-        <div class="welcome">
-            <h1>Witaj na stronie powitalnej</h1>
-        </div>
-<!--        <div>-->
-<!--            <p>Jesteś zalogowany jako: <span th:text="${username}"></span></p>-->
-<!--        </div>-->
-        <div class="login-button">
-            <p>Jesteś zalogowany jako: <span th:text="${username}"></span></p>
-            <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
-        </div>
-<!--        <div class="login-button">-->
-<!--            <a th:href="@{/patients/login}" class="btn btn-primary">Zaloguj</a>-->
-<!--            <a th:href="@{/patients/register}" class="btn btn-primary">Zarejestruj</a>-->
-<!--        </div>-->
-    </header>
+<header class="header">
+    <div class="logo">
+        <img th:src="@{/images/2135.jpg}" alt="Logo" width="180" height="180">
+    </div>
+    <div class="welcome">
+        <h1>Witaj na stronie powitalnej</h1>
+    </div>
+    <div class="login-button">
+        <p>Zalogowany: <span th:text="${username}"></span></p>
+        <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
+    </div>
+</header>
 
-    <div class="content">
-        <img th:src="@{/images/z1.jpg}" alt="Background Image">
-        <h1>Welcome to the Medical Clinic!</h1>
-        <p>We provide quality healthcare services.</p>
+<div class="content">
+    <img th:src="@{/images/z1.jpg}" alt="Background Image">
+    <h1>Welcome to the Medical Clinic!</h1>
+    <p>We provide quality healthcare services.</p>
 
+    <div th:if="${isAdmin}" class="role-div">
+        <h1>Witaj, Adminie!</h1>
+        <h2>Do twojej dyspozycji są poniższe panele</h2>
         <div class="btn-container">
-            <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Go to the doctors page</a>
-            <a th:href="@{/patients/dashboard/5}" class="btn btn-primary btn-lg">Go to the patients page</a>
+            <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Przeglądaj dostępnych lekarzy</a>
+            <a th:href="@{/patients/dashboard/5}" class="btn btn-primary btn-lg">Przejdź do panelu pacjenta(na sztywno
+                id=5)</a>
+<!--            trzeba nad tym pomyśleć jakie dać id -->
         </div>
         <div class="btn-container">
             <a th:href="@{/doctors/panel}" class="btn btn-primary btn-lg">Panel z lekarzami</a>
@@ -54,22 +52,40 @@
             <a th:href="@{/reservations/calendar}" class="btn btn-danger btn-lg">Kalendarz</a>
         </div>
     </div>
+    <br>
 
-    <div th:if="${isAdmin}">
-        <h1>Witaj, Adminie!</h1>
-    </div>
-
-    <div th:if="${isDoctor}">
+    <div th:if="${isDoctor}" class="role-div">
         <h1>Witaj, Doktorku!</h1>
+        <h2>W przygotowaniu jest panel dla lekarza</h2>
+        <h2>Na razie możesz tylko poprzeglądać lekarzy</h2>
+        <div class="btn-container">
+            <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Przeglądaj dostępnych lekarzy</a>
+            <a th:href="@{/patients/dashboard/5}" class="btn btn-primary btn-lg">Przejdź do panelu lekarza(nie
+                działa)</a>
+        </div>
     </div>
+    <br>
 
-    <div th:if="${isUser}">
+    <div th:if="${isUser}" class="role-div">
         <h1>Witaj, Pacjencie!</h1>
+        <h2>Korzystaj z naszych usług! Umów się na wizytę i nie trać czasu ani zdrowia!</h2>
+        <div class="btn-container">
+            <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Przeglądaj dostępnych lekarzy</a>
+        </div>
+        <br>
+        <h2>Zarządzaj swoimi danymi, sprawdzaj terminy wizyt, wystawiaj opinię i rób co tylko chcesz</h2>
+        <div class="btn-container">
+            <a th:href="@{/patients}" class="btn btn-primary btn-lg">Przejdź do panelu pacjenta</a>
+        </div>
+        <br>
     </div>
+    <br>
+</div>
+<br>
 
-    <div class="footer">
-        <p>© 2023 Twoja Stopka</p>
-    </div>
+<div class="footer">
+    <p>© 2023 Twoja Stopka</p>
+</div>
 
 </body>
 </html>

@@ -73,8 +73,6 @@ public class ReservationService {
                 .map(entry -> entry.getKey() + " " + entry.getValue())
                 .toList();
 
-
-
         // dzień tygodnia i data, godziny pracy
         Map<String, WorkingHours> resultMap = IntStream.range(0, Math.min(doctorWorkingHours.size(), dayAndDate.size()))
                 .boxed()
@@ -111,6 +109,8 @@ public class ReservationService {
                 .toList();
 
         List<String> dayAndDate = currentWeekLeftDays.entrySet().stream()
+                .filter(entry -> list.stream()
+                        .anyMatch(day -> day.getDayOfTheWeek().getNumber() == DayOfWeek.valueOf(entry.getKey()).getValue()))
                 .map(entry -> entry.getKey() + " " + entry.getValue())
                 .toList();
 

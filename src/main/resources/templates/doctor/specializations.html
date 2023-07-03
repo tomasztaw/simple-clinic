@@ -37,13 +37,12 @@
             </a>
         </div>
         <!-- Możesz dodać dodatkowe elementy w nagłówku -->
-        <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
+        <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
 
     </div>
 
-    <h1 class="mt-5 mb-4">List of Specializations</h1>
+    <h1 class="mt-5 mb-4">Lista specjalizacji</h1>
     <div class="list-group">
-        <!-- Loop through the specializations and display them as list items with links -->
         <a th:each="specialization : ${specializations}"
            th:href="@{/doctors/specialization/__${specialization.toLowerCase()}__}"
            class="list-group-item list-group-item-action">
