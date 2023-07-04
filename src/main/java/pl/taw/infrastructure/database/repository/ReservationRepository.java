@@ -80,5 +80,12 @@ public class ReservationRepository implements ReservationDAO {
                 .toList();
     }
 
-
+    @Override
+    public List<ReservationDTO> findAllByBoth(Integer doctorId, Integer patientId) {
+        return reservationJpaRepository.findAll().stream()
+                .filter(reservation -> doctorId.equals(reservation.getDoctorId()))
+                .filter(reservation -> patientId.equals(reservation.getPatientId()))
+                .map(reservationMapper::mapFromEntity)
+                .toList();
+    }
 }

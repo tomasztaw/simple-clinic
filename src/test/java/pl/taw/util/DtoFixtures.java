@@ -1,7 +1,10 @@
 package pl.taw.util;
 
 import lombok.experimental.UtilityClass;
+import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.PatientDTO;
+
+import java.util.List;
 
 @UtilityClass
 public class DtoFixtures {
@@ -26,4 +29,36 @@ public class DtoFixtures {
                 .build();
     }
 
+    public static DoctorDTO someDoctor1() {
+        return DoctorDTO.builder()
+                .doctorId(1)
+                .name("Alojzy")
+                .surname("Popiołek")
+                .title("Lekarz rodzinny")
+                .phone("+48 120 100 101")
+                .email("alojzypopiolek@eclinic.pl")
+                .build();
+    }
+    public static DoctorDTO someDoctor2() {
+        return DoctorDTO.builder()
+                .doctorId(2)
+                .name("Kornelia")
+                .surname("Zależna")
+                .title("Lekarz rodzinny")
+                .phone("+48 120 100 102")
+                .email("korneliazalezna@eclinic.pl")
+                .build();
+    }
+    public static DoctorDTO someDoctor3() {
+        return DoctorDTO.builder()
+                .doctorId(3)
+                .name("Tomasz")
+                .surname("Piasecki")
+                .title("Psychiatra")
+                .phone("+48 120 100 102")
+                .email("tomaszpiasecki@eclinic.pl")
+                .build();
+    }
+
+    public static List<DoctorDTO> doctors = List.of(someDoctor1(), someDoctor2(), someDoctor3());
 }

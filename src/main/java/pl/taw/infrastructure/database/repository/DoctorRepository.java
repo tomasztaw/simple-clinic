@@ -10,6 +10,8 @@ import pl.taw.infrastructure.database.repository.jpa.DoctorJpaRepository;
 import pl.taw.infrastructure.database.repository.mapper.DoctorMapper;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -30,6 +32,14 @@ public class DoctorRepository implements DoctorDAO {
         return doctorJpaRepository.findAll().stream()
                 .filter(doctor -> doctor.getTitle().toLowerCase().equals(specialization))
                 .map(doctorMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
+    public List<String> findAllSpecializations() {
+        return doctorJpaRepository.findAll().stream()
+                .map(DoctorEntity::getTitle)
+                .distinct()
                 .toList();
     }
 

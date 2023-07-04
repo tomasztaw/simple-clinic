@@ -27,4 +27,6 @@ public interface ReservationDAO {
     List<ReservationDTO> findAllByPatient(Integer patientId);
 
     List<ReservationDTO> findAllByDay(LocalDate day);
+
+    List<ReservationDTO> findAllByBoth(Integer doctorId, Integer patientId);
 }

@@ -7,11 +7,8 @@ import pl.taw.api.dto.DoctorScheduleDTO;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.DoctorScheduleDAO;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +24,8 @@ public class DoctorService {
         return doctorDAO.findBySpecialization(specialization);
     }
 
-    public List<String> getDoctorSpecializations() {
-        return doctorDAO.findAll().stream()
-                .map(DoctorDTO::getTitle)
-                .distinct()
-                .toList();
+    public List<String> getDoctorsSpecializations() {
+        return doctorDAO.findAllSpecializations();
     }
 
     public List<WorkingHours> getWorkingHours(Integer doctorId) {

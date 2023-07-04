@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  aplikacja:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./Dockerfile.aplikacja
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+  szperacz:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./Dockerfile.szperacz
+    depends_on:
+      - aplikacja

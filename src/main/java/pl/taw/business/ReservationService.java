@@ -38,10 +38,7 @@ public class ReservationService {
     }
 
     public List<ReservationDTO> findAllReservationsForBoth(Integer doctorId, Integer patientId) {
-        return reservationDAO.findAll().stream()
-                .filter(reservation -> doctorId.equals(reservation.getDoctorId()))
-                .filter(reservation -> patientId.equals(reservation.getPatientId()))
-                .toList();
+        return reservationDAO.findAllByBoth(doctorId, patientId);
     }
 
     public List<ReservationDTO> findAllByDay(LocalDate day) {
