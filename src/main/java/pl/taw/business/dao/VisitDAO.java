@@ -24,4 +24,6 @@ public interface VisitDAO {
 
     List<VisitDTO> findAllByPatient(Integer patientId);
 
+    List<VisitDTO> findAllForBoth(Integer doctorId, Integer patientId);
+
 }

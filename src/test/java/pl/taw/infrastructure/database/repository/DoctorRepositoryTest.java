@@ -125,5 +125,16 @@ class DoctorRepositoryTest {
         Mockito.verify(doctorJpaRepository, Mockito.times(1)).delete(doctorEntity);
     }
 
+    @Test
+    void testFindByIdThrow() {
+        // given
+        int doctorId = 0;
+
+        Mockito.when(doctorJpaRepository.findById(doctorId)).thenThrow(new RuntimeException("Id powinna być dodatnie"));
+
+        // when, then
+        Assertions.assertThrows(RuntimeException.class, () -> doctorRepository.findById(doctorId));
+    }
+
 
 }

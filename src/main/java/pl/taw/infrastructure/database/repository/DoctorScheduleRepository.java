@@ -29,7 +29,7 @@ public class DoctorScheduleRepository implements DoctorScheduleDAO {
     @Override
     public List<DoctorScheduleDTO> findScheduleByDoctorId(Integer doctorId) {
         return doctorScheduleJpaRepository.findAll().stream()
-                .filter(schedule -> schedule.getDoctorId().equals(doctorId))
+                .filter(schedule -> doctorId.equals(schedule.getDoctorId()))
                 .map(doctorScheduleMapper::mapFromEntity)
                 .toList();
     }

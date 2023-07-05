@@ -73,4 +73,11 @@ public class VisitRepository implements VisitDAO {
                 .toList();
     }
 
+    @Override
+    public List<VisitDTO> findAllForBoth(Integer doctorId, Integer patientId) {
+        return visitJpaRepository.findAll().stream()
+                .filter(visit -> doctorId.equals(visit.getDoctorId()) && patientId.equals(visit.getPatientId()))
+                .map(visitMapper::mapFromEntity)
+                .toList();
+    }
 }
