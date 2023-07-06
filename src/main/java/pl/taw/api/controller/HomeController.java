@@ -57,9 +57,4 @@ public class HomeController {
         return "home";
     }
 
-//    @GetMapping(WELCOME)
-//    public String welcomePage(Model model) {
-//        return "welcome";
-//    }
-
 }

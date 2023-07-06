@@ -62,12 +62,23 @@ public class PatientRepository implements PatientDAO {
 
     @Override
     public PatientEntity saveAndReturn(PatientEntity patientEntity) {
-        return patientJpaRepository.save(patientEntity);
+        if (!patientJpaRepository.existsByPesel(patientEntity.getPesel())
+                && !patientJpaRepository.existsByEmail(patientEntity.getEmail())) {
+            return patientJpaRepository.save(patientEntity);
+        } else {
+            String answer = patientJpaRepository.existsByPesel(patientEntity.getPesel()) ? "peselem" : "emailem";
+            throw new RuntimeException("W systemie znajduje się już ktoś z takim %s".formatted(answer));
+        }
     }
 
     @Override
     public void save(PatientEntity patientEntity) {
-        patientJpaRepository.save(patientEntity);
+        if (!patientJpaRepository.existsByPesel(patientEntity.getPesel())
+                && !patientJpaRepository.existsByEmail(patientEntity.getEmail())) {
+            patientJpaRepository.save(patientEntity);
+        } else {
+            throw new RuntimeException("W systemie znajduje się już ktoś z takim peselem/emailem");
+        }
     }
 
     @Override

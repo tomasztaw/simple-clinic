@@ -18,6 +18,33 @@
     .generated { color: #999; margin-top: 10px; }
     .generated a { color: #999; }
 
+    .footer {
+    padding: 10px;
+    margin-top: 30px;
+    text-align: center;
+    background-color: #f5f5f5;
+    /*zmiany - nie działa*/
+    /*position: absolute;
+    bottom: 0;*/
+}
+.contact-info {
+  display: flex;
+  flex-direction: column;
+}
+.navigation-menu a[href="/services"] {
+  margin-right: 10px;
+  color: red;
+}
+
+.privacy-policy a[href="/privacy"] {
+  margin-right: 10px;
+  color: blue;
+}
+.navigation-menu a, .privacy-policy a {
+  margin-right: 10px;
+}
+
+
     </style>
 
     <!-- DayPilot library -->
@@ -36,6 +63,12 @@
 <div class="main">
     <div id="dp"></div>
     <div class="generated">Generated using <a href="https://builder.daypilot.org/">DayPilot UI Builder</a>.</div>
+</div>
+
+<div class="footer">
+    <p><b>© 2023 E-clinic</b></p>
+
+    <div th:replace="footer.html"></div>
 </div>
 
 <script>

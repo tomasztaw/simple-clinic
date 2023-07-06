@@ -101,10 +101,12 @@
 
     <a class="btn btn-light" th:href="@{/opinions/panel}">Pokaż wszystkie opinie</a>
 
-    <div class="footer">
-      <!-- Tutaj wstaw kod dla stopki -->
-      <p>© 2023 Twoja Stopka</p>
-    </div>
+  </div>
+
+  <div class="footer">
+    <p><b>© 2023 E-clinic</b></p>
+
+    <div th:replace="footer.html"></div>
   </div>
 </body>
 </html>

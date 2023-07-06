@@ -14,14 +14,14 @@
 <body>
     <header class="header">
         <div class="logo">
-            <img th:src="@{/images/2135.jpg}" alt="Logo" width="180" height="180">
+            <img th:src="@{/images/2135.jpg}" alt="Logo" width="140" height="140">
         </div>
         <div class="welcome">
-            <h1>Witaj na stronie powitalnej</h1>
+            <h1>Bo zdrowie jest najważniejsze...</h1>
         </div>
         <div class="login-button">
             <a th:href="@{/login}" class="btn btn-primary">Zaloguj</a>
-            <a th:href="@{/register}" class="btn btn-primary">Zarejestruj (w trakcie)</a>
+            <a th:href="@{/register}" class="btn btn-primary">Zarejestruj</a>
         </div>
     </header>
 
@@ -48,10 +48,12 @@
     </div>
 
     <div class="footer">
-        <p>© 2023 Twoja Stopka</p>
+        <p><b>© 2023 E-clinic</b></p>
+
+        <div th:replace="footer.html"></div>
     </div>
 
-    <div class="footer" th:replace="footer.html"></div>
+<!--    <div class="footer" th:replace="footer.html"></div>-->
 
 </body>
 </html>

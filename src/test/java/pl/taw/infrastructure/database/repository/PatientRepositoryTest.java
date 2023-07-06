@@ -3,10 +3,9 @@ package pl.taw.infrastructure.database.repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
@@ -17,6 +16,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
+//@ExtendWith(MockitoExtension.class)
 class PatientRepositoryTest {
 
     @Mock
@@ -53,7 +58,7 @@ class PatientRepositoryTest {
         List<PatientDTO> result = patientRepository.findAll();
 
         // given
-        Assertions.assertEquals(expectedPatientDTOs.size(), result.size());
+        assertEquals(expectedPatientDTOs.size(), result.size());
     }
 
     @Test
@@ -74,7 +79,7 @@ class PatientRepositoryTest {
         PatientDTO result = patientRepository.findById(patientId);
 
         // given
-        Assertions.assertEquals(patientId, result.getPatientId());
+        assertEquals(patientId, result.getPatientId());
     }
 
     @Test
@@ -90,7 +95,7 @@ class PatientRepositoryTest {
         PatientEntity result = patientRepository.findEntityById(patientId);
 
         // given
-        Assertions.assertEquals(patientId, result.getPatientId());
+        assertEquals(patientId, result.getPatientId());
     }
 
     @Test
@@ -111,8 +116,8 @@ class PatientRepositoryTest {
         PatientDTO result = patientRepository.findByPesel(pesel);
 
         // then
-        Assertions.assertEquals(expectedPatientDTO, result);
-        Assertions.assertEquals(pesel.length(), result.getPesel().length());
+        assertEquals(expectedPatientDTO, result);
+        assertEquals(pesel.length(), result.getPesel().length());
     }
 
 
@@ -129,7 +134,7 @@ class PatientRepositoryTest {
         PatientEntity result = patientRepository.saveAndReturn(patientEntity);
 
         // given
-        Assertions.assertEquals(savedPatientEntity.getPatientId(), result.getPatientId());
+        assertEquals(savedPatientEntity.getPatientId(), result.getPatientId());
     }
 
     @Test
@@ -141,8 +146,68 @@ class PatientRepositoryTest {
         patientRepository.save(patientEntity);
 
         // then
-        Mockito.verify(patientJpaRepository, Mockito.times(1)).save(patientEntity);
+        verify(patientJpaRepository, Mockito.times(1)).save(patientEntity);
     }
+
+    @Test
+    public void testSaveAndReturn_UniquePatient() {
+        // given
+        PatientEntity patientEntity = PatientEntity.builder()
+                .name("Stefan")
+                .surname("Nowak")
+                .pesel("80101010266")
+                .email("stefannowak@jakis.pl")
+                .build();
+
+        BDDMockito.given(patientJpaRepository.existsByPesel(patientEntity.getPesel())).willReturn(false);
+        BDDMockito.given(patientJpaRepository.existsByEmail(patientEntity.getEmail())).willReturn(false);
+        BDDMockito.given(patientJpaRepository.save(patientEntity)).willReturn(patientEntity);
+
+        // when
+        PatientEntity savedPatient = patientRepository.saveAndReturn(patientEntity);
+
+        // then
+        assertEquals(patientEntity, savedPatient);
+        BDDMockito.then(patientJpaRepository).should().save(patientEntity);
+    }
+
+    @Test
+    public void testSaveAndReturn_DuplicatePesel() {
+        // given
+        PatientEntity patientEntity = PatientEntity.builder()
+                .name("Stefan")
+                .surname("Nowak")
+                .pesel("80101010266")
+                .email("stefannowak@jakis.pl")
+                .build();
+
+        BDDMockito.given(patientJpaRepository.existsByPesel(patientEntity.getPesel())).willReturn(true);
+
+        // when, then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> patientRepository.saveAndReturn(patientEntity));
+        assertEquals("W systemie znajduje się już ktoś z takim peselem", exception.getMessage());
+        BDDMockito.then(patientJpaRepository).should(Mockito.never()).save(patientEntity);
+    }
+
+    @Test
+    public void testSaveAndReturn_DuplicateEmail() {
+        // given
+        PatientEntity patientEntity = PatientEntity.builder()
+                .name("Stefan")
+                .surname("Nowak")
+                .pesel("80101010266")
+                .email("stefannowak@jakis.pl")
+                .build();
+
+        BDDMockito.given(patientJpaRepository.existsByPesel(patientEntity.getPesel())).willReturn(false);
+        BDDMockito.given(patientJpaRepository.existsByEmail(patientEntity.getEmail())).willReturn(true);
+
+        // when, then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> patientRepository.saveAndReturn(patientEntity));
+        assertEquals("W systemie znajduje się już ktoś z takim emailem", exception.getMessage());
+        BDDMockito.then(patientJpaRepository).should(Mockito.never()).save(patientEntity);
+    }
+
 
     @Test
     public void testDelete() {
@@ -153,7 +218,7 @@ class PatientRepositoryTest {
         patientRepository.delete(patientEntity);
 
         // then
-        Mockito.verify(patientJpaRepository, Mockito.times(1)).delete(patientEntity);
+        verify(patientJpaRepository, Mockito.times(1)).delete(patientEntity);
     }
 
 

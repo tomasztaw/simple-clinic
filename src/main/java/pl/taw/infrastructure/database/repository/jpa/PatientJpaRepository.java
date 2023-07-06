@@ -8,4 +8,8 @@ import pl.taw.infrastructure.database.entity.VisitEntity;
 @Repository
 public interface PatientJpaRepository extends JpaRepository<PatientEntity, Integer> {
 
+    boolean existsByPesel(String pesel);
+
+    boolean existsByEmail(String email);
+
 }

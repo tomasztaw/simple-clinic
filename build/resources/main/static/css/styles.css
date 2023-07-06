@@ -23,29 +23,42 @@
     margin-bottom: 2rem;
 }
 
-.content .btn-container {
+.content, .btn-container {
     display: flex;
     justify-content: center;
     margin: 15px;
+    background-color: #f5f5f5;
+}
+/*.btn-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.content .btn-container .btn-primary .btn-danger {
+.btn-container a {
+  flex: 0 0 49%; /* Ustaw odpowiednią szerokość przycisków */
+ /* margin: 5px;
+}*/
+
+
+
+.content, .btn-container, .btn-primary, .btn-danger {
     margin: 0 1rem;
 }
 
+/* nagłówek */
 .header {
-    padding: 20px;
-    text-align: center;
-    background-color: #f5f5f5;
-    height: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  height: 150px;
 }
-
-.footer {
-    padding: 10px;
-    text-align: center;
-    background-color: #f5f5f5;
-}
-
 .logo {
     float: left;
 }
@@ -57,29 +70,14 @@
 .login-button {
     float: right;
 }
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
 .header-logo {
   flex-grow: 1;
 }
 .header-logo img {
-  max-width: 30%;
+  max-width: 25%;
   height: auto;
 }
-.footer {
-  text-align: center;
-  margin-top: 30px;
-}
-/* nie działa */
-.footer div {
-    display: flex;
-    justify-content: center;
-}
+
 .photo-container {
   display: flex;
   justify-content: center;
@@ -101,12 +99,82 @@
 .actions button {
   margin-right: 10px;
 }
-.role-div {
+/*.role-div {
     margin: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #f8f9fa;
+    background-color: #f5f5f5;
+
+}
+/*.btn-container-admin {
+    white-space: nowrap;
+    flex-grow: 1;
+}*/
+
+/*.btn-container-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.btn-container-admin a {
+    flex-grow: 1;
+}*/
+
+.role-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+    /*  ????  */
+    flex-wrap: nowrap;
+
+}
+
+.btn-container-admin {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-container-admin a {
+    flex-grow: 1;
+}
+
+
+
+
+/* stopka */
+.footer {
+    padding: 10px;
+    margin-top: 30px;
+    text-align: center;
+    background-color: #f5f5f5;
+    /*zmiany - nie działa*/
+    /*position: absolute;
+    bottom: 0;*/
+}
+.contact-info {
+  display: flex;
+  flex-direction: column;
+}
+.navigation-menu a[href="/services"] {
+  margin-right: 10px;
+  color: red;
+}
+
+.privacy-policy a[href="/privacy"] {
+  margin-right: 10px;
+  color: blue;
+}
+.navigation-menu a, .privacy-policy a {
+  margin-right: 10px;
 }

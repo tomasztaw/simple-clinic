@@ -78,7 +78,8 @@ public class SecurityConfiguration {
 //                response.sendRedirect("/doctors");
                 response.sendRedirect("/clinic");
             } else if (roles.contains("USER")) {
-                response.sendRedirect("/clinic/patients");
+                response.sendRedirect("/clinic");
+//                response.sendRedirect("/clinic/patients");
             } else {
                 response.sendRedirect("/welcome");
             }

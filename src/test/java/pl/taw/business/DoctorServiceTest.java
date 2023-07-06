@@ -65,10 +65,6 @@ class DoctorServiceTest {
         assertSame(specializations, result); // to jest fajne porównanie, do zapamiętania
     }
 
-//    @Test
-//    void getWorkingHours() {
-//    }
-
     @Test
     void getWorkingHours() {
         // given
