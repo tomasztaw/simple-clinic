@@ -2,6 +2,8 @@ package pl.taw.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.VisitDAO;
@@ -27,6 +29,12 @@ public class VisitRepository implements VisitDAO {
         return visitJpaRepository.findAll().stream()
                 .map(visitMapper::mapFromEntity)
                 .toList();
+    }
+
+    @Override
+    public Page<VisitDTO> findAll(Pageable pageable) {
+        Page<VisitEntity> visitPage = visitJpaRepository.findAll(pageable);
+        return visitPage.map(visitMapper::mapFromEntity);
     }
 
     @Override

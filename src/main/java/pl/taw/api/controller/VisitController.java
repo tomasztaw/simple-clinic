@@ -2,6 +2,10 @@ package pl.taw.api.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +23,8 @@ import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
+import pl.taw.infrastructure.database.repository.VisitRepository;
+import pl.taw.infrastructure.database.repository.jpa.VisitJpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,12 +47,26 @@ public class VisitController {
     public static final String EDIT = "/edit";
     public static final String DOCTOR_ID = "/doctor/{doctorId}/all";
     public static final String PATIENT_ID = "/patient/{patientId}/all";
+    public static final String PAGINATION = "/pagination";
 
     private final VisitDAO visitDAO;
     private final VisitService visitService;
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
     private final OpinionDAO opinionDAO;
+
+    @GetMapping(PAGINATION)
+    public String getPaginationVisits(@RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "5") int size,
+                           Authentication authentication,
+                           Model model) {
+        Page<VisitDTO> visitsPage = visitService.getVisitsPage(page, size);
+        model.addAttribute("visits", visitsPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", visitsPage.getTotalPages());
+        model.addAttribute("selectedSize", size);
+        return "visit/visit-pagination";
+    }
 
 
     @GetMapping(PANEL)

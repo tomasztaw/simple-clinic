@@ -34,73 +34,29 @@
         <h1>Witaj, Adminie!</h1>
         <h2>Do twojej dyspozycji są poniższe panele</h2>
 
-        <div class="row">
-            <div class="col">
-                <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Przeglądaj dostępnych lekarzy</a>
-            </div>
-            <div class="col">
-                <a th:href="@{/patients/dashboard/5}" class="btn btn-primary btn-lg">Przejdź do panelu pacjenta</a>
-            </div>
-
-        </div><div class="row">
-            <div class="col">
-                <a th:href="@{/doctors/panel}" class="btn btn-primary btn-lg">Panel z lekarzami</a>
-            </div>
-            <div class="col">
-                <a th:href="@{/patients/panel}" class="btn btn-primary btn-lg">Panel z pacjentami</a>
-            </div>
-
-        </div><div class="row">
-            <div class="col">
-                <a th:href="@{/visits/panel}" class="btn btn-primary btn-lg">Panel z wizytami</a>
-            </div>
-            <div class="col">
-                <a th:href="@{/opinions/panel}" class="btn btn-primary btn-lg">Panel z opiniami</a>
-            </div>
-
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a th:href="@{/doctors}" class="btn btn-primary ">Przeglądaj dostępnych lekarzy</a>
+            <a th:href="@{/patients/dashboard/5}" class="btn btn-primary ">Przejdź do panelu pacjenta</a>
         </div>
-        <div class="row">
-            <div class="col">
-                <a th:href="@{/reservations/panel}" class="btn btn-primary btn-lg">Panel z rezerwacjami</a>
-            </div>
-            <div class="col">
-                <a th:href="@{/reservations/calendar}" class="btn btn-danger btn-lg">Kalendarz</a>
-            </div>
-
-        </div>
-
-        <div class="d-grid gap-2">
-            <button class="btn btn-primary" type="button">Przeglądaj dostępnych lekarzy</button>
-            <button class="btn btn-primary" type="button">Przejdź do panelu pacjenta</button>
-        </div>
+        <br>
 
         <div class="d-grid gap-2 col-6 mx-auto">
-            <button class="btn btn-primary" type="button">Przeglądaj dostępnych lekarzy</button>
-            <button class="btn btn-primary" type="button">Przejdź do panelu pacjenta</button>
+            <a th:href="@{/doctors/panel}" class="btn btn-primary ">Panel z lekarzami</a>
+            <a th:href="@{/patients/panel}" class="btn btn-primary ">Panel z pacjentami</a>
         </div>
+        <br>
 
-
-
-        <div class="btn-container-admin">
-            <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Przeglądaj dostępnych lekarzy</a>
-            <a th:href="@{/patients/dashboard/5}" class="btn btn-primary btn-lg">Przejdź do panelu pacjenta</a>
-            <!--            trzeba nad tym pomyśleć jakie dać id -->
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a th:href="@{/visits/panel}" class="btn btn-primary ">Panel z wizytami</a>
+            <a th:href="@{/opinions/panel}" class="btn btn-primary ">Panel z opiniami</a>
         </div>
+        <br>
 
-        <div class="bnt-container-admin">
-            <a th:href="@{/doctors/panel}" class="btn btn-primary btn-lg">Panel z lekarzami</a>
-            <a th:href="@{/patients/panel}" class="btn btn-primary btn-lg">Panel z pacjentami</a>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a th:href="@{/reservations/panel}" class="btn btn-primary ">Panel z rezerwacjami</a>
+            <a th:href="@{/reservations/calendar}" class="btn btn-danger ">Kalendarz</a>
         </div>
-
-        <div class="bnt-container-admin">
-            <a th:href="@{/visits/panel}" class="btn btn-primary btn-lg">Panel z wizytami</a>
-            <a th:href="@{/opinions/panel}" class="btn btn-primary btn-lg">Panel z opiniami</a>
-        </div>
-
-        <div class="bnt-container-admin">
-            <a th:href="@{/reservations/panel}" class="btn btn-primary btn-lg">Panel z rezerwacjami</a>
-            <a th:href="@{/reservations/calendar}" class="btn btn-danger btn-lg">Kalendarz</a>
-        </div>
+        <br>
 
     </div>
     <br>

@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Wizyty</h1>
+<table>
+    <tr>
+        <th><h2>Id</h2></th>
+        <th><h2>Notatka</h2></th>
+    </tr>
+    <tr th:each="visit : ${visits}">
+        <td th:text="${visit.visitId}"></td>
+        <td th:text="${visit.note}"></td>
+    </tr>
+</table>
+
+<div>
+    <span>Strona: </span>
+    <span th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/visits/pagination(page=${pageNumber})}" th:text="${pageNumber}"></a>
+    </span>
+</div>
+<br>
+
+<div class="pagination">
+    <ul>
+        <li th:if="${currentPage > 0}">
+            <a th:href="@{/visits/pagination(page=${currentPage - 1})}">Poprzednia</a>
+        </li>
+        <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/visits/pagination(page=${pageNumber})}" th:text="${pageNumber}"></a>
+        </li>
+        <li th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/visits/pagination(page=${currentPage + 1})}">Następna</a>
+        </li>
+    </ul>
+</div>
+<br>
+<br>
+
+<form th:action="@{/visits/pagination}" method="get">
+    <label for="pageSize">Liczba wizyt na stronie:</label>
+    <select id="pageSize" name="size" onchange="this.form.submit()">
+        <option value="5" th:selected="${size == 5}">5</option>
+        <option value="10" th:selected="${size == 10}">10</option>
+        <option value="15" th:selected="${size == 15}">15</option>
+    </select>
+</form>
+
+<!--<select id="pageSize" name="size" onchange="this.form.submit()">-->
+<!--    <option value="5" th:selected="${selectedSize == 5}">5</option>-->
+<!--    <option value="10" th:selected="${selectedSize == 10}">10</option>-->
+<!--    <option value="15" th:selected="${selectedSize == 15}">15</option>-->
+<!--    &lt;!&ndash; Dodaj inne opcje &ndash;&gt;-->
+<!--</select>-->
+
+
+</body>
+</html>

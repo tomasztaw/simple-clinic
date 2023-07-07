@@ -1,6 +1,7 @@
 package pl.taw.business.dao;
 
-import pl.taw.api.dto.OpinionDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
@@ -9,6 +10,8 @@ import java.util.List;
 public interface VisitDAO {
 
     List<VisitDTO> findAll();
+
+    Page<VisitDTO> findAll(Pageable pageable);
 
     VisitDTO findById(Integer visitId);
 

@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <title>Panel pacjenta</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!--    próby z dodatkowym panelem-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+
+
     <style>
         body {
             background-color: #f8f9fa;
         }
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            margin-top: 100px;
+            margin-top: 50px;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
@@ -28,7 +37,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
         .header-logo {
             flex-grow: 1;
@@ -41,6 +50,16 @@
             text-align: center;
             margin-top: 30px;
         }
+
+
+<!--        próby z dodatkowym panelem-->
+      body {
+         padding-top:20px;
+      }
+      .panel-body .btn:not(.btn-block) {
+        width:120px;
+        margin-bottom:10px;
+      }
     </style>
 </head>
 <body>
@@ -118,7 +137,79 @@
 
             </div>
         </div>
+        <br>
+
+        <div class="row">
+            <h3>Aktualizuj dane</h3>
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
+                    <button type="submit" class="btn btn-primary">Zaktualizuj telefon</button>
+                </form>
+                <a th:href="@{/patients/dashboard/5}" class="btn btn-primary ">Zaktualizuj e-mail</a>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <h3>Aktualizuj dane2</h3>
+            <div class="d-grid gap-2">
+                <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
+                    <button type="submit" class="btn btn-primary">Zaktualizuj telefon</button>
+                </form>
+                <a th:href="@{/patients/dashboard/5}" class="btn btn-primary ">Zaktualizuj e-mail</a>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <div class="d-flex">
+                <div class="p-2 flex-fill">
+<!--                    <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">-->
+<!--                        <button type="submit" class="btn btn-primary">Zaktualizuj telefon</button>-->
+<!--                    </form>-->
+                    <a th:href="@{/patients/dashboard/5}" class="btn btn-primary ">Zaktualizuj e-mail</a>
+                </div>
+                <div class="p-2 flex-fill">
+                    <a th:href="@{/patients/dashboard/5}" class="btn btn-primary ">Zaktualizuj e-mail</a>
+                </div>
+            </div>
+        </div>
+        <br>
+
     </div>
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <span class="glyphicon glyphicon-bookmark"></span> Szybkie skróty</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-6 col-md-6">
+                                <a href="#" class="btn btn-danger btn-lg" role="button"><span class="glyphicon glyphicon-list-alt"></span> <br/>Aktualizuj telefon</a>
+                                <a href="#" class="btn btn-warning btn-lg" role="button"><span class="glyphicon glyphicon-bookmark"></span> <br/>Aktualizuj e-mail</a>
+                                <a href="#" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-signal"></span> <br/>Sprawdź historię</a>
+                                <a href="#" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-comment"></span> <br/>Umów wizytę</a>
+                            </div>
+                            <div class="col-xs-6 col-md-6">
+                                <a href="#" class="btn btn-success btn-lg" role="button"><span class="glyphicon glyphicon-user"></span> <br/>Sprawdź rezerwacje</a>
+                                <a href="#" class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-file"></span> <br/>Twoje opinie</a>
+                                <a href="#" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-picture"></span> <br/>Napisz opinie</a>
+                                <a href="#" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-tag"></span> <br/>Coś jeszcze</a>
+                            </div>
+                        </div>
+                        <a href="http://www.jquery2dotnet.com/" class="btn btn-success btn-lg btn-block" role="button"><span class="glyphicon glyphicon-globe"></span> Powrót do strony głównej</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <div class="footer">
         <p><b>© 2023 E-clinic</b></p>
