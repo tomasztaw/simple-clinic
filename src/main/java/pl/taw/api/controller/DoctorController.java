@@ -459,8 +459,10 @@ public class DoctorController {
 
         PatientDTO patient = patientDAO.findByEmail(user.getEmail());
         model.addAttribute("patientId", patient.getPatientId());
+        String username = authentication.getName();
+        model.addAttribute("username", username);
 
-        return "/doctor/doctor-schedule-3";
+        return "/doctor/doctor-schedule-3"; // TODO do posprzątania zwracane widoki
     }
 
     // odczytywanie plików tekstowych z opisem lekarzy  -> chyba nie będzie potrzebne

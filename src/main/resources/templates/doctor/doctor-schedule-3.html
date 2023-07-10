@@ -17,7 +17,7 @@
       flex-grow: 1;
     }
     .header-logo img {
-      max-width: 30%;
+      max-width: 20%;
       height: auto;
     }
     .footer {
@@ -44,6 +44,7 @@
     }
     .actions button {
       margin-right: 10px;
+      btn-white-space: nowrap;
     }
 
     </style>
@@ -60,7 +61,17 @@
             </a>
         </div>
 
-        <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
+        <div>
+            <div>
+                <p>Zalogowany: <span th:text="${username}"></span></p>
+            </div>
+
+            <div class="actions">
+                <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
+                <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+            </div>
+        </div>
+
     </div>
 
     <h2>Doctor</h2>
@@ -129,7 +140,8 @@
 <div class="footer">
     <p><b>© 2023 E-clinic</b></p>
 
-    <div th:replace="footer.html"></div>
+    <div th:replace="fragments/footer.html"></div>
+
 </div>
 
 </body>

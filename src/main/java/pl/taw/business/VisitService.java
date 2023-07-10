@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.VisitDAO;
-import pl.taw.infrastructure.database.repository.VisitRepository;
 
 import java.util.List;
 

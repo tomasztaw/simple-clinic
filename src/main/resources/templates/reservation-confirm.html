@@ -23,7 +23,16 @@
 
 <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
 
-<a th:href="@{/patients/panel}" class="btn btn-info" role="button">Powrót do panelu pacjenta</a>
+<a th:href="@{/patients}" class="btn btn-info" role="button">Powrót do panelu pacjenta</a>
+
+
+<div class="footer">
+    <p><b>© 2023 E-clinic</b></p>
+
+    <div th:replace="fragments/footer.html"></div>
+
+</div>
+
 
 
 </body>

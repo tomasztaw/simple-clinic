@@ -19,6 +19,11 @@
       max-width: 30%;
       height: auto;
     }
+    .login-button {
+        float: right;
+        margin-right: 30px;
+    }
+
     .footer {
       text-align: center;
       margin-top: 30px;
@@ -150,13 +155,19 @@
         </a>
     </div>
     <div class="welcome">
-        <h1>Strona lekarza</h1>
+<!--        <h1>Strona lekarza</h1>-->
     </div>
     <div class="login-button">
         <p>Zalogowany: <span th:text="${username}"></span></p>
         <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
+        <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
     </div>
 </header>
+
+<!--<div class="header" th:replace="fragments/header :: header">-->
+
+<!--&lt;!&ndash;    <header th:replace="fragments/header :: header"></header>&ndash;&gt;-->
+<!--</div>-->
 
 <div class="container">
 
@@ -228,7 +239,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="opinia-komentarz">
-                            <p>Opinia: </p><h2 th:text="${opinion.comment}"></h2>
+                            <h2 th:text="${opinion.comment}"></h2>
                         </div>
                     </div>
                 </div>
@@ -295,7 +306,7 @@
 <div class="footer">
     <p><b>© 2023 E-clinic</b></p>
 
-    <div th:replace="footer.html"></div>
+    <div th:replace="fragments/footer.html"></div>
 </div>
 
 <script>
