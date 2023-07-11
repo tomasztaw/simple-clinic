@@ -17,7 +17,7 @@ public class PatientDTO {
     private Integer patientId;
     private String name;
     private String surname;
-    @Pattern(regexp = "\\d{11}", message = "Invalid PESEL number")
+    @Pattern(regexp = "\\d{11}", message = "Niepoprawny numer PESEL")
     private String pesel;
     @Size(min = 7, max = 15)
     @Pattern(regexp = "^[+]\\d{2}\\s\\d{3}\\s\\d{3}\\s\\d{3}$")

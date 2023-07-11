@@ -96,6 +96,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/register/addUser").permitAll()
                 .requestMatchers("/templates/registration-confirmation.html").permitAll()
                 .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**", "/register/**").permitAll()
+                .requestMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN")
                 //.requestMatchers("/patients/**", "/doctors/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
                 .anyRequest().authenticated()
                 .and()

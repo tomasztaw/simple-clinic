@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
@@ -53,6 +54,7 @@ public class DoctorController {
     public static final String PANEL = "/panel";
     public static final String SHOW = "/show/{doctorId}";
     public static final String ADD = "/add";
+    public static final String VALID = "/valid";
     public static final String UPDATE = "/update";
     public static final String DELETE_ID = "/delete/{doctorId}";
     public static final String SPECIALIZATION = "/specialization/{specialization}";
@@ -74,7 +76,7 @@ public class DoctorController {
 
     @GetMapping(PANEL)
     public String doctorsPanel(Model model) {
-        List<DoctorDTO> doctors = doctorDAO.findAll().stream().toList();
+        List<DoctorDTO> doctors = doctorDAO.findAll();
         model.addAttribute("doctors", doctors);
         model.addAttribute("updateDoctor", new DoctorDTO());
 
@@ -102,15 +104,38 @@ public class DoctorController {
                 .email(email)
                 .build();
         doctorDAO.save(newDoctor);
-//        return "redirect:/doctors/doctor-panel";
+
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
 
+    @PostMapping(ADD + VALID)
+    public String addValidDoctor(
+            @Valid @ModelAttribute("updateDoctor") DoctorDTO doctorDTO,
+            HttpServletRequest request
+    ) {
+        DoctorEntity newDoctor = DoctorEntity.builder()
+                .name(doctorDTO.getName())
+                .surname(doctorDTO.getSurname())
+                .title(doctorDTO.getTitle())
+                .phone(doctorDTO.getPhone())
+                .email(doctorDTO.getEmail())
+                .build();
+        doctorDAO.save(newDoctor);
+
+        String referer = request.getHeader("Referer");
+        if (referer != null) {
+            return "redirect:" + referer;
+        } else {
+            return null;
+        }
+    }
+
     @PutMapping(UPDATE)
     public String updateDoctor(
-            @ModelAttribute("updateDoctor") DoctorDTO updateDoctor,
-            HttpServletRequest request) {
+            @Valid @ModelAttribute("updateDoctor") DoctorDTO updateDoctor,
+            HttpServletRequest request
+    ) {
         DoctorEntity doctorEntity = doctorDAO.findEntityById(updateDoctor.getDoctorId());
         doctorEntity.setName(updateDoctor.getName());
         doctorEntity.setSurname(updateDoctor.getSurname());
@@ -118,7 +143,7 @@ public class DoctorController {
         doctorEntity.setPhone(updateDoctor.getPhone());
         doctorEntity.setEmail(updateDoctor.getEmail());
         doctorDAO.save(doctorEntity);
-//        return "redirect:/doctors/doctor-panel";
+
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
@@ -132,8 +157,6 @@ public class DoctorController {
         } else {
             throw new EntityNotFoundException("Could not found doctor with id: [%s]".formatted(doctorId));
         }
-        // TODO zmienić na powrót do poprzedniej strony
-//        return "redirect:/doctors/panel";
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
@@ -171,7 +194,6 @@ public class DoctorController {
         List<WorkingHours> workingHours = doctorService.getWorkingHours(doctorId);
         model.addAttribute("workingHours", workingHours);
         String doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
-//        String defaultDescription = "src/main/resources/desc/doctorDesc0.txt";
         String defaultDescription = "src/main/resources/desc/default.txt";
         Path filePath = Paths.get(doctorDescFile);
         String description;
@@ -274,8 +296,7 @@ public class DoctorController {
         return "doctor-details";
     }
 
-    @GetMapping(value = DOCTOR_ID_JS,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = DOCTOR_ID_JS, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public DoctorDTO doctorDetailsJS(@PathVariable Integer doctorId) {
         return doctorDAO.findById(doctorId);
@@ -450,11 +471,6 @@ public class DoctorController {
         model.addAttribute("doctor", doctor);
         model.addAttribute("simpleMap", simpleMap);
 
-        // na razie przypiszemy pacjenta na sztywno !!!!!!!!!!!!!!!
-//        model.addAttribute("patientId", 5);
-//        UserEntity user = (UserEntity) authentication.getDetails();
-//        String email = ((UserEntity) authentication.getDetails()).getEmail();
-
         UserEntity user = userRepository.findByUserName(authentication.getName());
 
         PatientDTO patient = patientDAO.findByEmail(user.getEmail());
@@ -467,7 +483,6 @@ public class DoctorController {
 
     // odczytywanie plików tekstowych z opisem lekarzy  -> chyba nie będzie potrzebne
     private String readDescriptionFromFile(String fileName) throws IOException {
-//        return new String(Files.readAllBytes(Paths.get(fileName)));
         return Files.readString(Paths.get(fileName));
     }
 

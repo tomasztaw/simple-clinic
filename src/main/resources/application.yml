@@ -29,6 +29,7 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+    static-path-pattern=/static/**:
 
   security:
     enabled: true

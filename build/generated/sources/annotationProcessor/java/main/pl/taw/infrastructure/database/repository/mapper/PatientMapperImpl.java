@@ -7,8 +7,8 @@ import pl.taw.infrastructure.database.entity.PatientEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-01T15:10:35+0200",
-    comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (Private Build)"
+    date = "2023-07-11T15:05:19+0200",
+    comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (GraalVM Community)"
 )
 @Component
 public class PatientMapperImpl implements PatientMapper {
