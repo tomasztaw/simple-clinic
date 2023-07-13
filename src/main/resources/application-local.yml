@@ -1,3 +1,6 @@
 spring:
   security:
     enabled: false
+    csrf:
+      enabled: false
+

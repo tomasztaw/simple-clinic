@@ -73,5 +73,8 @@ public class DoctorRepository implements DoctorDAO {
         doctorJpaRepository.delete(doctorEntity);
     }
 
+    public void saveAllAndFlush(List<DoctorEntity> doctorEntities) {
+        doctorJpaRepository.saveAllAndFlush(doctorEntities);
+    }
 
 }

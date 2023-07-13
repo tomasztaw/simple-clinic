@@ -101,7 +101,6 @@ public class SecurityConfiguration {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-//                .defaultSuccessUrl("/", true) // dodane
                 .successHandler(authenticationSuccessHandler())
                 .permitAll()
                 .and()

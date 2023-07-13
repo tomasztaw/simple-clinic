@@ -12,17 +12,17 @@ import javax.sql.DataSource;
 @TestConfiguration
 public class PersistenceContainerTestConfiguration {
 
-    private static final String USERNAME = "test";
-    private static final String PASSWORD = "test";
-    private static final String POSTGRESQL = "postgresql";
-    private static final String POSTGRESQL_CONTAINER = "postgres:15.0";
+    public static final String POSTGRES_USERNAME = "username";
+    public static final String POSTGRES_PASSWORD = "password";
+    public static final String POSTGRESQL = "postgresql";
+    public static final String POSTGRESQL_CONTAINER = "postgres:15.3";
 
     @Bean
     @Qualifier(POSTGRESQL)
     PostgreSQLContainer<?> postgresqlContainer() {
         PostgreSQLContainer<?> postgresqlContainer = new PostgreSQLContainer<>(POSTGRESQL_CONTAINER)
-            .withUsername(USERNAME)
-            .withPassword(PASSWORD);
+            .withUsername(POSTGRES_USERNAME)
+            .withPassword(POSTGRES_PASSWORD);
         postgresqlContainer.start();
 //        System.setProperty("spring.datasource.username", postgresqlContainer.getUsername());
 //        System.setProperty("spring.datasource.password", postgresqlContainer.getPassword());

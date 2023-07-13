@@ -188,11 +188,14 @@ public class DoctorController {
     public String showDoctorDetails(
             @PathVariable Integer doctorId,
             Model model,
-            Authentication authentication) {
+            Authentication authentication
+    ) {
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         model.addAttribute("doctor", doctor);
+
         List<WorkingHours> workingHours = doctorService.getWorkingHours(doctorId);
         model.addAttribute("workingHours", workingHours);
+
         String doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
         String defaultDescription = "src/main/resources/desc/default.txt";
         Path filePath = Paths.get(doctorDescFile);
@@ -213,7 +216,6 @@ public class DoctorController {
         List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
         model.addAttribute("opinions", opinions);
 
-//        return "doctor/doctor-show";
         return "doctor/doctor-show-new";
     }
 
@@ -224,8 +226,7 @@ public class DoctorController {
         return "doctor/doctors-logo";
     }
 
-    @GetMapping(value = DOCTOR_ID,
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = DOCTOR_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public DoctorDTO doctorDetails(@PathVariable Integer doctorId) {
         return doctorDAO.findById(doctorId);
     }
@@ -424,18 +425,13 @@ public class DoctorController {
     public String getDoctorScheduleSimpleMap(@PathVariable Integer doctorId, Model model, Authentication authentication) {
 
         LocalDate today = LocalDate.now();
-
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
         Map<Map<String, LocalDate>, List<WorkingHours>> resultMap = reservationService.getWorkingHoursForCurrentWeek(workingHoursList);
-
         // Może trzeba będzie pomyśleć nad metodą, która zwraca rezerwacje dla danego tygodnia
         List<ReservationDTO> notAvailableTimes = reservationService.findAllReservationsByDoctor(doctorId);
-
         List<LocalDateTime> listOfRes = notAvailableTimes.stream().map(item -> LocalDateTime.of(item.getDay(), item.getStartTimeR())).toList();
-
         Map<String, WorkingHours> simpleMapBeforeCheck;
-//        Map<String, WorkingHours> simpleMap = reservationService.simpleMap(workingHoursList);
 
         if (today.getDayOfWeek().getValue() < 5) {
             simpleMapBeforeCheck = reservationService.simpleMap(workingHoursList);
@@ -481,7 +477,7 @@ public class DoctorController {
         return "/doctor/doctor-schedule-3"; // TODO do posprzątania zwracane widoki
     }
 
-    // odczytywanie plików tekstowych z opisem lekarzy  -> chyba nie będzie potrzebne
+    // odczytywanie plików tekstowych z opisem lekarzy -> chyba nie będzie potrzebne
     private String readDescriptionFromFile(String fileName) throws IOException {
         return Files.readString(Paths.get(fileName));
     }

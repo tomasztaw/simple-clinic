@@ -1,8 +1,15 @@
-api:
-  cepik:
-    url: http://localhost:9999
+#api:
+#  cepik:
+#    url: http://localhost:9999
 
 spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+#  security:
+#    enabled: false
+
+logging:
+  level:
+    root: DEBUG

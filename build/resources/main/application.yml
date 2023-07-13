@@ -34,6 +34,9 @@ spring:
   security:
     enabled: true
 #    enabled: false
+    csrf:
+#      enabled: true
+      enabled: false
 
   flyway:
     baseline-on-migrate=true:
