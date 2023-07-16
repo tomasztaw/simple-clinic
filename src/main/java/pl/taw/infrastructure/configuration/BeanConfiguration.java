@@ -19,6 +19,7 @@ public class BeanConfiguration {
         return new HiddenHttpMethodFilter();
     }
 
+    // czy musi być static?
     @Bean
     public static ObjectMapper objectMapper() {
         return new ObjectMapper()

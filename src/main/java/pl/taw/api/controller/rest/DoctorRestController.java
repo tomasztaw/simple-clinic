@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.DoctorsDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
@@ -30,8 +31,21 @@ public class DoctorRestController {
     private final DoctorDAO doctorDAO;
     private final VisitService visitService;
 
+    // napisane po drugim oglądaniu w21
+    @GetMapping(value = DOCTOR_ID,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public DoctorDTO showDoctorDetails(@PathVariable("doctorId") Integer doctorId) {
+        return doctorDAO.findById(doctorId);
+    }
+
+    @GetMapping
+    public DoctorsDTO getDoctors() {
+        return DoctorsDTO.of(doctorDAO.findAll());
+    }
+    // #########################
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<DoctorDTO>> getAllPatients() {
+    public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
         List<DoctorDTO> doctors = doctorDAO.findAll();
         if (doctors.size() > 0) {
             return ResponseEntity.ok(doctors);
