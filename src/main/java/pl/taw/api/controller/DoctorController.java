@@ -127,7 +127,7 @@ public class DoctorController {
         if (referer != null) {
             return "redirect:" + referer;
         } else {
-            return null;
+            return "home";
         }
     }
 

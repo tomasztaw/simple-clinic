@@ -42,30 +42,6 @@ public class SecurityConfiguration {
                 .build();
     }
 
-//    @Bean
-//    @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
-//    SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.csrf()
-//                .disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/login", "/error", "/images/**", "/clinic").permitAll()
-//                .requestMatchers("/patients/**", "/doctors/**", "/opinions/**", "/visits/**", "/reservations/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
-//                .requestMatchers("/panel/**").hasAnyAuthority("ADMIN")
-//                .requestMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN")
-//                .requestMatchers("/api/**").hasAnyAuthority("REST_API")
-//                .and()
-//                .formLogin()
-//                .defaultSuccessUrl("/clinic") // dodane
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutSuccessUrl("/login")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .permitAll();
-//
-//        return httpSecurity.build();
-//    }
 
     @Bean  // TODO to chyba jednak nie będzie potrzebne, każdy będzie przekierowywany na stronę główną
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
@@ -91,7 +67,8 @@ public class SecurityConfiguration {
     SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/clinic/welcome").permitAll()
+//                .requestMatchers("/clinic/welcome").permitAll()
+                .requestMatchers("/welcome").permitAll()
                 .requestMatchers("/register").permitAll()
                 .requestMatchers("/register/addUser").permitAll()
                 .requestMatchers("/templates/registration-confirmation.html").permitAll()
@@ -125,5 +102,49 @@ public class SecurityConfiguration {
 
         return httpSecurity.build();
     }
+
+    //    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity.authorizeHttpRequests()
+//                .requestMatchers("/login", "/error", "/images/oh_no.png", "/welcome").permitAll()
+//                .requestMatchers("/patients/**", "/images/**").hasAnyAuthority("USER", "DOCTOR", "ADMIN")
+//                .requestMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN")
+//                .and()
+//                .formLogin()
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .logoutSuccessUrl("/welcome")
+//                .invalidateHttpSession(true)
+//                .deleteCookies("JSESSIONID")
+//                .permitAll();
+//
+//        return httpSecurity.build();
+//    }
+
+//    @Bean
+//    @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
+//    SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity.csrf()
+//                .disable()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/login", "/error", "/images/**", "/clinic").permitAll()
+//                .requestMatchers("/patients/**", "/doctors/**", "/opinions/**", "/visits/**", "/reservations/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
+//                .requestMatchers("/panel/**").hasAnyAuthority("ADMIN")
+//                .requestMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN")
+//                .requestMatchers("/api/**").hasAnyAuthority("REST_API")
+//                .and()
+//                .formLogin()
+//                .defaultSuccessUrl("/clinic") // dodane
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .logoutSuccessUrl("/login")
+//                .invalidateHttpSession(true)
+//                .deleteCookies("JSESSIONID")
+//                .permitAll();
+//
+//        return httpSecurity.build();
+//    }
 
 }
