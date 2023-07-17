@@ -20,6 +20,8 @@ public interface DoctorDAO {
 
     void delete(DoctorEntity doctorEntity);
 
+    void deleteById(Integer doctorId);
+
     List<DoctorDTO> findBySpecialization(String specialization);
 
     List<String> findAllSpecializations();

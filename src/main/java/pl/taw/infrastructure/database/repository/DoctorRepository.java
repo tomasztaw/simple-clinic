@@ -73,6 +73,13 @@ public class DoctorRepository implements DoctorDAO {
         doctorJpaRepository.delete(doctorEntity);
     }
 
+    // dodane dla rest api, zobaczymy co dalej
+    @Override
+    public void deleteById(Integer doctorId) {
+        doctorJpaRepository.deleteById(doctorId);
+    }
+
+    // dodane dla testów, zobaczymy co dalej
     public void saveAllAndFlush(List<DoctorEntity> doctorEntities) {
         doctorJpaRepository.saveAllAndFlush(doctorEntities);
     }
