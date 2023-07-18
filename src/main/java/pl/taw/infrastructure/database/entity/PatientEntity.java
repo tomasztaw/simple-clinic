@@ -2,9 +2,12 @@ package pl.taw.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.security.access.method.P;
 import pl.taw.infrastructure.security.UserEntity;
 
 import java.util.List;
+import java.util.Set;
 
 @With
 @Getter
@@ -45,4 +48,7 @@ public class PatientEntity {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OpinionEntity> createdOpinions;
 
+    // dodajemy zwierzęta do konsumowania api
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "patient")
+    private Set<PetEntity> pets;
 }

@@ -9,7 +9,11 @@ import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.PatientDAO;
+import pl.taw.business.dao.PetDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
+import pl.taw.infrastructure.database.entity.PetEntity;
+import pl.taw.infrastructure.database.repository.forpet.PetRepository;
+import pl.taw.infrastructure.petstore.Pet;
 
 import java.util.List;
 import java.util.Random;
@@ -29,9 +33,37 @@ public class PatientRestController {
     public static final String UPDATE_ID = "/{patientId}/update";
     public static final String DELETE_ID = "/{patientId}/delete";
 
+    // dla obsługi PETA (zwierząt) !!!! - do skasowania
+    public static final String PATIENT_UPDATE_PET = "/{patientId}/pet/{petId}";
+    private PetDAO petDAO;
+    private PetRepository petRepository;
+    // #####################
 
     private final PatientDAO patientDAO;
     private final VisitService visitService;
+
+    // PATCH do obsługi zwierzątek-do skasowania
+    @PatchMapping(PATIENT_UPDATE_PET)
+    public ResponseEntity<?> updatePatientWithPet(
+            @PathVariable("patientId") Integer patientId,
+            @PathVariable("petId") Integer petId
+    ) {
+        PatientEntity existingPatient = patientDAO.findEntityById(patientId);
+        // szukanie pet w api
+        Pet petFromStore = petDAO.getPet(Long.valueOf(petId))
+                .orElseThrow(() -> new RuntimeException("Pet with id: [%s] could not by retrieved".formatted(petId)));
+
+        PetEntity newPet = PetEntity.builder()
+                .petStorePetId(petFromStore.getId())
+                .name(petFromStore.getName())
+                .status(petFromStore.getStatus())
+                .patient(existingPatient)
+                .build();
+
+        petRepository.save(newPet);
+
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PatientDTO>> getAllPatients() {
