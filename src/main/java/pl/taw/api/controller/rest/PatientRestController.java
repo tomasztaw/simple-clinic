@@ -35,8 +35,8 @@ public class PatientRestController {
 
     // dla obsługi PETA (zwierząt) !!!! - do skasowania
     public static final String PATIENT_UPDATE_PET = "/{patientId}/pet/{petId}";
-    private PetDAO petDAO;
-    private PetRepository petRepository;
+    private final PetDAO petDAO;
+    private final PetRepository petRepository;
     // #####################
 
     private final PatientDAO patientDAO;

@@ -2,8 +2,10 @@ package pl.taw.api.controller.rest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.security.access.method.P;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
@@ -11,7 +13,6 @@ import pl.taw.api.dto.DoctorsDTO;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
-import java.lang.management.MemoryManagerMXBean;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -82,7 +83,7 @@ public class DoctorRestControllerSample {
      * Zwracany jest status 201 ze ścieżką dla nowego lekarza (.../clinic/api/sample/doctors/[?18?]
      * Pamiętaj, że POST nie jest idempotentny. Za każdym razem będzie tworzony nowy zasób.
      */
-    @PostMapping
+    @PostMapping("/nie-wiem-czy-to-prawidlowo-bez-sciezki")
     @Transactional
     public ResponseEntity<DoctorDTO> addDoctorSample(
             @Valid @RequestBody DoctorDTO doctorDTO
@@ -147,7 +148,7 @@ public class DoctorRestControllerSample {
         }
     }
 
-    @DeleteMapping(DOCTOR_ID)
+    @DeleteMapping(DOCTOR_ID + "/cokolwiek")
     public ResponseEntity<?> deleteDoctorSample2(
             @PathVariable("doctorId") Integer doctorId
     ) {

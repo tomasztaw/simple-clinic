@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl-PL" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona powitalna</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{css/styles-welcome.css}">
+
+    <style th:inline="text">
+        .banner {
+            background: url{[[@{/images/z1.jpg}]]}
+                    no-repeat center center fixed;
+        }
+    </style>
+
+</head>
+<body>
+<div class="banner">
+    <div class="navbar">
+        <img th:src="@{/images/2135.jpg}" class="logo" alt="logo">
+        <ul>
+            <li><a th:href="@{/register}">Zarejestruj</a></li>
+            <li><a th:href="@{/login}">Zaloguj</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+
+        <h1>Witamy w naszej Klinice Medycznej</h1>
+        <br>
+        <p>Dziękujemy, że wybraliście naszą klinikę jako miejsce opieki medycznej.</p>
+        <p>Jesteśmy zespołem doświadczonych lekarzy i personelu medycznego, którzy są gotowi zadbać o Wasze zdrowie i dobre samopoczucie.</p>
+        <p>Nasz priorytet to zapewnienie Wam wysokiej jakości opieki medycznej w przyjaznej i komfortowej atmosferze.</p>
+        <p>W naszej klinice oferujemy szeroki zakres usług medycznych, od rutynowych badań i konsultacji po skomplikowane zabiegi medyczne.</p>
+        <p>Nasi lekarze są wysoko wykwalifikowani i stale doskonalą swoje umiejętności, aby zapewnić Wam najlepszą opiekę.</p>
+        <p>Jeśli macie jakiekolwiek pytania lub potrzebujecie informacji, nasz personel jest tutaj, aby Wam pomóc.</p>
+        <p>Jeszcze raz dziękujemy za zaufanie i wybór naszej Kliniki Medycznej. Jesteśmy gotowi służyć Wam!</p>
+
+        <div class="button__login">
+            <!-- <button type="button"><span></span>Zarejestruj się</button>
+            <button type="button"><span></span>Zaloguj</button> -->
+
+            <button type="button"><span></span><a th:href="@{/register}">Zarejestruj się</a></button>
+            <button type="button"><span></span><a th:href="@{/login}">Zaloguj</a></button>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer">
+    <p><b>© 2023 E-clinic</b></p>
+
+    <div th:replace="fragments/footer.html"></div>
+
+</div>
+
+</body>
+</html>

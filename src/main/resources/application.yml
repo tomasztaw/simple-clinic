@@ -30,6 +30,7 @@ spring:
       filter:
         enabled: true
     static-path-pattern=/static/**:
+#    static-path-pattern: "/resources/**"
 
   security:
     enabled: true

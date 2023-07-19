@@ -20,6 +20,9 @@ public class OpinionRestController {
 
     public static final String API_OPINIONS = "/api/opinions";
     public static final String COMMENTS = "/comments";
+
+
+
     public static final String UPDATE_BY_ID = "/update/{opinionId}";
     public static final String ADD = "/add";
     public static final String DELETE_BY_ID = "/delete/{opinionId}";
