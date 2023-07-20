@@ -81,32 +81,37 @@ dependencyManagement {
 		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
 	}
 }
-//
-//// https://github.com/OpenAPITools/openapi-generator/tree/master/modules
-//// https://openapi-generator.tech/docs/generators/java/
-//// https://openapi-generator.tech/docs/plugins
-//// http://www.cepik.gov.pl/interfejs-dla-cepik
-//openApiGenerate {
-//	generatorName = "java"
-//	library = "webclient"
-//	configOptions.putAll([
-//			serializableModel   : "true",
-//			dateLibrary         : "java8",
-//			serializationLibrary: "jackson"
-//	])
-//	outputDir = "$buildDir/generated-sources/openapi".toString()
+
+// https://github.com/OpenAPITools/openapi-generator/tree/master/modules
+// https://openapi-generator.tech/docs/generators/java/
+// https://openapi-generator.tech/docs/plugins
+// https://petstore3.swagger.io/
+// http://www.cepik.gov.pl/interfejs-dla-cepik
+
+openApiGenerate {
+	generatorName = "java"
+	library = "webclient"
+	configOptions.putAll([
+			serializableModel   : "true",
+			dateLibrary         : "java8",
+			serializationLibrary: "jackson"
+	])
+	outputDir = "$buildDir/generated-sources/openapi".toString()
 //	inputSpec = "$rootDir/src/main/resources/contracts/cepik-1.1.3.json".toString()
+	inputSpec = "$rootDir/src/main/resources/contracts/petstore-v3.0.2.json".toString()
 //	apiPackage = "pl.zajavka.infrastructure.cepik.api"
+	apiPackage = "pl.taw.infrastructure.petstore.api"
 //	modelPackage = "pl.zajavka.infrastructure.cepik.model"
-//}
-//
-//sourceSets {
-//	main {
-//		java.srcDirs += "$buildDir/generated-sources/openapi/src/main/java"
-//	}
-//}
-//
-//compileJava.dependsOn tasks.openApiGenerate
+	modelPackage = "pl.taw.infrastructure.petstore.model"
+}
+
+sourceSets {
+	main {
+		java.srcDirs += "$buildDir/generated-sources/openapi/src/main/java"
+	}
+}
+
+compileJava.dependsOn tasks.openApiGenerate
 
 test {
 	useJUnitPlatform()

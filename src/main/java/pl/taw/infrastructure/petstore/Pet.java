@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.taw.infrastructure.petstore.model.Category;
 
 @Data
 @Builder
@@ -13,6 +14,7 @@ public class Pet {
 
     private Long id;
     private String name;
-    private String status;
+//    private String status;
+    private String category;
 
 }
