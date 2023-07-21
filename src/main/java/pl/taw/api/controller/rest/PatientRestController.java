@@ -56,7 +56,7 @@ public class PatientRestController {
         PetEntity newPet = PetEntity.builder()
                 .petStorePetId(petFromStore.getId())
                 .name(petFromStore.getName())
-                .status(petFromStore.getStatus())
+                .category(petFromStore.getCategory())
                 .patient(existingPatient)
                 .build();
 

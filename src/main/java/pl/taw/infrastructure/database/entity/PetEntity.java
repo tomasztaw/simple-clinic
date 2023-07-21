@@ -7,7 +7,7 @@ import lombok.*;
 @With
 @Entity
 @Builder
-@ToString(of = {"name", "status"})
+@ToString(of = {"name", "category"})
 @EqualsAndHashCode(of = "petId")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,8 +25,8 @@ public class PetEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "category")
+    private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")

@@ -6,6 +6,8 @@ server:
 api:
   cepik:
     url: https://api.cepik.gov.pl/
+  petStore:
+    url: https://petstore3.swagger.io/api/v3/
 
 spring:
   datasource:

@@ -46,6 +46,43 @@ class PatientControllerMockitoTest {
 //        MockitoAnnotations.openMocks(this);
 //    }
 
+    /**
+     * Najprostszy test na pobieranie pacjenta przez kontroler
+     * w21-25
+     * Test jednostkowy
+     */
+    @Test
+    void thatRetrievingPatientsWorksCorrectly() {
+        // given
+        Integer patientId = 10;
+        PatientDTO patient = DtoFixtures.somePatient1();
+        when(patientDAO.findById(patientId)).thenReturn(patient);
+
+        // when
+        PatientDTO result = patientController.patientDetails(patientId);
+
+        // then
+        assertThat(result).isEqualTo(DtoFixtures.somePatient1());
+    }
+
+    /**
+     * Zapisywanie, patientDAO nie działa, trzeba użyć JpaRepo
+     * w21-25
+     * Test jednostkowy
+     */
+    @Test
+    void thatSavingPatientWorksCorrectlyNew() {
+        // given
+//        when(patientDAO.saveAndReturn(any(PatientEntity.class)))
+        when(patientJpaRepository.save(any(PatientEntity.class)))
+                .thenReturn(EntityFixtures.somePatient1().withPatientId(123));
+
+        // when
+        ResponseEntity<?> result = patientController.addRequestPatient(DtoFixtures.somePatient1());
+
+        // then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
 
 //    @Ignore
 //    @Test

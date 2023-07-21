@@ -142,7 +142,8 @@ public class PatientController {
         return "update-phone";
     }
 
-    @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
+//    @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
+    @PatchMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
     public String updatePatientPhoneView(
             @PathVariable("patientId") Integer patientId,
             @RequestParam(required = true, value = "newPhone") String newPhone,

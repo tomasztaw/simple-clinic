@@ -14,6 +14,7 @@ import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import pl.taw.infrastructure.petstore.ApiClient;
+import pl.taw.infrastructure.petstore.api.PetApi;
 import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
@@ -35,7 +36,7 @@ public class WebClientConfiguration {
 //    private String cepikUrl;
 //
     @Bean
-    public ApiClient webClient(final ObjectMapper objectMapper) {
+    public ApiClient petStoreApiClient(final ObjectMapper objectMapper) {
 //    public WebClient webClient(final ObjectMapper objectMapper) {
 //        final var httpClient = HttpClient.create()
 //                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT)
@@ -68,6 +69,11 @@ public class WebClientConfiguration {
         ApiClient apiClient = new ApiClient(webClient);
         apiClient.setBasePath(petStoreUrl);
         return apiClient;
+    }
+
+    @Bean
+    public PetApi petApi(final ObjectMapper objectMapper) {
+        return new PetApi(petStoreApiClient(objectMapper));
     }
 
 //    @Bean
