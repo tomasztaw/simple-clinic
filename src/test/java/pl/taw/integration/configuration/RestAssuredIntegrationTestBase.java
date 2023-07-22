@@ -14,6 +14,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import pl.taw.integration.support.AuthenticationTestSupport;
 import pl.taw.integration.support.ControllerTestSupport;
@@ -21,10 +23,22 @@ import pl.taw.integration.support.ControllerTestSupport;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * w21-29
+ */
+
 public abstract class RestAssuredIntegrationTestBase
     extends AbstractIT
     implements ControllerTestSupport, AuthenticationTestSupport {
 
+    // #####################
+//    @LocalServerPort
+//    private int serverPort;
+//
+//    @Value("${server.servlet.context-path}")
+//    private String basePath;
+
+    // ####################
     protected static WireMockServer wireMockServer;
 
     private String jSessionIdValue;
@@ -77,12 +91,12 @@ public abstract class RestAssuredIntegrationTestBase
         wireMockServer.resetAll();
     }
 
-    public RequestSpecification requestSpecification() {
-        return restAssuredBase()
-            .accept(ContentType.JSON)
-            .contentType(ContentType.JSON)
-            .cookie("JSESSIONID", jSessionIdValue);
-    }
+//    public RequestSpecification requestSpecification() {
+//        return restAssuredBase()
+//            .accept(ContentType.JSON)
+//            .contentType(ContentType.JSON)
+//            .cookie("JSESSIONID", jSessionIdValue);
+//    }
 
     public RequestSpecification requestSpecificationNoAuthentication() {
         return restAssuredBase();
@@ -100,5 +114,16 @@ public abstract class RestAssuredIntegrationTestBase
         return RestAssuredConfig.config()
             .objectMapperConfig(new ObjectMapperConfig()
                 .jackson2ObjectMapperFactory((type, s) -> objectMapper));
+    }
+
+// ************************
+    public RequestSpecification requestSpecification() {
+        return RestAssured
+                .given()
+                .config(getConfig())
+                .basePath(basePath)
+                .port(port)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON);
     }
 }

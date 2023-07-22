@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.PatientDTO;
+import pl.taw.api.dto.PatientsDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.OpinionDAO;
@@ -280,6 +281,12 @@ public class PatientController {
     @ResponseBody
     public List<PatientDTO> patientsList() {
         return patientDAO.findAll();
+    }
+
+    @GetMapping(value = SHOW_ALL + "/dots", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public PatientsDTO patientsDTOList() {
+        return PatientsDTO.of(patientDAO.findAll());
     }
 
     // ok
