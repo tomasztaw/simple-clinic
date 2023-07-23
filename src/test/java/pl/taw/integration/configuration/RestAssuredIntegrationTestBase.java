@@ -74,7 +74,7 @@ public abstract class RestAssuredIntegrationTestBase
 
     @BeforeEach
     void beforeEach() {
-        jSessionIdValue = login("test_user", "test")
+        jSessionIdValue = login("tomek", "test")
             .and()
             .cookie("JSESSIONID")
             .header(HttpHeaders.LOCATION, "http://localhost:%s%s/".formatted(port, basePath))
@@ -91,12 +91,12 @@ public abstract class RestAssuredIntegrationTestBase
         wireMockServer.resetAll();
     }
 
-//    public RequestSpecification requestSpecification() {
-//        return restAssuredBase()
-//            .accept(ContentType.JSON)
-//            .contentType(ContentType.JSON)
-//            .cookie("JSESSIONID", jSessionIdValue);
-//    }
+    public RequestSpecification requestSpecification() {
+        return restAssuredBase()
+            .accept(ContentType.JSON)
+            .contentType(ContentType.JSON)
+            .cookie("JSESSIONID", jSessionIdValue);
+    }
 
     public RequestSpecification requestSpecificationNoAuthentication() {
         return restAssuredBase();
@@ -117,13 +117,13 @@ public abstract class RestAssuredIntegrationTestBase
     }
 
 // ************************
-    public RequestSpecification requestSpecification() {
-        return RestAssured
-                .given()
-                .config(getConfig())
-                .basePath(basePath)
-                .port(port)
-                .accept(ContentType.JSON)
-                .contentType(ContentType.JSON);
-    }
+//    public RequestSpecification requestSpecification() {
+//        return RestAssured
+//                .given()
+//                .config(getConfig())
+//                .basePath(basePath)
+//                .port(port)
+//                .accept(ContentType.JSON)
+//                .contentType(ContentType.JSON);
+//    }
 }

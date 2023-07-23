@@ -1,6 +1,6 @@
-#api:
-#  cepik:
-#    url: http://localhost:9999
+api:
+  petStore:
+    url: http://localhost:9999
 
 spring:
   jpa:
