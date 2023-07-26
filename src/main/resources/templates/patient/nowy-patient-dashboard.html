@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel pacjenta</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{css/style-patient-dashboard.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="header-logo">
+            <a href="/" th:href="@{/}">
+                 <img th:src="@{/images/2135.jpg}" alt="Logo">
+            </a>
+        </div>
+        <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
+
+    </div>
+
+    <h1>Panel pacjenta</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Dane pacjenta</h3>
+            <div class="form-group">
+                <label for="name">Imię:</label>
+                <input type="text" class="form-control" id="name" name="name" th:value="${patient.name}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="surname">Nazwisko:</label>
+                <input type="text" class="form-control" id="surname" name="surname" th:value="${patient.surname}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="pesel">PESEL:</label>
+                <input type="text" class="form-control" id="pesel" name="pesel" th:value="${patient.pesel}" readonly>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Kontakt</h3>
+            <div class="form-group">
+                <label for="phone">Telefon:</label>
+                <input type="text" class="form-control" id="phone" name="phone" th:value="${patient.phone}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" th:value="${patient.email}" readonly>
+            </div>
+            
+            <div class="updateContact">
+                <div class="col">
+                    <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
+                        <button type="submit" class="btn btn-primary">Zaktualizuj telefon</button>
+                    </form>
+                </div>
+                <div class="col">
+                    <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
+                        <button type="submit" class="btn btn-primary">Zaktualizuj email</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <div class="row">
+            <div class="col">
+                <a th:href="@{/patients/history/{patientId}(patientId=${patient.patientId})}" class="btn btn-primary btn-lg">Sprawdź historię</a>
+            </div>
+            <div class="col">
+                <a href="/clinic/reservations" class="btn btn-primary btn-lg">Umów wizytę</a>
+            </div>
+            <div class="col">
+                <a href="/clinic/prescriptions/patient/5" class="btn btn-primary btn-lg">Twoje rezerwacje</a>
+            </div>
+
+            <div class="col">
+                <a th:href="@{/opinions/patient/{patientId}(patientId=${patientId})}" class="btn btn-primary btn-lg">Twoje opinie</a>
+            </div>
+            <div class="col">
+                <a href="/clinic/opinions/dodaj-opinie/5" class="btn btn-primary btn-lg">Dodaj opinie</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div th:replace="fragments/footer.html"></div>
+    </div>
+</div>
+</body>
+</html>

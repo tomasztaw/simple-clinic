@@ -8,20 +8,27 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
 
 
-    <title>Specializations</title>
+    <title>Specjalizacje</title>
+    <style>
+        .logo-spec {
+          width: 120px;
+          height: 120px;
+          border-radius: 10px;
+          margin-left: 25px;
+        }
+    </style>
 
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div class="header-logo">
-            <!-- Tutaj wstaw kod dla logo -->
+<!--        <div class="header-logo">-->
             <a href="/" th:href="@{/}">
-                <img th:src="@{/images/2135.jpg}" alt="Logo">
+                <img th:src="@{/images/2135.jpg}" class="logo-spec" alt="Logo">
             </a>
-        </div>
-        <!-- Możesz dodać dodatkowe elementy w nagłówku -->
+<!--        </div>-->
+
         <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
 
     </div>
@@ -31,7 +38,7 @@
         <a th:each="specialization : ${specializations}"
            th:href="@{/doctors/specialization/__${specialization.toLowerCase()}__}"
            class="list-group-item list-group-item-action">
-            <span th:text="${specialization}"></span>
+            <b><span th:text="${specialization}"></span></b>
         </a>
     </div>
     <br>
@@ -41,10 +48,7 @@
 </div>
 
 <div class="footer">
-    <p><b>© 2023 E-clinic</b></p>
-
     <div th:replace="fragments/footer.html"></div>
-
 </div>
 
 </body>

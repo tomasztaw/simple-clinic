@@ -21,8 +21,6 @@ public class OpinionRestController {
     public static final String API_OPINIONS = "/api/opinions";
     public static final String COMMENTS = "/comments";
 
-
-
     public static final String UPDATE_BY_ID = "/update/{opinionId}";
     public static final String ADD = "/add";
     public static final String DELETE_BY_ID = "/delete/{opinionId}";
@@ -45,6 +43,7 @@ public class OpinionRestController {
         return ResponseEntity.ok(comments);
     }
 
+    // to na pewno źle !!!!!!!!!!!!!
     @GetMapping(value = UPDATE_BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OpinionDTO> getOpinionById(@PathVariable("opinionId") Integer opinionId) {
         OpinionDTO opinion = opinionDAO.findById(opinionId);

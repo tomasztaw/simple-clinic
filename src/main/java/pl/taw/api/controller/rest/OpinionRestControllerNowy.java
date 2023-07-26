@@ -23,14 +23,13 @@ public class OpinionRestControllerNowy {
     public static final String API_OPINIONS = "/api/opinions/nowy";
     public static final String OPINION_ID = "/{opinionId}";
     public static final String COMMENTS = "/comments";
-    public static final String UPDATE_BY_ID = "/update/{opinionId}";
+    public static final String UPDATE_BY_ID = "/{opinionId}/update";
     public static final String ADD = "/add";
-    public static final String DELETE_BY_ID = "/delete/{opinionId}";
+    public static final String DELETE_BY_ID = "/{opinionId}/delete";
 
     private final OpinionDAO opinionDAO;
-    private final DoctorDAO doctorDAO;
-    private final PatientDAO patientDAO;
-
+//    private final DoctorDAO doctorDAO;
+//    private final PatientDAO patientDAO;
 
     @GetMapping
     public OpinionsDTO getOpinions() {
@@ -50,6 +49,7 @@ public class OpinionRestControllerNowy {
         return ResponseEntity.ok(comments);
     }
 
+    // do poprawy na PUT lub do usunięcia
     @GetMapping(value = UPDATE_BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OpinionDTO> getOpinionById(@PathVariable("opinionId") Integer opinionId) {
         OpinionDTO opinion = opinionDAO.findById(opinionId);
@@ -60,6 +60,7 @@ public class OpinionRestControllerNowy {
         }
     }
 
+    // bez końcówki!!! - samo POST
     @PostMapping(ADD)
     public ResponseEntity<OpinionEntity> createOpinion(@RequestBody OpinionEntity opinionEntity) {
         OpinionEntity createdOpinion = opinionDAO.saveAndReturn(opinionEntity);

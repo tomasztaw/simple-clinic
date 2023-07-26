@@ -75,7 +75,8 @@ public class PatientController {
 
         model.addAttribute("patient", patient);
 
-        return "patient/patient-page";
+//        return "patient/patient-page";
+        return "patient/nowy-patient-dashboard";
     }
 
     @GetMapping(LOGOWANIE)
