@@ -84,7 +84,7 @@
         <td th:text="${visit.visitId}"></td>
         <td th:text="${visit.doctor.doctorId}"></td>
         <td>
-          <a th:href="@{/doctors/show/{doctorId}(doctorId=${visit.doctor.doctorId})}">
+          <a th:href="@{/doctors/{doctorId}/show(doctorId=${visit.doctor.doctorId})}">
             <span th:text="${visit.doctor.name + ' ' + visit.doctor.surname + ' ' + visit.doctor.title}"></span>
           </a>
         </td>

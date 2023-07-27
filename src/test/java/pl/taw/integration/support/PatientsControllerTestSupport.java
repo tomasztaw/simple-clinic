@@ -6,7 +6,6 @@ import io.restassured.specification.RequestSpecification;
 import org.springframework.http.HttpStatus;
 import pl.taw.api.controller.PatientController;
 import pl.taw.api.controller.rest.PatientRestController;
-import pl.taw.api.controller.rest.PatientRestControllerNowy;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.PatientsDTO;
 
@@ -20,7 +19,7 @@ public interface PatientsControllerTestSupport {
 
     default PatientsDTO listPatients() {
         return requestSpecification()
-                .get(PatientRestControllerNowy.API_PATIENTS) // Nie jestem pewien czy to ta końcówka
+                .get(PatientRestController.API_PATIENTS) // Nie jestem pewien czy to ta końcówka
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and()
@@ -40,7 +39,7 @@ public interface PatientsControllerTestSupport {
 
     default PatientDTO getPatientById(final Integer patientId) {
         return requestSpecification()
-                .get(PatientRestControllerNowy.API_PATIENTS + PatientRestControllerNowy.PATIENT_ID, patientId)
+                .get(PatientRestController.API_PATIENTS + PatientRestController.PATIENT_ID, patientId)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and()
@@ -51,7 +50,7 @@ public interface PatientsControllerTestSupport {
     default ExtractableResponse<Response> savePatient(final PatientDTO patientDTO) {
         return requestSpecification()
                 .body(patientDTO)
-                .post(PatientRestControllerNowy.API_PATIENTS)
+                .post(PatientRestController.API_PATIENTS)
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
                 .and()

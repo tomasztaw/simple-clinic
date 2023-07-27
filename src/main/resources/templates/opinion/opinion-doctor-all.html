@@ -112,7 +112,7 @@
       </ul>
 
       <div class="actions">
-        <a th:href="@{/doctors/schedule/{doctorId}(doctorId=${doctorId})}" class="btn btn-primary btn-lg">Umów wizytę</a>
+        <a th:href="@{/doctors/{doctorId}/schedule(doctorId=${doctorId})}" class="btn btn-primary btn-lg">Umów wizytę</a>
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
       </div>
 

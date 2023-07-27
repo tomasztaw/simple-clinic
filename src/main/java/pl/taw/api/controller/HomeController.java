@@ -29,7 +29,6 @@ import java.util.Set;
 public class HomeController {
 
     public static final String HOME = "/";
-    public static final String WELCOME = "/welcome";
 
     private final PatientDAO patientDAO;
     private final UserRepository userRepository;

@@ -6,9 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.OpinionDTO;
-import pl.taw.business.dao.DoctorDAO;
+import pl.taw.api.dto.OpinionsDTO;
 import pl.taw.business.dao.OpinionDAO;
-import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.OpinionEntity;
 
 import java.util.List;
@@ -18,21 +17,24 @@ import java.util.List;
 @AllArgsConstructor
 public class OpinionRestController {
 
-    public static final String API_OPINIONS = "/api/opinions";
+    public static final String API_OPINIONS = "/api/opinions/nowy";
+    public static final String OPINION_ID = "/{opinionId}";
     public static final String COMMENTS = "/comments";
+    public static final String UPDATE_BY_ID = "/{opinionId}/update";
+    public static final String DELETE_BY_ID = "/{opinionId}/delete";
+    public static final String OPINION_UPDATE_NOTE = "/{opinionId}/comment";
 
-    public static final String UPDATE_BY_ID = "/update/{opinionId}";
-    public static final String ADD = "/add";
-    public static final String DELETE_BY_ID = "/delete/{opinionId}";
 
     private final OpinionDAO opinionDAO;
-    private final DoctorDAO doctorDAO;
-    private final PatientDAO patientDAO;
 
     @GetMapping
-    public ResponseEntity<List<OpinionDTO>> getAllOpinions() {
-        List<OpinionDTO> opinions = opinionDAO.findAll();
-        return ResponseEntity.ok(opinions);
+    public OpinionsDTO getOpinions() {
+        return OpinionsDTO.of(opinionDAO.findAll());
+    }
+
+    @GetMapping(value = OPINION_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public OpinionDTO getOpinionDetails(@PathVariable("opinionId") Integer opinionId) {
+        return opinionDAO.findById(opinionId);
     }
 
     @GetMapping(value = COMMENTS, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,18 +45,7 @@ public class OpinionRestController {
         return ResponseEntity.ok(comments);
     }
 
-    // to na pewno źle !!!!!!!!!!!!!
-    @GetMapping(value = UPDATE_BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OpinionDTO> getOpinionById(@PathVariable("opinionId") Integer opinionId) {
-        OpinionDTO opinion = opinionDAO.findById(opinionId);
-        if (opinion != null) {
-            return ResponseEntity.ok(opinion);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping(ADD)
+    @PostMapping
     public ResponseEntity<OpinionEntity> createOpinion(@RequestBody OpinionEntity opinionEntity) {
         OpinionEntity createdOpinion = opinionDAO.saveAndReturn(opinionEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOpinion);
@@ -81,7 +72,6 @@ public class OpinionRestController {
         }
     }
 
-
     @DeleteMapping(DELETE_BY_ID)
     public ResponseEntity<Void> deleteOpinionById(@PathVariable("opinionId") Integer opinionId) {
         OpinionEntity opinionForDelete = opinionDAO.findEntityById(opinionId);
@@ -90,5 +80,17 @@ public class OpinionRestController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PatchMapping(OPINION_UPDATE_NOTE)
+    public ResponseEntity<?> updateOpinionComment(
+            @PathVariable("opinionId") Integer opinionId,
+            @RequestParam(required = true) String updatedComment
+    ) {
+        OpinionEntity existingOpinion = opinionDAO.findEntityById(opinionId);
+        existingOpinion.setComment(updatedComment);
+        opinionDAO.save(existingOpinion);
+
+        return ResponseEntity.ok().build();
     }
 }

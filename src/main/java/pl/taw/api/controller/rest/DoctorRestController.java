@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.DoctorsDTO;
 import pl.taw.api.dto.VisitDTO;
+import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(DoctorRestController.API_DOCTORS)
@@ -23,7 +26,7 @@ public class DoctorRestController {
 
     public static final String API_DOCTORS = "/api/doctors";
     public static final String DOCTOR_ID = "/{doctorId}";
-    public static final String HISTORY = "/history/{doctorId}";
+    public static final String HISTORY = "/{doctorId}/history";
     public static final String DOCTOR_ID_RESULT = "/%s";
     public static final String DOCTOR_UPDATE_TITLE = "/{doctorId}/title";
     public static final String DOCTOR_UPDATE_PHONE = "/{doctorId}/phone";

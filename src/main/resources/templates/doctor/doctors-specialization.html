@@ -25,15 +25,13 @@
 <body>
 <div class="container">
   <div class="header">
-<!--    <div class="header-logo">-->
-      <!-- Tutaj wstaw kod dla logo -->
       <a href="/" th:href="@{/}">
         <img th:src="@{/images/2135.jpg}" class="logo-spec" alt="Logo">
       </a>
-<!--    </div>-->
-    <!-- Możesz dodać dodatkowe elementy w nagłówku -->
-    <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
-
+    <div>
+      <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
+      <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+    </div>
   </div>
 
   <h1 class="mt-5 mb-4">Lista lekarzy o specjalizacji <span th:text="${specialization}"></span></h1>
@@ -53,9 +51,8 @@
       <td th:text="${doctor.surname}"></td>
       <td th:text="${doctor.title}"></td>
       <td>
-        <a th:href="@{'/doctors/show/' + ${doctor.doctorId}}" class="btn btn-primary">Szczegóły</a>
-
-      </td> <!-- Dodany odnośnik do szczegółów dla każdego lekarza -->
+        <a th:href="@{'/doctors/' + ${doctor.doctorId} + '/show'}" class="btn btn-primary">Szczegóły</a>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -66,7 +63,7 @@
 
   <a th:href="@{/doctors/specializations}" class="btn btn-primary me-2">Wyszukaj po specjalizacji</a>
 
-  <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+<!--  <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>-->
 
 </div>
 

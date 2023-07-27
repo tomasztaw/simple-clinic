@@ -39,13 +39,11 @@ public class OpinionController {
     public static final String UPDATE_BY_ID = "/update/{opinionId}";
     public static final String DELETE = "/delete/{opinionId}";
 
-
     private final OpinionDAO opinionDAO;
     private final VisitDAO visitDAO;
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
 
-    // panel
     @GetMapping(PANEL)
     public String showOpinionPanel(Model model, Authentication authentication) {
         List<OpinionDTO> opinions = opinionDAO.findAll();
@@ -63,12 +61,12 @@ public class OpinionController {
             @PathVariable("opinionId") Integer opinionId, Model model) {
         OpinionDTO opinion = opinionDAO.findById(opinionId);
         model.addAttribute("opinion", opinion);
-        // dodawanie modelu z wizytą
         VisitDTO visit = visitDAO.findById(opinion.getVisit().getVisitId());
         model.addAttribute("visit", visit);
         return "opinion/opinion-show";
     }
 
+    // pusta ścieżka, bez add!
     @PostMapping(ADD)
     public String addOpinion(
             @RequestParam(value = "doctorId") Integer doctorId,
@@ -150,6 +148,7 @@ public class OpinionController {
 
     // ####################################################################################################
 
+    // można coś pomyśleć o takiej stronie tylko z opiniami
     @GetMapping
     public String opinionsPage() {
         return "opinions";
@@ -181,7 +180,7 @@ public class OpinionController {
         return "opinion/opinion-patient-all";
     }
 
-    // !!! nie działa
+    // !!! nie działa - do wywalenia
     // dodawanie opinii przez pacjenta
 //    @PostMapping(ADD)
 //    @PostMapping("/add/{visitId}")
@@ -195,11 +194,10 @@ public class OpinionController {
 
         System.out.println("addOpinion zostało wywołane");
 
-        return "opinion-form"; // Nazwa widoku z formularzem dodawania opinii
+        return "opinion-form";
     }
 
-
-    // wzór dla posta
+    // wzór dla posta - chyba do wywalenia!!!!
     @PostMapping("/opinions/addNieMaTakiego")
     public String addOpinion(
             @ModelAttribute("opinionDTO") OpinionDTO opinionDTO,
@@ -208,11 +206,8 @@ public class OpinionController {
         VisitDTO visit = new VisitDTO();
         visit.setVisitId(visitId);
         opinionDTO.setVisit(visit);
-
         // Dodanie opinii do bazy danych
-
         return "redirect:/opinions";
     }
-
 
 }

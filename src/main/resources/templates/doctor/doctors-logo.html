@@ -23,7 +23,6 @@
     <div class="container">
         <a class="navbar-brand" href="/" th:href="@{/}">
             <img th:src="@{/images/2135.jpg}" alt="Logo Przychodni" class="logo">
-<!--            Lista lekarzy-->
         </a>
         <h2>Lista lekarzy</h2>
         <div class="d-flex">
@@ -40,7 +39,7 @@
             <th scope="col">Imię</th>
             <th scope="col">Nazwisko</th>
             <th scope="col">Specjalizacja</th>
-            <th scope="col">Akcje</th> <!-- Dodany nagłówek dla kolumny akcji -->
+            <th scope="col">Akcje</th>
         </tr>
         </thead>
         <tbody>
@@ -49,8 +48,8 @@
             <td th:text="${doctor.surname}"></td>
             <td th:text="${doctor.title}"></td>
             <td>
-                <a th:href="@{'/doctors/show/' + ${doctor.doctorId}}" class="btn btn-primary">Szczegóły</a>
-            </td> <!-- Dodany odnośnik do szczegółów dla każdego lekarza -->
+                <a th:href="@{'/doctors/' + ${doctor.doctorId} + '/show'}" class="btn btn-primary">Szczegóły</a>
+            </td>
         </tr>
         </tbody>
     </table>

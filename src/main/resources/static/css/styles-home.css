@@ -7,18 +7,15 @@
 .banner {
   width: 100%;
   height: 100vh;
-  /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(z1.jpg);*/
-  /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("@{./images/z1.jpg}");*/
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("@{/images/z1.jpg}");
   background-size: cover;
   background-position: center;
-  /* filter: blur(1px); */
 }
 
 .navbar {
   width: 85%;
   margin: auto;
-  padding: 35px 0;
+  padding: 20px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,7 +42,7 @@
 }
 
 .logo {
-    width: 150px;
+    width: 120px;
     height: auto;
     cursor: pointer;
     border-radius: 5%;
@@ -62,4 +59,5 @@
     padding: 10px;
     text-align: center;
     color: white;
+    margin-top: 20px;
 }

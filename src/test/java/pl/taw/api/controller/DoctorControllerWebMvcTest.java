@@ -146,7 +146,7 @@ class DoctorControllerWebMvcTest {
         when(opinionDAO.findAllByDoctor(doctorId)).thenReturn(opinions);
 
         // when, then
-        mockMvc.perform(get("/doctors/show/{doctorId}", doctorId))
+        mockMvc.perform(get("/doctors/{doctorId}/show", doctorId))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("doctor", doctor))
                 .andExpect(model().attribute("workingHours", workingHours))

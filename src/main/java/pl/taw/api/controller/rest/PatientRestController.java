@@ -1,22 +1,17 @@
 package pl.taw.api.controller.rest;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.PatientDTO;
+import pl.taw.api.dto.PatientsDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.PatientDAO;
-import pl.taw.business.dao.PetDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
-import pl.taw.infrastructure.database.entity.PetEntity;
-import pl.taw.infrastructure.database.repository.forpet.PetRepository;
-import pl.taw.infrastructure.petstore.Pet;
 
 import java.util.List;
-import java.util.Random;
 
 @RestController
 @RequestMapping(PatientRestController.API_PATIENTS)
@@ -24,79 +19,23 @@ import java.util.Random;
 public class PatientRestController {
 
     public static final String API_PATIENTS = "/api/patients";
-    public static final String LOGOWANIE = "/logowanie";
     public static final String PATIENT_ID = "/{patientId}";
-    public static final String DASHBOARD_ID = "/dashboard/{patientId}";
-    public static final String HISTORY = "/history/{patientId}";
+    public static final String HISTORY = "/{patientId}/history";
     public static final String PATIENT_UPDATE_PHONE = "/{patientId}/phone";
-    public static final String ADD = "/add";
-    public static final String UPDATE_ID = "/{patientId}/update";
-    public static final String DELETE_ID = "/{patientId}/delete";
+    public static final String PATIENT_UPDATE_EMAIL = "/{patientId}/email";
 
-    // dla obsługi PETA (zwierząt) !!!! - do skasowania
-    public static final String PATIENT_UPDATE_PET = "/{patientId}/pet/{petId}";
-    private final PetDAO petDAO;
-    private final PetRepository petRepository;
-    // #####################
 
     private final PatientDAO patientDAO;
     private final VisitService visitService;
 
-    // PATCH do obsługi zwierzątek-do skasowania
-    @PatchMapping(PATIENT_UPDATE_PET)
-    public ResponseEntity<?> updatePatientWithPet(
-            @PathVariable("patientId") Integer patientId,
-            @PathVariable("petId") Integer petId
-    ) {
-        PatientEntity existingPatient = patientDAO.findEntityById(patientId);
-        // szukanie pet w api
-        Pet petFromStore = petDAO.getPet(Long.valueOf(petId))
-                .orElseThrow(() -> new RuntimeException("Pet with id: [%s] could not by retrieved".formatted(petId)));
 
-        PetEntity newPet = PetEntity.builder()
-                .petStorePetId(petFromStore.getId())
-                .name(petFromStore.getName())
-                .category(petFromStore.getCategory())
-                .patient(existingPatient)
-                .build();
-
-        petRepository.save(newPet);
-
-        return ResponseEntity.ok().build();
+    @GetMapping
+    public PatientsDTO getPatients() {
+        return PatientsDTO.of(patientDAO.findAll());
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PatientDTO>> getAllPatients() {
-        List<PatientDTO> patients = patientDAO.findAll();
-        if (patients.size() > 0) {
-            return ResponseEntity.ok(patients);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping(LOGOWANIE)
-    public ResponseEntity<String> showLoginForm() {
-        return ResponseEntity.ok("login2");
-    }
-
-    @PostMapping(LOGOWANIE)
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-        if (username.equals("user") && password.equals("test")) {
-            // Losowanie pacjenta
-            Random random = new Random();
-            int size = patientDAO.findAll().size();
-            int patientId = random.nextInt(size) + 1;
-
-            return ResponseEntity.ok("/patients/dashboard/" + patientId);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid username or password");
-        }
-    }
-
-    @GetMapping(DASHBOARD_ID)
-    public ResponseEntity<PatientDTO> showDashboardWithId(@PathVariable("patientId") Integer patientId) {
+    @GetMapping(value = PATIENT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<PatientDTO> showPatientById(@PathVariable("patientId") Integer patientId) {
         PatientDTO patient = patientDAO.findById(patientId);
 
         if (patient != null) {
@@ -118,35 +57,7 @@ public class PatientRestController {
         }
     }
 
-    @GetMapping(value = PATIENT_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PatientDTO> showPatientById(@PathVariable("patientId") Integer patientId) {
-        PatientDTO patient = patientDAO.findById(patientId);
-
-        if (patient != null) {
-            return ResponseEntity.ok(patient);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping(PATIENT_UPDATE_PHONE)
-    public ResponseEntity<String> updatePatientPhone(
-            @PathVariable("patientId") Integer patientId,
-            @RequestParam("newPhone") String newPhone) {
-        PatientEntity patient = patientDAO.findEntityById(patientId);
-
-        if (patient != null) {
-            patient.setPhone(newPhone);
-            patientDAO.save(patient);
-            String answer = String.format("Numer zaktualizowany na [%s] dla pacjenta [%s %s]"
-                    .formatted(newPhone, patient.getName(), patient.getSurname()));
-            return ResponseEntity.ok(answer);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping(ADD)
+    @PostMapping
     public ResponseEntity<String> addPatient(
             @RequestParam(value = "name") String name,
             @RequestParam(value = "surname") String surname,
@@ -165,7 +76,7 @@ public class PatientRestController {
         return ResponseEntity.ok("Dodano pacjenta: " + name + " " + surname);
     }
 
-    @PutMapping(UPDATE_ID)
+    @PutMapping(PATIENT_ID)
     public ResponseEntity<String> updatePatient(
             @PathVariable("patientId") Integer patientId,
             @RequestParam(value = "name") String name,
@@ -189,17 +100,45 @@ public class PatientRestController {
         }
     }
 
-    @DeleteMapping(DELETE_ID)
-    public ResponseEntity<String> deletePatientById(@PathVariable("patientId") Integer patientId) {
-        PatientEntity patientForDelete = patientDAO.findEntityById(patientId);
+    @DeleteMapping(PATIENT_ID)
+    public ResponseEntity<?> deletePatient(@PathVariable("patientId") Integer patientId) {
+        PatientEntity existingPatient = patientDAO.findEntityById(patientId);
+        patientDAO.delete(existingPatient);
+        return ResponseEntity.noContent().build();
+    }
 
-        if (patientForDelete != null) {
-            patientDAO.delete(patientForDelete);
-            return ResponseEntity.ok("Pacjent wykasowany");
+    @PatchMapping(PATIENT_UPDATE_PHONE)
+    public ResponseEntity<String> updatePatientPhone(
+            @PathVariable("patientId") Integer patientId,
+            @RequestParam("newPhone") String newPhone) {
+        PatientEntity patient = patientDAO.findEntityById(patientId);
+
+        if (patient != null) {
+            patient.setPhone(newPhone);
+            patientDAO.save(patient);
+            String answer = String.format("Numer zaktualizowany na [%s] dla pacjenta [%s %s]"
+                    .formatted(newPhone, patient.getName(), patient.getSurname()));
+            return ResponseEntity.ok(answer);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @PatchMapping(PATIENT_UPDATE_EMAIL)
+    public ResponseEntity<String> updatePatientEmail(
+            @PathVariable("patientId") Integer patientId,
+            @RequestParam("newEmail") String newEmail) {
+        PatientEntity patient = patientDAO.findEntityById(patientId);
+
+        if (patient != null) {
+            patient.setEmail(newEmail);
+            patientDAO.save(patient);
+            String answer = String.format("Email zaktualizowany na [%s] dla pacjenta [%s %s]"
+                    .formatted(newEmail, patient.getName(), patient.getSurname()));
+            return ResponseEntity.ok(answer);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
