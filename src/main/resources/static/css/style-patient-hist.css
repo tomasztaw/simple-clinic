@@ -1,0 +1,51 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-right: 20px;
+}
+
+.header-logo {
+    flex-grow: 1;
+}
+
+.header-logo img {
+    max-width: 20%;
+    height: auto;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.actions button {
+    margin-right: 10px;
+}
+
+li {
+    list-style-type: none;
+}
+
+.visit-container {
+    display: flex;
+}
+
+.visit-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+h2, h3 {
+    margin: 30px;
+}
+

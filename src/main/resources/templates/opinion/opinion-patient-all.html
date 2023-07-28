@@ -92,9 +92,9 @@
                     <!-- Dodaj przyciski obok każdej opinii -->
                     <li>
                         <a class="btn btn-primary"
-                           th:href="@{/opinions/update/{opinionId}(opinionId=${opinion.opinionId})}" th:method="put">Edytuj</a>
+                           th:href="@{/opinions/{opinionId}/update(opinionId=${opinion.opinionId})}" th:method="put">Edytuj</a>
                         <a class="btn btn-danger"
-                           th:href="@{/opinions/delete/{opinionId}(opinionId=${opinion.opinionId})}" th:method="delete">Usuń</a>
+                           th:href="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="delete">Usuń</a>
                     </li>
 
                 </ul>

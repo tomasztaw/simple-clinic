@@ -289,11 +289,11 @@ public class VisitController {
     }
 
 
-    @PostMapping("/{visitId}/delete")
-    public String deleteVisit(@PathVariable("visitId") Integer visitId) {
-        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
-        visitDAO.delete(existingVisit);
-        return "redirect:/visits";
-    }
+//    @PostMapping("/{visitId}/delete")
+//    public String deleteVisit(@PathVariable("visitId") Integer visitId) {
+//        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
+//        visitDAO.delete(existingVisit);
+//        return "redirect:/visits";
+//    }
 }
 

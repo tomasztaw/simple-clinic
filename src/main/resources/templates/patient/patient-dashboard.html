@@ -4,54 +4,16 @@
     <meta charset="UTF-8">
     <title>Panel pacjenta</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            margin-top: 100px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .header-logo {
-            flex-grow: 1;
-        }
-        .header-logo img {
-            max-width: 50%;
-            height: auto;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{css/style-patient-dashboard.css}">
 </head>
 <body>
 <div class="container">
     <div class="header">
         <div class="header-logo">
             <a href="/" th:href="@{/}">
-                <img th:src="@{/images/2135.jpg}" alt="Logo">
+                 <img th:src="@{/images/2135.jpg}" alt="Logo">
             </a>
         </div>
-        <!-- Możesz dodać dodatkowe elementy w nagłówku -->
         <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
 
     </div>
@@ -84,45 +46,52 @@
                 <label for="email">Email:</label>
                 <input type="email" class="form-control" id="email" name="email" th:value="${patient.email}" readonly>
             </div>
+            
+            <div class="updateContact">
+                <div class="col">
+                    <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
+                        <button type="submit" class="btn btn-primary">Zaktualizuj telefon</button>
+                    </form>
+                </div>
+                <div class="col">
+                    <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
+                        <button type="submit" class="btn btn-primary">Zaktualizuj email</button>
+                    </form>
+                </div>
+
+                <div class="col">
+                    <a th:href="@{/patients/telefon}" class="btn btn-primary">Aktualizuj telefon - nowy!</a>
+                </div>
+
+                TO JEST DO POPRAWY, NIE MOGĘ TEGO OGARNĄĆ - PATCH NIE JEST OBSŁUGIWANY.....
+
+            </div>
         </div>
     </div>
 
     <div class="text-center">
         <div class="row">
             <div class="col">
-                <form th:action="@{/patients/phone-view/{patientId}(patientId=${patient.patientId})}" method="post" th:method="patch" class="mt-4">
-                    <button type="submit" class="btn btn-primary">Zaktualizuj telefon</button>
-                </form>
+                <a th:href="@{/patients/history/{patientId}(patientId=${patient.patientId})}" class="btn btn-primary btn-lg">Sprawdź historię</a>
             </div>
             <div class="col">
-                <a th:href="@{/patients/history/{patientId}(patientId=${patient.patientId})}" class="btn btn-primary">Sprawdź historię</a>
-            </div>
-            <div class="col">
-                <a href="/clinic/reservations" class="btn btn-danger">Umów wizytę</a>
+                <a href="/clinic/reservations" class="btn btn-primary btn-lg">Umów wizytę</a>
             </div>
             <div class="col">
                 <a href="/clinic/prescriptions/patient/5" class="btn btn-primary btn-lg">Twoje rezerwacje</a>
             </div>
 
             <div class="col">
-<!--                <a href="/clinic/opinions" class="btn btn-primary">Twoje opinie</a>-->
                 <a th:href="@{/opinions/patient/{patientId}(patientId=${patientId})}" class="btn btn-primary btn-lg">Twoje opinie</a>
-<!--                Przypisane na sztywno, nie wiem dlaczego nie mogę pobrać id pacjenta-->
-<!--                <a href="/clinic/opinions/patient/5" class="btn btn-primary btn-lg">Twoje opinie</a>-->
             </div>
             <div class="col">
-<!--                <a href="/clinic/opinions/addForm" class="btn btn-primary btn-lg">Dodaj opinie</a>-->
                 <a href="/clinic/opinions/dodaj-opinie/5" class="btn btn-primary btn-lg">Dodaj opinie</a>
-
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <p><b>© 2023 E-clinic</b></p>
-
         <div th:replace="fragments/footer.html"></div>
-
     </div>
 </div>
 </body>

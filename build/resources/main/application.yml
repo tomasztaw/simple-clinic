@@ -33,6 +33,9 @@ spring:
         enabled: true
     static-path-pattern=/static/**:
 #    static-path-pattern: "/resources/**"
+    dispatch:
+      trace:
+        request: true
 
   security:
     enabled: true

@@ -28,16 +28,17 @@ import java.util.List;
 public class OpinionController {
 
     public static final String OPINIONS = "/opinions";
+    public static final String OPINION_ID = "/{opinionId}";
     public static final String DOCTOR_ID = "/doctor/{doctorId}";
     public static final String PATIENT_ID = "/patient/{patientId}";
-    public static final String EDIT = "/edit/{opinionId}";
+    public static final String EDIT = "/{opinionId}/edit";
     public static final String PANEL = "/panel";
     public static final String ADD = "/add";
     public static final String ADD_FROM_VISIT = "/add/{visitId}/{doctorId}/{patientId}";
-    public static final String SHOW = "/show/{opinionId}";
+    public static final String SHOW = "/{opinionId}/show";
     public static final String UPDATE = "/update";
-    public static final String UPDATE_BY_ID = "/update/{opinionId}";
-    public static final String DELETE = "/delete/{opinionId}";
+    public static final String UPDATE_BY_ID = "/{opinionId}/update";
+    public static final String DELETE = "/{opinionId}/delete";
 
     private final OpinionDAO opinionDAO;
     private final VisitDAO visitDAO;
@@ -66,7 +67,6 @@ public class OpinionController {
         return "opinion/opinion-show";
     }
 
-    // pusta ścieżka, bez add!
     @PostMapping(ADD)
     public String addOpinion(
             @RequestParam(value = "doctorId") Integer doctorId,
@@ -78,7 +78,8 @@ public class OpinionController {
         OpinionEntity newOpinion = OpinionEntity.builder()
                 .doctorId(doctorId)
                 .patientId(patientId)
-                .visit(visit)
+//                .visit(visit)
+                .visitId(visitId)
                 .comment(comment)
                 .createdAt(LocalDateTime.now())
                 .build();

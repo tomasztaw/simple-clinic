@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Formularz do aktualizacji numeru telefonu</title>
+</head>
+<body>
+<h2>Aktualizuj numer telefonu</h2>
+<form th:object="${patient}" th:action="@{/patients/updatePhoneNumber}" method="put">
+  <input type="hidden" name="_method" value="put">
+  <label for="phoneNumber">Numer telefonu:</label>
+  <input type="text" id="phoneNumber" th:field="*{phone}">
+
+  <!-- Dodaj inne pola, które chcesz aktualizować -->
+
+  <button type="submit">Aktualizuj</button>
+</form>
+</body>
+</html>

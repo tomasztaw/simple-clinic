@@ -140,7 +140,7 @@
                 <td th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></td>
                 <td th:text="${opinion.comment}"></td>
                 <td>
-                    <form action="#" th:action="@{/opinions/show/{opinionId}(opinionId=${opinion.opinionId})}"
+                    <form action="#" th:action="@{/opinions/{opinionId}/show(opinionId=${opinion.opinionId})}"
                           method="GET">
                         <button type="submit" class="btn btn-info">Show</button>
                     </form>
@@ -160,10 +160,7 @@
 </div>
 
 <div class="footer">
-    <p><b>© 2023 E-clinic</b></p>
-
     <div th:replace="fragments/footer.html"></div>
-
 </div>
 
 </body>

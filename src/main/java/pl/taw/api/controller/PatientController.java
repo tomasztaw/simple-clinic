@@ -35,7 +35,6 @@ import java.util.Random;
 public class PatientController {
 
     public static final String PATIENTS = "/patients";
-    public static final String LOGOWANIE = "/logowanie";
     public static final String DASHBOARD = "/dashboard";
     public static final String DASHBOARD_ID = "/dashboard/{patientId}";
     public static final String PATIENT_ID = "/{patientId}";
@@ -48,73 +47,34 @@ public class PatientController {
     public static final String UPDATE = "/update";
     public static final String SHOW = "/show/{patientId}";
     public static final String DELETE = "/delete/{patientId}";
-    public static final String REGISTER = "/register";
     public static final String SHOW_ALL = "/all";
 
     private final PatientJpaRepository patientJpaRepository;
     private final PatientDAO patientDAO;
     private final OpinionDAO opinionDAO;
-    // dodanie wizyt
     private final VisitService visitService;
-
     private final UserRepository userRepository;
+
+
+
 
     @GetMapping
     public String patientPage(Authentication authentication, Model model) {
-
         ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
         UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
         String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
-
         UserEntity user = UserEntity.builder()
                 .userName(details.getUsername())
                 .email(userEmail)
                 .build();
-
         PatientDTO patient = patientDAO.findByEmail(user.getEmail());
-
-        model.addAttribute("patient", patient);
-
-//        return "patient/patient-page";
-        return "patient/nowy-patient-dashboard";
-    }
-
-    @GetMapping(LOGOWANIE)
-    public String showLoginForm() {
-        return "login2";
-    }
-
-
-    @PostMapping(LOGOWANIE)
-    public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        if (username.equals("user") && password.equals("test")) {
-            // losowanie pacjent
-            Random random = new Random();
-            int size = patientDAO.findAll().size();
-            int patientId = random.nextInt(size) + 1;
-
-            return "redirect:/patients/dashboard/" + patientId;
-        } else {
-            model.addAttribute("error", "Invalid username or password");
-            return "redirect:/login";
-        }
-    }
-
-    @GetMapping(REGISTER)
-    public String registerPatient() {
-        return "register";
-    }
-
-    // wyświetlanie na sztywno pacjenta o id: 5
-    @GetMapping(DASHBOARD)
-    public String showDashboard(Model model) {
-        String pesel = "85061718378";
-        PatientDTO patient = patientDAO.findByPesel(pesel);
-
         model.addAttribute("patient", patient);
 
         return "patient/patient-dashboard";
     }
+
+
+
 
     @GetMapping(DASHBOARD_ID)
     public String showDashboardWithId(
@@ -145,7 +105,8 @@ public class PatientController {
     }
 
 //    @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
-    @PatchMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
+//    @PatchMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
+    @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
     public String updatePatientPhoneView(
             @PathVariable("patientId") Integer patientId,
             @RequestParam(required = true, value = "newPhone") String newPhone,
@@ -263,11 +224,9 @@ public class PatientController {
         PatientDTO patient = patientDAO.findById(patientId);
         List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
         List<OpinionDTO> opinions = opinionDAO.findAllByPatient(patientId);
-//        List<PrescriptionDTO> prescriptions = prescriptionDAO.findByPatientId(patientId);
         model.addAttribute("patient", patient);
         model.addAttribute("visits", visits);
         model.addAttribute("opinions", opinions);
-//        model.addAttribute("prescriptions", prescriptions);
         return "patient/patient-show";
     }
 
@@ -316,4 +275,74 @@ public class PatientController {
 
     // można w przyszłości pomyśleć nad aktualizacją tylko części danych (telefon, email)
     // w panelu aktualizacji wyświetlają się aktualne dane i poprawia się tylko potrzebne, reszta zostaje
+
+
+    // #####################################        RZECZY DO SKASOWANIA    #########################
+
+    public static final String LOGOWANIE = "/logowanie";
+    public static final String REGISTER = "/register";
+
+
+    // próba nowej aktualizacji telefonu - nie działa
+    @GetMapping("/telefon")
+    public String aktualizujTelefon(Authentication authentication, Model model) {
+        ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
+        UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
+        String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
+        UserEntity user = UserEntity.builder()
+                .userName(details.getUsername())
+                .email(userEmail)
+                .build();
+        PatientDTO patient = patientDAO.findByEmail(user.getEmail());
+        model.addAttribute("patient", patient);
+
+        return "patient/patient-phone";
+    }
+
+    @PutMapping("/patients/updatePhoneNumber")
+    public String updatePhoneNumber(@ModelAttribute("patient") PatientEntity patient) {
+//        PatientEntity patientForUpdatePhone = patientDAO.findEntityById(patient.getPatientId());
+//        patientForUpdatePhone.setPhone(patient.getPhone());
+//        patientDAO.save(patientForUpdatePhone);
+        patientDAO.save(patient);
+        return "redirect:/home";
+    }
+
+
+    @GetMapping(LOGOWANIE)
+    public String showLoginForm() {
+        return "login2";
+    }
+
+
+    @PostMapping(LOGOWANIE)
+    public String login(@RequestParam String username, @RequestParam String password, Model model) {
+        if (username.equals("user") && password.equals("test")) {
+            // losowanie pacjent
+            Random random = new Random();
+            int size = patientDAO.findAll().size();
+            int patientId = random.nextInt(size) + 1;
+
+            return "redirect:/patients/dashboard/" + patientId;
+        } else {
+            model.addAttribute("error", "Invalid username or password");
+            return "redirect:/login";
+        }
+    }
+
+    @GetMapping(REGISTER)
+    public String registerPatient() {
+        return "register";
+    }
+
+    // wyświetlanie na sztywno pacjenta o id: 5
+    @GetMapping(DASHBOARD)
+    public String showDashboard(Model model) {
+        String pesel = "85061718378";
+        PatientDTO patient = patientDAO.findByPesel(pesel);
+
+        model.addAttribute("patient", patient);
+
+        return "patient/patient-dashboard";
+    }
 }
