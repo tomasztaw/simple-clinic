@@ -66,7 +66,6 @@
           <img th:src="@{/images/2135.jpg}" alt="Logo">
         </a>
       </div>
-      <!-- Możesz dodać dodatkowe elementy w nagłówku -->
       <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
     </div>
 
@@ -134,32 +133,6 @@
 
     </div>
       <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-
-      <div class="media-body">
-          <h2>Recepta (na razie atrapa - może w przyszłości dołożę)</h2>
-          <table class="table table-striped">
-              <tr>
-                  <th>Nazwa leku</th>
-                  <th>Dozowanie</th>
-                  <th>Instrukcja</th>
-              </tr>
-              <tr>
-                  <!--            <td th:text="${prescription.medicationName}"></td>-->
-                  <td>Jakaś nazwa leku</td>
-                  <!--            <td th:text="${prescription.dosage}"></td>-->
-                  <td>Rano i wieczorem po 1 tabletce</td>
-                  <!--            <td th:text="${prescription.instructions}"></td>-->
-                  <td>Brać przez 4 tygodnie po posiłku</td>
-              </tr>
-          </table>
-      </div>
-      <br>
-      <br>
 
     <div class="actions">
       <button class="btn btn-primary">Umów kolejną wizytę</button>
@@ -167,13 +140,10 @@
       <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
     </div>
 
-    <a class="btn btn-light" th:href="@{/visits/panel}">Show all visits(panel wizyty)</a>
+    <a class="btn btn-light" th:href="@{/visits/panel}">Show all visits(panel wizyty) - powinna być tylko dla admina</a>
 
     <div class="footer">
-      <p><b>© 2023 E-clinic</b></p>
-
       <div th:replace="fragments/footer.html"></div>
-
     </div>
   </div>
 </body>

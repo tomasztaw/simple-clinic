@@ -1,0 +1,28 @@
+<div xmlns:th="http://www.w3.org/1999/xhtml">
+  <h1>Witaj, Adminie!</h1>
+  <h2>Do twojej dyspozycji są poniższe panele</h2>
+
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <a th:href="@{/doctors}" class="btn btn-primary ">Przeglądaj dostępnych lekarzy</a>
+    <a th:href="@{/patients/dashboard/5}" class="btn btn-primary ">Przejdź do panelu pacjenta</a>
+  </div>
+  <br>
+
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <a th:href="@{/doctors/panel}" class="btn btn-primary ">Panel z lekarzami</a>
+    <a th:href="@{/patients/panel}" class="btn btn-primary ">Panel z pacjentami</a>
+  </div>
+  <br>
+
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <a th:href="@{/visits/panel}" class="btn btn-primary ">Panel z wizytami</a>
+    <a th:href="@{/opinions/panel}" class="btn btn-primary ">Panel z opiniami</a>
+  </div>
+  <br>
+
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <a th:href="@{/reservations/panel}" class="btn btn-primary ">Panel z rezerwacjami</a>
+    <a th:href="@{/reservations/calendar}" class="btn btn-danger ">Kalendarz</a>
+  </div>
+  <br>
+</div>

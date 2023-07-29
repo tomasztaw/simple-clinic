@@ -75,10 +75,11 @@
                 <a th:href="@{/patients/history/{patientId}(patientId=${patient.patientId})}" class="btn btn-primary btn-lg">Sprawdź historię</a>
             </div>
             <div class="col">
-                <a href="/clinic/reservations" class="btn btn-primary btn-lg">Umów wizytę</a>
+<!--                <a href="/clinic/reservations" class="btn btn-primary btn-lg">Umów wizytę</a>-->
+                <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>
             </div>
             <div class="col">
-                <a href="/clinic/prescriptions/patient/5" class="btn btn-primary btn-lg">Twoje rezerwacje</a>
+                <a th:href="@{/reservations/patient/{patientId}(patientId=${patient.patientId})}" class="btn btn-primary btn-lg">Twoje rezerwacje</a>
             </div>
 
             <div class="col">
