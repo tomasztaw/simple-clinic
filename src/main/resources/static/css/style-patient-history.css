@@ -36,6 +36,7 @@ li {
 
 .visit-container {
     display: flex;
+    justify-content: space-between;
 }
 
 .visit-buttons {

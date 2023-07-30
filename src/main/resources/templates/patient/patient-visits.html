@@ -15,12 +15,14 @@
 <div class="container">
 
     <div class="header">
+<!--        <div th:replace="~{fragments/header}"></div>-->
         <div class="header-logo">
             <a href="/" th:href="@{/}">
                 <img th:src="@{/images/2135.jpg}" alt="Logo">
             </a>
         </div>
         <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
+
     </div>
 
     <h2>Twoja Historia</h2>
@@ -72,6 +74,8 @@
             <button class="btn btn-primary">Umów wizytę</button>
             <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
         </div>
+
+        <a th:href="@{/patients/history/nowy/{patientId}(patientId=${patient.patientId})}" class="btn btn-primary btn-lg">Sprawdź historię - Nowy widok</a>
 
     </div>
 

@@ -56,8 +56,6 @@ public class PatientController {
     private final UserRepository userRepository;
 
 
-
-
     @GetMapping
     public String patientPage(Authentication authentication, Model model) {
         ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
@@ -72,8 +70,6 @@ public class PatientController {
 
         return "patient/patient-dashboard";
     }
-
-
 
 
     @GetMapping(DASHBOARD_ID)
@@ -96,6 +92,22 @@ public class PatientController {
         return "patient/patient-visits";
     }
 
+    @GetMapping("/history/nowy/{patientId}")
+    public String showNewHistory(@PathVariable("patientId") Integer patientId,
+                                 Authentication authentication,
+                                 Model model
+    ) {
+        PatientDTO patient = patientDAO.findById(patientId);
+        List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
+        model.addAttribute("patient", patient);
+        model.addAttribute("visits", visits);
+        return "patient/patient-visits-nowy";
+    }
+
     @PatchMapping(PATIENT_UPDATE_PHONE_VIEW) // "/phone-view/{patientId}"
     public String showUpdatePhoneView(
             @PathVariable("patientId") Integer patientId, Model model) {
@@ -104,7 +116,7 @@ public class PatientController {
         return "update-phone";
     }
 
-//    @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
+    //    @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
 //    @PatchMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
     @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
     public String updatePatientPhoneView(
