@@ -23,17 +23,7 @@
         </div>
 
         <div class="content">
-            <div th:if="${isAdmin}" class="role-div">
-                <div th:replace="~{fragments/home-admin}"></div>
-            </div>
-
-            <div th:if="${isDoctor}" class="role-div">
-                <div th:replace="~{fragments/home-doctor}"></div>
-            </div>
-
-            <div th:if="${isUser}" class="role-div">
-                <div th:replace="~{fragments/home-user}"></div>
-            </div>
+            <div th:replace="~{fragments/home-roles}"></div>
         </div>
 
         <div class="footer">

@@ -50,10 +50,8 @@
   <div class="container">
     <div class="header">
       <div class="header-logo">
-        <!-- Tutaj wstaw kod dla logo -->
         <img th:src="@{/images/2135.jpg}" alt="Logo">
       </div>
-      <!-- Możesz dodać dodatkowe elementy w nagłówku -->
       <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
     </div>
 
@@ -63,7 +61,8 @@
         <th>Id</th>
         <th>Lekarz</th>
         <th>Pacjent</th>
-        <th>Dzień</th>
+        <th>Data</th>
+        <th>Dzień tygodnia</th>
         <th>Czas</th>
       </tr>
       <tr>
@@ -71,6 +70,7 @@
         <td th:text="${doctor.name + ' ' + doctor.surname + ' ' + doctor.title}"></td>
         <td th:text="${patient.name + ' ' + patient.surname}"></td>
         <td th:text="${#temporals.format(reservation.day, 'dd MM yyyy')}"></td>
+        <td th:text="${#temporals.format(reservation.day, 'EEEE')}"></td>
         <td th:text="${reservation.startTimeR}"></td>
       </tr>
     </table>
@@ -78,6 +78,50 @@
     <div class="media">
 
       <div class="media-body">
+
+        <hr>
+        <h2>Przycisk dla wygenerowania wizyty dla tej opinii</h2>
+        <button>Przekształć na wizytę</button>
+        <hr>
+
+        <th:block th:with="now=${#temporals.createNow()}">
+<!--          przed datą rezerwacji-->
+          <div th:if="${reservation.day.isAfter(now.toLocalDate()) || (reservation.day.isEqual(now.toLocalDate()) && reservation.startTimeR.isAfter(now.toLocalTime()))}">
+            <h1>Zapraszamy na wizytę w wyznaczonym terminie</h1>
+            <h2>Jeżeli nie możesz przybyć do odwołaj wizytę</h2>
+              <form th:action="@{/reservations/delete/{reservationId}(reservationId=${reservation.reservationId})}" th:method="post">
+                  <input type="hidden" name="_method" value="DELETE" />
+                  <button class="btn btn-primary" type="submit">Usuń rezerwację</button>
+              </form>
+          </div>
+
+<!--          po dacie rezerwacji-->
+          <div th:unless="${reservation.day.isAfter(now.toLocalDate()) || (reservation.day.isEqual(now.toLocalDate()) && reservation.startTimeR.isAfter(now.toLocalTime()))}">
+            <h1>Przekształć odbytą rezerwację w wizytę</h1>
+<!--            <a class="btn btn-primary" th:href="@{/reservations/doctor/{doctorId}(doctorId=${doctor.doctorId})}">-->
+            <a class="btn btn-primary" th:href="@{/}">
+              Generuj wizytę
+            </a>
+              <hr>
+              <form th:action="@{/visits/generate}" method="POST">
+                  <input type="hidden" th:name="doctorId" th:value="${reservation.doctorId}" />
+                  <input type="hidden" th:name="patientId" th:value="${reservation.patientId}" />
+                  <input type="hidden" th:name="date" th:value="${#temporals.format(reservation.day, 'yyyy-MM-dd')}" />
+                  <input type="hidden" th:name="time" th:value="${#temporals.format(reservation.startTimeR, 'HH:mm')}" />
+
+                  <p>Treść notatki: <input type="text" class="form-control" name="note" /></p>
+                  <br>
+
+                  <button type="submit" class="btn btn-primary btn-lg">Generuj wizytę</button>
+              </form>
+              <hr>
+          </div>
+        </th:block>
+
+        <hr>
+
+
+
         <h2>Opis (zastanowię się co tu jeszcze może być)</h2>
 <!--        <h3 th:text="${opinion.comment}"></h3>-->
 
@@ -112,9 +156,8 @@
     <a class="btn btn-light" th:href="@{/reservations/panel}">Panel z rezerwacjami</a>
 
     <div class="footer">
-      <p><b>© 2023 E-clinic</b></p>
 
-      <div th:replace="fragments/footer.html"></div>
+      <div th:replace="~{fragments/footer.html}"></div>
 
     </div>
   </div>

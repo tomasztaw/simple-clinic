@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import pl.taw.api.dto.DoctorDTO;
-import pl.taw.api.dto.OpinionDTO;
-import pl.taw.api.dto.PatientDTO;
-import pl.taw.api.dto.VisitDTO;
+import pl.taw.api.dto.*;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.OpinionDAO;
@@ -26,7 +23,9 @@ import pl.taw.infrastructure.database.entity.VisitEntity;
 import pl.taw.infrastructure.database.repository.VisitRepository;
 import pl.taw.infrastructure.database.repository.jpa.VisitJpaRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -134,6 +133,28 @@ public class VisitController {
                 .build();
         visitDAO.save(visit);
 
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
+    // działa, można pomyśleć, żeby ujednolicić te dwie metody post
+    @PostMapping("/generate")
+    public String generateVisit(
+            @RequestParam("doctorId") Integer doctorId,
+            @RequestParam("patientId") Integer patientId,
+            @RequestParam("date") String date,
+            @RequestParam("time") String time,
+            @RequestParam("note") String note,
+            HttpServletRequest request
+    ) {
+        VisitEntity visit = VisitEntity.builder()
+                .doctorId(doctorId)
+                .patientId(patientId)
+                .dateTime(LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(time)))
+                .note(note)
+                .status("odbyta")
+                .build();
+        visitDAO.save(visit);
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }

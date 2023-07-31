@@ -1,27 +1,18 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinic Header</title>
-    <link rel="stylesheet" href="style-header.css">
-</head>
-<body>
-
-<div class="header">
+<header class="header__fra" xmlns:th="http://www.w3.org/1999/xhtml">
 
     <a th:href="@{/}" class="logo">
-        <img class="logo-img" th:src="@{/images/2135.jpg}" alt="logo firmy" title="Strona główna">
+        <img class="header__logo-img" th:src="@{/images/2135.jpg}" alt="logo firmy" title="Strona główna">
     </a>
 
-    <div class="header-right">
-        <p class="username-p">Zalogowany: <span th:text="${username}"></span></p>
+    <div class="header__btns">
+        <p class="header__username-p">Zalogowany: <span th:text="${username}"></span></p>
 
-        <button class="logout-btn"><a th:href="@{/logout}">Wyloguj</a></button>
+        <button class="header__logout-btn"><a th:href="@{/logout}">Wyloguj</a></button>
 
-        <button class="go-back-btn" onclick="history.go(-1);">Powrót</button>
+        <button class="header__go-back-btn" onclick="history.go(-1);">Powrót</button>
     </div>
-</div>
 
-</body>
-</html>
+
+</header>
+
+
