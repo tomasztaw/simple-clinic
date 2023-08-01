@@ -36,7 +36,6 @@ public class VisitController {
     public static final String VISITS = "/visits";
     public static final String PANEL = "/panel";
     public static final String SHOW = "/show/{visitId}";
-
     public static final String VISIT_ID = "/{visitId}";
     public static final String ADD = "/add";
     public static final String UPDATE = "/update";
@@ -48,11 +47,35 @@ public class VisitController {
     public static final String PATIENT_ID = "/patient/{patientId}/all";
     public static final String PAGINATION = "/pagination";
 
+    public static final String GENERATE = "/generate";
+    public static final String DOCTOR_AND_PATIENT = "/{doctorId}/{patientId}";
+
     private final VisitDAO visitDAO;
     private final VisitService visitService;
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
     private final OpinionDAO opinionDAO;
+
+    @GetMapping(DOCTOR_AND_PATIENT)
+    public String visitsDoctorAndPatient(
+            @PathVariable("doctorId") Integer doctorId,
+            @PathVariable("patientId") Integer patientId,
+            Authentication authentication,
+            Model model
+    ) {
+        List<VisitDTO> visits = visitDAO.findAllForBoth(doctorId, patientId);
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
+        PatientDTO patient = patientDAO.findById(patientId);
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
+        model.addAttribute("visits", visits);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("patient", patient);
+
+        return "visit/doctor-and-patient";
+    }
 
     @GetMapping(PAGINATION)
     public String getPaginationVisits(@RequestParam(defaultValue = "0") int page,
@@ -138,7 +161,7 @@ public class VisitController {
     }
 
     // działa, można pomyśleć, żeby ujednolicić te dwie metody post
-    @PostMapping("/generate")
+    @PostMapping(GENERATE)
     public String generateVisit(
             @RequestParam("doctorId") Integer doctorId,
             @RequestParam("patientId") Integer patientId,

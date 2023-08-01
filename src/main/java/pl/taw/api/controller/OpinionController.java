@@ -62,8 +62,10 @@ public class OpinionController {
             @PathVariable("opinionId") Integer opinionId, Model model) {
         OpinionDTO opinion = opinionDAO.findById(opinionId);
         model.addAttribute("opinion", opinion);
-        VisitDTO visit = visitDAO.findById(opinion.getVisit().getVisitId());
-        model.addAttribute("visit", visit);
+//        VisitDTO visit = visitDAO.findById(opinion.getVisit().getVisitId());
+//        model.addAttribute("visit", visit);
+        VisitDTO visitDTO = visitDAO.findById(opinion.getVisitId());
+        model.addAttribute("visit", visitDTO);
         return "opinion/opinion-show";
     }
 
@@ -129,7 +131,8 @@ public class OpinionController {
     public String updateOpinionById(
             @PathVariable("opinionId") Integer opinionId,
             @RequestParam String newComment,
-            HttpServletRequest request) {
+            HttpServletRequest request
+    ) {
         OpinionEntity opinion = opinionDAO.findEntityById(opinionId);
         opinion.setComment(newComment);
         opinionDAO.save(opinion);
@@ -139,11 +142,14 @@ public class OpinionController {
     }
 
     @DeleteMapping(DELETE)
-    public String deleteOpinionById(@PathVariable Integer opinionId) {
+    public String deleteOpinionById(@PathVariable Integer opinionId,
+                                    HttpServletRequest request
+    ) {
         OpinionEntity opinionForDelete = opinionDAO.findEntityById(opinionId);
         opinionDAO.delete(opinionForDelete);
 
-        return "redirect:/opinions/opinion-panel";
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
 

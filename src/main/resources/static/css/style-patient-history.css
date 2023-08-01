@@ -27,7 +27,7 @@
 }
 
 .actions button {
-    margin-right: 10px;
+    margin: 0 20px;
 }
 
 li {
@@ -41,9 +41,11 @@ li {
 
 .visit-buttons {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    flex-direction: columns;
+    /*justify-content: space-around;
+    align-items: center;*/
     margin: 20px;
+    min-width: 155px;
 }
 
 h2, h3 {
@@ -63,25 +65,25 @@ body {
 .header__fra {
   overflow: hidden;
   background-color: white;
-  padding: 30px 80px;
+  padding: 30px 50px;
 }
 
 .header__logo-img {
-    width: 170px;
+    width: 250px;
     cursor: pointer;
-    /*border-radius: 8px;
-    box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);*/
-    transition: border-radius 1s;
+    border-radius: 8px;
+    transition: box-shadow 1s;
 }
 
 .header__logo-img:hover {
-    border-radius: 40px;
+    box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);
 }
 
 .header__username-p {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 20px;
+    margin-top: 30px;
     text-align: center;
 }
 
@@ -93,7 +95,7 @@ body {
     border-radius: 10px;
     font-weight: bold;
     border: none;
-    background-color: #2bc48a;
+    background-color: #007bff;
     color: white;
     cursor: pointer;
     position: relative;
@@ -124,4 +126,21 @@ body {
   .header__btns {
     float: none;
   }
+}
+
+.visit__note {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#update-opinion-div {
+    display: none;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);
+    padding: 20px 30px;
+}
+
+#successMessage {
+    font-size: 40px;
+    text-align: center;
 }

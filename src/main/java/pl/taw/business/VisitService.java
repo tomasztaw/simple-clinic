@@ -31,7 +31,8 @@ public class VisitService {
     }
 
     public boolean hasPatientSeenThisDoctor(Integer doctorId, Integer patientId) {
-        return findAllVisitForBoth(doctorId, patientId).size() > 0;
+//        return findAllVisitForBoth(doctorId, patientId).size() > 0;
+        return !findAllVisitForBoth(doctorId, patientId).isEmpty();
     }
 
     public Page<VisitDTO> getVisitsPage(int page, int size) {

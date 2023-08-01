@@ -21,6 +21,12 @@
         .header-logo img {
             max-width: 30%;
             height: auto;
+            border-radius: 50%;
+            transition: box-shadow 1s;
+        }
+
+        .header-logo img:hover {
+           box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);
         }
 
         .footer {
@@ -33,7 +39,6 @@
             justify-content: center;
             align-items: flex-start;
             overflow: hidden;
-            /* Dodana linia */
         }
 
         .photo-container img {
@@ -41,7 +46,6 @@
             height: 280px;
             object-fit: cover;
             object-position: top;
-            /* Dodana linia */
             margin-right: 20px;
         }
 
@@ -51,8 +55,12 @@
             margin-top: 20px;
         }
 
-        .actions button {
-            margin-right: 10px;
+        .actions button, .actions a {
+            margin: auto 20px;
+        }
+
+        ul {
+          list-style: none;
         }
     </style>
 </head>
@@ -61,12 +69,15 @@
 
   <div class="container">
 
+<!--    Header na zewnątrz!-->
+
     <div class="header">
     <div class="header-logo">
-      <!-- Tutaj wstaw kod dla logo -->
-      <img th:src="@{/images/2135.jpg}" alt="Logo">
+      <a href="/" th:href="@{/}" title="Strona główna">
+        <img th:src="@{/images/2135.jpg}" alt="Logo">
+      </a>
     </div>
-    <!-- Możesz dodać dodatkowe elementy w nagłówku -->
+
     <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
   </div>
 
@@ -106,12 +117,19 @@
           <ul>
             <li>Id: <span th:text="${reservation.reservationId}"></span></li>
             <li>Id lekarza: <span th:text="${reservation.doctorId}"></span></li>
+<!--            <li>Dane lekarza: <span th:text="${} + ' ' + ${}"></span></li>-->
             <li>Dzień: <span th:text="${reservation.day}"></span></li>
             <li>Czas: <span th:text="${reservation.startTimeR}"></span></li>
             <div class="actions">
-              <button class="btn btn-danger">Odwołaj wizytę</button>
-              <button class="btn btn-danger">Pokaż lekarza</button>
-              <button class="btn btn-danger">Pokaż wizyty u tego lekarza</button>
+              <form th:action="@{/reservations/delete/{reservationId}(reservationId=${reservation.reservationId})}" th:method="post">
+                <input type="hidden" name="_method" value="DELETE" />
+                <button class="btn btn-danger" type="submit">Odwołaj wizytę</button>
+              </form>
+
+              <a th:href="@{'/doctors/' + ${reservation.doctorId} + '/show'}" class="btn btn-primary">Pokaż tego lekarza</a>
+
+              <a th:href="@{'/visits/' + ${reservation.doctorId} + '/' + ${reservation.patientId}}" class="btn btn-primary">Pokaż wizyty u tego lekarza</a>
+
             </div>
           </ul>
           <br>
@@ -119,17 +137,14 @@
       </ul>
 
       <div class="actions">
-        <button class="btn btn-primary">Umów wizytę</button>
+        <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
       </div>
 
       <a class="btn btn-light" th:href="@{/doctors}">Show all doctors</a>
 
       <div class="footer">
-        <p><b>© 2023 E-clinic</b></p>
-
-        <div th:replace="fragments/footer.html"></div>
-
+        <div th:replace="~{fragments/footer.html}"></div>
       </div>
     </div>
   </div>

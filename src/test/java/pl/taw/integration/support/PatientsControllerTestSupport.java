@@ -57,11 +57,11 @@ public interface PatientsControllerTestSupport {
                 .extract();
     }
 
-    default void updatePatientByPet(final Integer patientId, final Long petId) {
-        String endpoint = PatientController.PATIENTS + PatientRestController.PATIENT_UPDATE_PET;
-        requestSpecification()
-                .patch(endpoint, patientId, petId)
-                .then()
-                .statusCode(HttpStatus.OK.value());
-    }
+//    default void updatePatientByPet(final Integer patientId, final Long petId) {
+//        String endpoint = PatientController.PATIENTS + PatientRestController.PATIENT_UPDATE_PET;
+//        requestSpecification()
+//                .patch(endpoint, patientId, petId)
+//                .then()
+//                .statusCode(HttpStatus.OK.value());
+//    }
 }

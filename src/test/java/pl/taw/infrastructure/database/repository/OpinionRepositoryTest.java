@@ -247,7 +247,6 @@ class OpinionRepositoryTest {
         opinionRepository.delete(opinion);
         List<OpinionDTO> result = opinionRepository.findAll();
 
-
         // then
         verify(opinionJpaRepository, times(1)).delete(opinion);
         assertDoesNotThrow(() -> opinionRepository.delete(opinion));

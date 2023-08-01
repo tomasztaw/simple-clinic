@@ -52,7 +52,16 @@
         }
 
         .actions button {
-            margin-right: 10px;
+            margin: 0 20px;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px auto;
         }
 
     </style>
@@ -71,11 +80,11 @@
         <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
     </div>
 
-    <h2>Twoje Opinie</h2>
+    <h1>Twoje Opinie</h1>
 
     <div class="media-body">
 
-        <h1>Opinie o lekarzu</h1>
+        <h2>Opinie o lekarzu</h2>
         <ul th:if="${opinions.isEmpty()}">
             <li>Brak opinii - napisz pierwszą</li>
         </ul>
@@ -88,13 +97,25 @@
                     </li>
                     <li>Data: <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></span></li>
                     <li>Opinia: <span th:text="${opinion.comment}"></span></li>
-                    <li>Napisana przez: <span th:text="${opinion.patient.name}"></span></li>
-                    <!-- Dodaj przyciski obok każdej opinii -->
                     <li>
                         <a class="btn btn-primary"
                            th:href="@{/opinions/{opinionId}/update(opinionId=${opinion.opinionId})}" th:method="put">Edytuj</a>
+
+<!--                        NIE DZIAŁA - SPRÓBUJĘ TO ZROBIĆ NA PRZYCISKU-->
+                        <form th:action="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="post">
+                            <input type="hidden" name="_method" value="DELETE" />
+                            <button class="btn btn-danger" type="submit">Usuń</button>
+                        </form>
+
                         <a class="btn btn-danger"
                            th:href="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="delete">Usuń</a>
+
+                        <hr>
+                        <form action="#" th:action="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="DELETE">
+                            <input type="hidden" name="_method" value="DELETE" />
+                            <button type="submit" class="btn btn-danger">Usuń</button>
+                        </form>
+
                     </li>
 
                 </ul>
@@ -103,7 +124,7 @@
         </ul>
 
         <div class="actions">
-            <button class="btn btn-primary">Umów wizytę</button>
+            <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>
             <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
         </div>
 
@@ -112,10 +133,7 @@
 </div>
 
 <div class="footer">
-    <p><b>© 2023 E-clinic</b></p>
-
-    <div th:replace="fragments/footer.html"></div>
-
+    <div th:replace="~{fragments/footer.html}"></div>
 </div>
 
 </body>

@@ -142,14 +142,14 @@
                 <td>
                     <form action="#" th:action="@{/opinions/{opinionId}/show(opinionId=${opinion.opinionId})}"
                           method="GET">
-                        <button type="submit" class="btn btn-info">Show</button>
+                        <button type="submit" class="btn btn-info">Pokaż</button>
                     </form>
                 </td>
                 <td>
                     <form action="#"
-                          th:action="@{/opinions/delete/{opinionId}(opinionId=${opinion.opinionId})}"
+                          th:action="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}"
                           th:method="DELETE">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger">Usuń</button>
                     </form>
                 </td>
             </tr>

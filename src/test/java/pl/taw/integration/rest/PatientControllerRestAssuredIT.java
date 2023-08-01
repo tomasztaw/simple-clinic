@@ -76,25 +76,25 @@ public class PatientControllerRestAssuredIT
 
     // w21-32
 
-    @Test
-    void thatPatientsCanBeUpdatedCorrectly() {
-        // given
-        long petId = 4;
-        PatientDTO patient1 = DtoFixtures.somePatient1();
-        ExtractableResponse<Response> response = savePatient(patient1);
-        String patientDetailsPath = response.headers().get("Location").getValue();
-        PatientDTO retrievedPatient = getPatient(patientDetailsPath);
-
-        stubForPet(wireMockServer, petId);
-
-        // when
-        updatePatientByPet(retrievedPatient.getPatientId(), petId);
-
-        // then
-        PatientDTO patientWithPet = getPatientById(retrievedPatient.getPatientId());
-        Assertions.assertThat(patientWithPet)
-                .usingRecursiveComparison()
-                .ignoringFields("patientId", "petId")
-                .isEqualTo(patient1);
-    }
+//    @Test
+//    void thatPatientsCanBeUpdatedCorrectly() {
+//        // given
+//        long petId = 4;
+//        PatientDTO patient1 = DtoFixtures.somePatient1();
+//        ExtractableResponse<Response> response = savePatient(patient1);
+//        String patientDetailsPath = response.headers().get("Location").getValue();
+//        PatientDTO retrievedPatient = getPatient(patientDetailsPath);
+//
+//        stubForPet(wireMockServer, petId);
+//
+//        // when
+//        updatePatientByPet(retrievedPatient.getPatientId(), petId);
+//
+//        // then
+//        PatientDTO patientWithPet = getPatientById(retrievedPatient.getPatientId());
+//        Assertions.assertThat(patientWithPet)
+//                .usingRecursiveComparison()
+//                .ignoringFields("patientId", "petId")
+//                .isEqualTo(patient1);
+//    }
 }

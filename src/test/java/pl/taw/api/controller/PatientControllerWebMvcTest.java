@@ -307,7 +307,8 @@ public class PatientControllerWebMvcTest {
 
         // when, then
         String endpoint = PatientController.PATIENTS + PatientController.PATIENT_UPDATE_PHONE;
-        mockMvc.perform(patch(endpoint, patientId)
+//        mockMvc.perform(patch(endpoint, patientId)
+        mockMvc.perform(post(endpoint, patientId)
                         .param("newPhone", newPhone)
                         .param("referer", referer))
                 .andExpect(status().isFound())
@@ -329,7 +330,8 @@ public class PatientControllerWebMvcTest {
 
         // when, then
         String endpoint = PatientController.PATIENTS + PatientController.PATIENT_UPDATE_PHONE;
-        mockMvc.perform(patch(endpoint, patientId)
+//        mockMvc.perform(patch(endpoint, patientId)
+        mockMvc.perform(post(endpoint, patientId)
                         .param("newPhone", newPhone))
                 .andExpect(status().is5xxServerError());
 
