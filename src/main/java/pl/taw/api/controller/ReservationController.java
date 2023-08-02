@@ -123,11 +123,12 @@ public class ReservationController {
     }
 
     @DeleteMapping(DELETE)
-    public String deleteReservationById(@PathVariable Integer reservationId) {
+    public String deleteReservationById(@PathVariable Integer reservationId, HttpServletRequest request) {
         ReservationEntity reservationForDelete = reservationDAO.findEntityById(reservationId);
         reservationDAO.delete(reservationForDelete);
-        // TODO można pomyśleć powrocie nie do panelu
-        return "redirect:/reservations/panel";
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
 

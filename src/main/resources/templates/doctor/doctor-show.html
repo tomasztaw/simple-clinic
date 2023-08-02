@@ -19,6 +19,11 @@
       max-width: 30%;
       height: auto;
     }
+    .login-button {
+        float: right;
+        margin-right: 30px;
+    }
+
     .footer {
       text-align: center;
       margin-top: 30px;
@@ -35,6 +40,7 @@
       object-fit: cover;
       object-position: top;
       margin-right: 20px;
+      border-radius: 8px;
     }
     .actions {
       display: flex;
@@ -42,47 +48,144 @@
       margin-top: 20px;
     }
     .actions button {
-      margin-right: 10px;
+      margin-left: 100px;
+    }
+
+    .actions a {
+        margin: 0 30px;
     }
 
     .description {
       white-space: pre-line;
     }
 
+    .opis {
+        border-radius: 10px;
+        box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);
+        padding:20px;
+    }
+
+    .opinie {
+        border-radius: 50px;
+        box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);
+        padding: 20px 50px;
+    }
+
+    .opinie h1 {
+        text-align: center;
+        font-weight: bold;
+    }
+
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .certificate-image {
+        cursor: pointer;
+        width: 200px;
+        height: auto;
+    }
+
+    #certificate-modal-image {
+        max-width: 600px;
+        max-height: 600px;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        color: #fff;
+        font-size: 100px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .opinie {
+        /* Dodaj odpowiednie style dla sekcji opinii */
+    }
+
+    .opinie h1 {
+        /* Dodaj odpowiednie style dla nagłówka "Opinie o lekarzu" */
+    }
+
+    .opinia {
+        /* Dodaj odpowiednie style dla pojedynczej opinii */
+    }
+
+    .opinia-data {
+        /* Dodaj odpowiednie style dla sekcji z datą opinii */
+    }
+
+    .opinia-autor {
+        /* Dodaj odpowiednie style dla sekcji z nazwą autora opinii */
+    }
+
+    .opinia-komentarz {
+        /* Dodaj odpowiednie style dla sekcji z treścią komentarza opinii */
+    }
+
+.certificates {
+        /* Dodaj odpowiednie style dla sekcji certyfikatów */
+    }
+
+    .certificates h2 {
+        /* Dodaj odpowiednie style dla nagłówka "Certyfikaty" */
+    }
+
+    .certificate-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 kolumny o równej szerokości */
+        grid-gap: 10px; /* Odstępy między obrazkami */
+    }
+
+    .certificate-item {
+        /* Dodaj odpowiednie style dla pojedynczego certyfikatu */
+    }
+
+    .certificate-item img {
+        width: 100%; /* Obrazki wypełniają szerokość dostępnej przestrzeni */
+        height: auto; /* Proporcjonalne zachowanie wysokości */
+    }
+
+
 
 
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <div class="header-logo">
-            <!-- Tutaj wstaw kod dla logo -->
-            <a href="/" th:href="@{/}">
-                <img th:src="@{/images/2135.jpg}" alt="Logo">
-            </a>
-        </div>
-        <!-- Możesz dodać dodatkowe elementy w nagłówku -->
-        <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
+<header class="header">
+    <div class="logo">
+        <a href="/" th:href="@{/}">
+            <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna" width="180" height="180">
+        </a>
     </div>
+    <div class="welcome">
+    </div>
+    <div class="login-button">
+        <p>Zalogowany: <span th:text="${username}"></span></p>
+        <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
+        <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+    </div>
+</header>
 
-    <h2>Doctor</h2>
-    <table class="table table-striped table-hover">
-        <tr>
-            <th>Id</th>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th>Specjalizacja</th>
-            <th>e-mail</th>
-        </tr>
-        <tr>
-            <td th:text="${doctor.doctorId}"></td>
-            <td th:text="${doctor.name}"></td>
-            <td th:text="${doctor.surname}"></td>
-            <td th:text="${doctor.title}"></td>
-            <td th:text="${doctor.email}"></td>
-        </tr>
-    </table>
+<div class="container">
 
     <div class="media">
         <div class="photo-container">
@@ -91,11 +194,18 @@
         </div>
 
         <div class="media-body">
-            <h2>Opis</h2>
-
-            <div class="description" th:text="${description}"></div>
-
-            <h2>Godziny przyjęć</h2>
+            <div class="row">
+                <div class="col">
+                    <h3>Doktor <span th:text="${doctor.name} + ' ' + ${doctor.surname}"></span></h3>
+                    <h3>Specjalizacja <span th:text="${doctor.title}"></span></h3>
+                </div>
+                <div class="col">
+                    <a th:href="@{/doctors/{doctorId}/schedule(doctorId=${doctorId})}" class="btn btn-primary btn-lg">
+                        Umów wizytę
+                    </a>
+                </div>
+            </div>
+            <h4>Godziny przyjęć:</h4>
             <table class="table table-striped">
                 <tr>
                     <th>Dzień tygodnia</th>
@@ -109,24 +219,131 @@
                 </tr>
             </table>
         </div>
+        <br>
+        <br>
     </div>
 
+    <div class="opis">
+        <h2>Opis</h2>
+
+        <div class="description" th:text="${description}"></div>
+    </div>
+    <br>
+    <br>
+
+    <div class="opinie">
+        <h1>Opinie o lekarzu</h1>
+        <br>
+        <div th:if="${opinions.isEmpty()}">
+            <p>Brak opinii, napisz pierwszą</p>
+        </div>
+        <div th:if="${not opinions.isEmpty()}">
+            <div th:each="opinion : ${opinions}" class="opinia">
+                <div class="row">
+                    <div class="col">
+                        <div class="opinia-autor">
+                            <span th:text="${opinion.patient.name}"></span>
+                            <span th:text="${opinion.patient.name.endsWith('a') ? 'napisała' : 'napisał'}"></span>:
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="opinia-data">
+                            <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy')}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="opinia-komentarz">
+                            <h2 th:text="${opinion.comment}"></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+
+    <div class="certificates">
+        <h2>Certyfikaty</h2>
+        <div class="certificate-grid">
+            <div class="certificate-item">
+                <img th:src="@{/images/certyfikat1.jpeg}" alt="certyfikat">
+            </div>
+            <div class="certificate-item">
+                <img th:src="@{/images/certyfikat2.jpeg}" alt="certyfikat">
+            </div>
+            <div class="certificate-item">
+                <img th:src="@{/images/certyfikat3.jpeg}" alt="certyfikat">
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+
+
+
+    // to w połowie działa
+    <div class="certificates">
+        <h2>Certyfikaty</h2>
+        <ul>
+            <li>
+                <img class="certificate-image" th:src="@{/images/certyfikat1.jpeg}" alt="certyfikat">
+            </li>
+            <li>
+                <img class="certificate-image" th:src="@{/images/certyfikat2.jpeg}" alt="certyfikat">
+            </li>
+            <li>
+                <img class="certificate-image" th:src="@{/images/certyfikat3.jpeg}" alt="certyfikat">
+            </li>
+        </ul>
+    </div>
+
+    <div id="certificate-modal" class="modal">
+        <span class="close">&times;</span>
+        <img id="certificate-modal-image" src="" alt="certyfikat">
+    </div>
+
+
     <div class="actions">
-        <a th:href="@{/doctors/{doctorId}/schedule(doctorId=${doctorId})}" class="btn btn-primary btn-lg">Umów
-            wizytę</a>
+        <a th:href="@{/doctors/{doctorId}/schedule(doctorId=${doctorId})}" class="btn btn-primary btn-lg">
+            Umów wizytę
+        </a>
         <a th:href="@{/opinions/doctor/{doctorId}(doctorId=${doctorId})}" class="btn btn-primary btn-lg">Opinie</a>
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
     </div>
 
-    <a class="btn btn-light" th:href="@{/doctors}">Show all doctors</a>
+    <a class="btn btn-light" th:href="@{/doctors}">Pokaż wszystkich lekarzy</a>
 
 </div>
 
 <div class="footer">
-    <p><b>© 2023 E-clinic</b></p>
-
-    <div th:replace="fragments/footer.html"></div>
-
+    <div th:replace="~{fragments/footer.html}"></div>
 </div>
+
+<script>
+    const certificateImages = document.querySelectorAll('.certificate-image');
+    const certificateModal = document.getElementById('certificate-modal');
+    const certificateModalImage = document.getElementById('certificate-modal-image');
+    const closeCertificateModal = document.querySelector('.close');
+
+    certificateImages.forEach(image => {
+        image.addEventListener('click', () => {
+            const imageSrc = image.getAttribute('src');
+            certificateModalImage.setAttribute('src', imageSrc);
+            certificateModal.style.display = 'block';
+        });
+    });
+
+    closeCertificateModal.addEventListener('click', () => {
+        certificateModal.style.display = 'none';
+    });
+</script>
+
+
 </body>
 </html>

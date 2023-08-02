@@ -83,19 +83,9 @@ public class PatientController {
     }
 
     @GetMapping(HISTORY)
-    public String showHistory(@PathVariable("patientId") Integer patientId, Model model) {
-        PatientDTO patient = patientDAO.findById(patientId);
-        List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
-
-        model.addAttribute("patient", patient);
-        model.addAttribute("visits", visits);
-        return "patient/patient-visits";
-    }
-
-    @GetMapping("/history/nowy/{patientId}")
-    public String showNewHistory(@PathVariable("patientId") Integer patientId,
-                                 Authentication authentication,
-                                 Model model
+    public String showHistory(@PathVariable("patientId") Integer patientId,
+                              Authentication authentication,
+                              Model model
     ) {
         PatientDTO patient = patientDAO.findById(patientId);
         List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
@@ -105,7 +95,7 @@ public class PatientController {
         }
         model.addAttribute("patient", patient);
         model.addAttribute("visits", visits);
-        return "patient/patient-visits-nowy";
+        return "patient/patient-history";
     }
 
     @PatchMapping(PATIENT_UPDATE_PHONE_VIEW) // "/phone-view/{patientId}"
@@ -288,13 +278,6 @@ public class PatientController {
     // można w przyszłości pomyśleć nad aktualizacją tylko części danych (telefon, email)
     // w panelu aktualizacji wyświetlają się aktualne dane i poprawia się tylko potrzebne, reszta zostaje
 
-
-    // #####################################        RZECZY DO SKASOWANIA    #########################
-
-    public static final String LOGOWANIE = "/logowanie";
-    public static final String REGISTER = "/register";
-
-
     // próba nowej aktualizacji telefonu - nie działa
     @GetMapping("/telefon")
     public String aktualizujTelefon(Authentication authentication, Model model) {
@@ -311,14 +294,47 @@ public class PatientController {
         return "patient/patient-phone";
     }
 
-    @PutMapping("/patients/updatePhoneNumber")
-    public String updatePhoneNumber(@ModelAttribute("patient") PatientEntity patient) {
-//        PatientEntity patientForUpdatePhone = patientDAO.findEntityById(patient.getPatientId());
-//        patientForUpdatePhone.setPhone(patient.getPhone());
-//        patientDAO.save(patientForUpdatePhone);
-        patientDAO.save(patient);
-        return "redirect:/home";
+    @PatchMapping("/updatePhoneNumber")
+    public String updatePhoneNumber(@ModelAttribute("patient") PatientDTO patient) {
+        PatientEntity patientForUpdatePhone = patientDAO.findEntityById(patient.getPatientId());
+        patientForUpdatePhone.setPhone(patient.getPhone());
+        patientJpaRepository.save(patientForUpdatePhone);
+
+//        return "redirect:/patients/dashboard/" + patient.getPatientId();
+        return "redirect:/";
     }
+
+    @GetMapping("/email")
+    public String aktualizujEmail(Authentication authentication, Model model) {
+        ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
+        UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
+        String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
+        UserEntity user = UserEntity.builder()
+                .userName(details.getUsername())
+                .email(userEmail)
+                .build();
+        PatientDTO patient = patientDAO.findByEmail(user.getEmail());
+        model.addAttribute("patient", patient);
+
+        return "patient/patient-email";
+    }
+
+    @PatchMapping("/updateEmail")
+    public String updateEmail(@ModelAttribute("patient") PatientDTO patient) {
+        PatientEntity patientForUpdatePhone = patientDAO.findEntityById(patient.getPatientId());
+        patientForUpdatePhone.setEmail(patient.getEmail());
+        // TODO a co z kredkami?!
+        patientJpaRepository.save(patientForUpdatePhone);
+
+//        return "redirect:/patients/dashboard/" + patient.getPatientId();
+        return "redirect:/";
+    }
+
+
+    // #####################################        RZECZY DO SKASOWANIA    #########################
+
+    public static final String LOGOWANIE = "/logowanie";
+    public static final String REGISTER = "/register";
 
 
     @GetMapping(LOGOWANIE)

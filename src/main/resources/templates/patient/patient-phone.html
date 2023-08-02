@@ -5,14 +5,17 @@
 </head>
 <body>
 <h2>Aktualizuj numer telefonu</h2>
-<form th:object="${patient}" th:action="@{/patients/updatePhoneNumber}" method="put">
-  <input type="hidden" name="_method" value="put">
+<form th:object="${patient}" th:action="@{/patients/updatePhoneNumber}" th:method="patch">
+  <input type="hidden" name="_method" value="patch">
   <label for="phoneNumber">Numer telefonu:</label>
   <input type="text" id="phoneNumber" th:field="*{phone}">
 
-  <!-- Dodaj inne pola, które chcesz aktualizować -->
+  <input type="hidden" th:field="*{patientId}">
 
   <button type="submit">Aktualizuj</button>
 </form>
+<br><br>
+<button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+
 </body>
 </html>

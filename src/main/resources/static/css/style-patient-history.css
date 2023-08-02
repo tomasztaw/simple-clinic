@@ -27,7 +27,7 @@
 }
 
 .actions button {
-    margin: 0 20px;
+    margin-left: 100px;
 }
 
 li {
@@ -42,8 +42,6 @@ li {
 .visit-buttons {
     display: flex;
     flex-direction: columns;
-    /*justify-content: space-around;
-    align-items: center;*/
     margin: 20px;
     min-width: 155px;
 }
@@ -53,6 +51,30 @@ h2, h3 {
     text-align: center;
 }
 
+.todo {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: bold;
+    color: yellow;
+    background-color: red;
+}
+
+.history-header {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.doctor-link {
+    text-decoration: none;
+    color: black;
+}
+
+.doctor-link:hover {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
 
 /* HEADER - FRAGMENT */
 * {box-sizing: border-box;}

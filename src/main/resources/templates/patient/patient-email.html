@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Formularz do aktualizacji e-mail</title>
+  <script>
+    function showConfirmation() {
+      if (confirm('Czy na pewno chcesz zaktualizować e-mail pacjenta? Nie jest jeszcze rozwiązany problem z kredkami!!!!')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  </script>
+</head>
+<body>
+<h2>Aktualizuj e-mail</h2>
+<form th:object="${patient}" th:action="@{/patients/updateEmail}" th:method="patch" onsubmit="return showConfirmation();">
+  <input type="hidden" name="_method" value="patch">
+  <label for="email">E-mail:</label>
+  <input type="text" id="email" th:field="*{email}">
+
+  <input type="hidden" th:field="*{patientId}">
+
+  <button type="submit">Aktualizuj</button>
+</form>
+
+<br><br>
+<button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+
+</body>
+</html>

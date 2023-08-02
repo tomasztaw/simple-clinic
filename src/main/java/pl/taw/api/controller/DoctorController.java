@@ -70,7 +70,7 @@ public class DoctorController {
     public String doctors(Model model) {
         List<DoctorDTO> doctors = doctorDAO.findAll();
         model.addAttribute("doctors", doctors);
-        return "doctor/doctors-logo";
+        return "doctor/doctors-all";
     }
 
     @GetMapping(value = DOCTOR_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -125,7 +125,7 @@ public class DoctorController {
         List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
         model.addAttribute("opinions", opinions);
 
-        return "doctor/doctor-show-new";
+        return "doctor/doctor-show";
     }
 
     @GetMapping(PANEL)
@@ -317,7 +317,7 @@ public class DoctorController {
         String username = authentication.getName();
         model.addAttribute("username", username);
 
-        return "/doctor/doctor-schedule-3"; // TODO do posprzątania zwracane widoki
+        return "/doctor/doctor-schedule";
     }
 
     // odczytywanie plików tekstowych z opisem lekarzy -> chyba nie będzie potrzebne

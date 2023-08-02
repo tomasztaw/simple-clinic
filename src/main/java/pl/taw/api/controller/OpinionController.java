@@ -1,6 +1,7 @@
 package pl.taw.api.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -142,10 +143,16 @@ public class OpinionController {
     }
 
     @DeleteMapping(DELETE)
+    @Transactional
     public String deleteOpinionById(@PathVariable Integer opinionId,
                                     HttpServletRequest request
     ) {
         OpinionEntity opinionForDelete = opinionDAO.findEntityById(opinionId);
+        VisitEntity visit = opinionForDelete.getVisit();
+        if (visit != null) {
+            visit.setOpinion(null);
+            visitDAO.save(visit);
+        }
         opinionDAO.delete(opinionForDelete);
 
         String referer = request.getHeader("Referer");

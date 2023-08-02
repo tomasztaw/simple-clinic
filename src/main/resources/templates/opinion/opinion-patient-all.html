@@ -100,17 +100,7 @@
                     <li>
                         <a class="btn btn-primary"
                            th:href="@{/opinions/{opinionId}/update(opinionId=${opinion.opinionId})}" th:method="put">Edytuj</a>
-
-<!--                        NIE DZIAŁA - SPRÓBUJĘ TO ZROBIĆ NA PRZYCISKU-->
-                        <form th:action="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="post">
-                            <input type="hidden" name="_method" value="DELETE" />
-                            <button class="btn btn-danger" type="submit">Usuń</button>
-                        </form>
-
-                        <a class="btn btn-danger"
-                           th:href="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="delete">Usuń</a>
-
-                        <hr>
+                        <p class="todo">Do zrobienia edycja</p>
                         <form action="#" th:action="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="DELETE">
                             <input type="hidden" name="_method" value="DELETE" />
                             <button type="submit" class="btn btn-danger">Usuń</button>

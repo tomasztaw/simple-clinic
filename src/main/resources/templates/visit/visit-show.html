@@ -46,11 +46,12 @@
       margin-top: 20px;
     }
     .actions button {
-      margin-right: 10px;
+      margin-left: 100px;
     }
     a {
       color: inherit;
       text-decoration: none;
+      margin: 0 20px;
     }
 
     a:hover {
@@ -58,9 +59,8 @@
     }
 
     .media {
-      border: 1px solid black;
       border-radius: 50px;
-      padding: 30px;
+      padding: 60px 30px;
       margin: 40px auto;
       box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);
     }
@@ -71,7 +71,7 @@
     <div class="header">
       <div class="header-logo">
         <a href="/" th:href="@{/}">
-          <img th:src="@{/images/2135.jpg}" alt="Logo">
+          <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna">
         </a>
       </div>
       <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
@@ -145,12 +145,13 @@
     <br>
 
     <div class="actions">
-      <button class="btn btn-primary">Umów kolejną wizytę</button>
+<!--      <button class="btn btn-primary">Umów kolejną wizytę</button>-->
+      <a th:href="@{/doctors/{doctorId}/schedule(doctorId=${visit.doctor.doctorId})}" class="btn btn-primary btn-lg">Umów kolejną wizytę</a>
       <a th:href="@{/opinions/doctor/{doctorId}(doctorId=${visit.doctor.doctorId})}" class="btn btn-primary btn-lg">Opinie o tym lekarzy</a>
       <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
     </div>
 
-    <a class="btn btn-light" th:href="@{/visits/panel}">Show all visits(panel wizyty) - powinna być tylko dla admina</a>
+<!--    <a class="btn btn-light" th:href="@{/visits/panel}">Show all visits(panel wizyty) - powinna być tylko dla admina</a>-->
 
     <div class="footer">
       <div th:replace="~{fragments/footer.html}"></div>

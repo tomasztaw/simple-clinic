@@ -26,7 +26,6 @@ public class VisitEntity {
     private Integer doctorId;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-//    @JoinColumn(name = "doctor_id", nullable = true)
     @JoinColumn(name = "doctor_id", nullable = true, referencedColumnName = "doctor_id", insertable = false, updatable = false)
     private DoctorEntity doctor;
 
@@ -34,7 +33,6 @@ public class VisitEntity {
     private Integer patientId;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-//    @JoinColumn(name = "patient_id", nullable = true)
     @JoinColumn(name = "patient_id", nullable = true, referencedColumnName = "patient_id", insertable = false, updatable = false)
     private PatientEntity patient;
 

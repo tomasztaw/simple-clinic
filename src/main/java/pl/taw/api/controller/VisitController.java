@@ -135,7 +135,20 @@ public class VisitController {
         model.addAttribute("visits", visits);
         model.addAttribute("patient", patient);
 
-        return "patient/patient-visits";
+        return "patient/patient-history";
+    }
+
+    @GetMapping("/patient/{patientId}/addOpinions")
+    public String addOpinionsForVisits(@PathVariable("patientId") Integer patientId, Model model) {
+        List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId).stream()
+                .filter(visit -> visit.getOpinion() == null)
+                .toList();
+        PatientDTO patient = patientDAO.findById(patientId);
+
+        model.addAttribute("visits", visits);
+        model.addAttribute("patient", patient);
+
+        return "opinion/opinion-to-add";
     }
 
     @PostMapping(ADD)

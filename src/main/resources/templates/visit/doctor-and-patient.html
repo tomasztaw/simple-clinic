@@ -36,25 +36,38 @@
                         <li>Data: <span th:text="${#temporals.format(visit.dateTime, 'dd MM yyyy HH:mm')}"></span></li>
                         <li>Status: <span th:text="${visit.status}"></span></li>
                         <li class="visit__note">Notatka: <span th:text="${visit.note}"></span></li>
+<!--                        <li class="visit__note" th:if="${visit.opinion != null}">Notatka: <span th:text="${visit.opinion.comment}"></span></li>-->
                     </ul>
                     <div class="visit-buttons">
 
-                        <button class="btn btn-primary" onclick="showFormForUpdateOpinion()">Zmodyfikuj opinię</button>
+                        <div th:if="${visit.opinion != null}">
+                            <button class="btn btn-primary" onclick="showFormForUpdateOpinion()">Zmodyfikuj opinię</button>
+                        </div>
 
-                        <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/{visitId}(visitId=${visit.visitId})}" class="btn btn-primary">Dodaj opinię</a>
+                        <div th:if="${visit.opinion == null}">
+                            <a th:href="@{/opinions/add/{visitId}(visitId=${visit.visitId})}" class="btn btn-primary">Dodaj opinię</a>
+                            <p class="todo">Do zrobienia!</p>
+                        </div>
 
-                        <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/}">
-                            <button class="btn btn-primary">Dodaj opinię</button>
-                        </a>
+
+                        <!--                        <div th:if="${visit.opinion != null}">-->
+<!--                            <button class="btn btn-primary" onclick="showFormForUpdateOpinion()">Zmodyfikuj opinię</button>-->
+<!--                        </div>-->
+
+<!--                        <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/{visitId}(visitId=${visit.visitId})}" class="btn btn-primary">Dodaj opinię</a>-->
+
+<!--                        <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/}">-->
+<!--                            <button class="btn btn-primary">Dodaj opinię</button>-->
+<!--                        </a>-->
 
                     </div>
                 </div>
                 <br>
                 <div id="update-opinion-div">
                     <h3>Aktualizacja opinii</h3>
-                    <p>Stara opinia: <span th:text="${visit.opinion.comment}"></span></p>
+                    <p>Stara opinia: <span th:if="${visit.opinion != null}" th:text="${visit.opinion.comment}"></span></p>
                     <br>
-                    <form id="update-opinion-form" th:action="@{/opinions/{opinionId}/update(opinionId=${visit.opinion.opinionId})}" th:method="PUT">
+                    <form th:if="${visit.opinion != null}" id="update-opinion-form" th:action="@{/opinions/{opinionId}/update(opinionId=${visit.opinion.opinionId})}" th:method="PUT">
                         <label for="newComment">Nowy komentarz:</label><br>
                         <textarea id="newComment" name="newComment" rows="4" cols="50"></textarea><br>
                         <input type="submit" value="Aktualizuj">
@@ -81,14 +94,25 @@
 </div>
 
 <script>
+
     function showFormForUpdateOpinion() {
         var x = document.getElementById("update-opinion-div");
-        if (x.style.display === "block") {
+        if (x && x.style.display === "block") {
             x.style.display = "none";
-        } else {
+        } else if (x) {
             x.style.display = "block";
         }
     }
+
+
+<!--    function showFormForUpdateOpinion() {-->
+<!--        var x = document.getElementById("update-opinion-div");-->
+<!--        if (x.style.display === "block") {-->
+<!--            x.style.display = "none";-->
+<!--        } else {-->
+<!--            x.style.display = "block";-->
+<!--        }-->
+<!--    }-->
 
     document.getElementById("update-opinion-form").addEventListener("submit", function(event) {
         event.preventDefault();
