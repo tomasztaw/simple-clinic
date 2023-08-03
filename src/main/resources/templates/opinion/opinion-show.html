@@ -50,10 +50,8 @@
   <div class="container">
     <div class="header">
       <div class="header-logo">
-        <!-- Tutaj wstaw kod dla logo -->
-        <img th:src="@{/images/2135.jpg}" alt="Logo">
+        <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna">
       </div>
-      <!-- Możesz dodać dodatkowe elementy w nagłówku -->
       <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
     </div>
 
@@ -73,11 +71,15 @@
       </tr>
     </table>
 
+    <hr>
+
     <div class="media">
 
       <div class="media-body">
-        <h2>Opis</h2>
+        <h2>Treść opinii:</h2>
         <h3 th:text="${opinion.comment}"></h3>
+
+        <hr>
 
         <h2>Wizyta</h2>
         <table class="table table-striped">
@@ -93,21 +95,22 @@
       </div>
     </div>
 
+    <hr>
+
     <div class="actions">
-      <button class="btn btn-primary">Umów /wizytę/ kolejną wizytę</button>
+      <a th:href="@{/doctors/{doctorId}/schedule(doctorId=${opinion.doctorId})}" class="btn btn-primary btn-lg">
+        Umów kolejną wizytę
+      </a>
       <a th:href="@{/opinions/doctor/{doctorId}(doctorId=${opinion.doctorId})}" class="btn btn-primary btn-lg">Opinie o tym lekarzy</a>
       <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
     </div>
 
-    <a class="btn btn-light" th:href="@{/opinions/panel}">Pokaż wszystkie opinie</a>
+    <a class="btn btn-light" th:href="@{/opinions/panel}">Pokaż wszystkie opinie (?)</a>
 
   </div>
 
   <div class="footer">
-    <p><b>© 2023 E-clinic</b></p>
-
-    <div th:replace="fragments/footer.html"></div>
-
+    <div th:replace="~{fragments/footer.html}"></div>
   </div>
 </body>
 </html>

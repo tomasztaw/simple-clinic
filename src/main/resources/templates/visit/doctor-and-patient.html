@@ -21,6 +21,7 @@
     <h2>Twoja Historia u lekarza: <span th:text="${doctor.name + ' ' + doctor.surname}"></span></h2>
 
     <h3>Jesteś zalogowany jako: <span th:text="${patient.name + ' ' + patient.surname}"></span></h3>
+    <hr>
 
     <div class="media-body">
 
@@ -78,7 +79,7 @@
             </li>
         </ul>
 
-
+        <hr>
         <div class="actions">
             <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>
             <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>

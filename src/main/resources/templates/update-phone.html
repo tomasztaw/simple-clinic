@@ -23,17 +23,21 @@
             text-align: center;
             margin-top: 30px;
         }
+        .welcome {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 <header class="header">
     <div class="logo">
         <a href="/" th:href="@{/}">
-            <img th:src="@{/images/2135.jpg}" alt="Logo" width="180" height="180">
+            <img th:src="@{/images/2135.jpg}" alt="Logo" width="180" height="180" title="Strona główna">
         </a>
     </div>
     <div class="welcome">
-        <h1>Zmiana numeru telefonu</h1>
+        <h1>TO NA CHWILĘ OBECNĄ NIE DZIAŁ, ALE POPRAWIĘ :)</h1>
     </div>
     <div class="login-button">
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
@@ -45,6 +49,7 @@
     <h5 class="mt-5">Format numeru (+48 xxx xxx xxx)</h5>
     <form th:action="@{/patients/{patientId}/phone(patientId=${patient.patientId})}" method="post" class="mt-4">
 
+<!--        TUTAJ POWINNA BYĆ CHYBA "PATCH" - DO SPRAWDZENIA-->
         <input type="hidden" th:name="_method" th:value="POST">
         <div class="form-group">
             <label for="newPhone">Nowy numer:</label>
@@ -55,7 +60,7 @@
     </form>
 </div>
 <div class="footer">
-    <div th:replace="fragments/footer.html"></div>
+    <div th:replace="~{fragments/footer.html}"></div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -33,7 +33,6 @@
             justify-content: center;
             align-items: flex-start;
             overflow: hidden;
-            /* Dodana linia */
         }
 
         .photo-container img {
@@ -41,7 +40,6 @@
             height: 280px;
             object-fit: cover;
             object-position: top;
-            /* Dodana linia */
             margin-right: 20px;
         }
 
@@ -52,7 +50,7 @@
         }
 
         .actions button {
-            margin-right: 10px;
+            margin-left: 100px;
         }
     </style>
 </head>
@@ -63,10 +61,8 @@
 
     <div class="header">
     <div class="header-logo">
-      <!-- Tutaj wstaw kod dla logo -->
-      <img th:src="@{/images/2135.jpg}" alt="Logo">
+      <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna">
     </div>
-    <!-- Możesz dodać dodatkowe elementy w nagłówku -->
     <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
   </div>
 
@@ -97,12 +93,12 @@
 
       <h1>Opinie o lekarzu</h1>
       <ul th:if="${opinions.isEmpty()}">
-        <li>Brak opinii - napisz pierwszą</li>
+        <li>Brak opinii, umów się na wizytę i napisz pierwszą</li>
       </ul>
       <ul th:if="${not opinions.isEmpty()}">
         <li th:each="opinion : ${opinions}">
           <ul>
-            <li>Id: <span th:text="${opinion.opinionId}"></span></li>
+            <li>Id opinii: <span th:text="${opinion.opinionId}"></span></li>
             <li>Data: <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></span></li>
             <li>Opinia: <span th:text="${opinion.comment}"></span></li>
             <li>Napisana przez: <span th:text="${opinion.patient.name}"></span></li>
@@ -116,7 +112,7 @@
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
       </div>
 
-      <a class="btn btn-light" th:href="@{/doctors}">Show all doctors</a>
+      <a class="btn btn-light" th:href="@{/doctors}">Pokaż wszystkich lekarzy</a>
 
     </div>
   </div>
@@ -124,10 +120,7 @@
   </div>
 
   <div class="footer">
-    <p><b>© 2023 E-clinic</b></p>
-
-    <div th:replace="fragments/footer.html"></div>
-
+    <div th:replace="~{fragments/footer.html}"></div>
   </div>
 
 </body>

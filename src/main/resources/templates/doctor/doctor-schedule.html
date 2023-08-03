@@ -37,13 +37,20 @@
       object-position: top;
       margin-right: 20px;
     }
+
+    .actions-header {
+        display: flex;
+        justify-content: space-between;
+        width: 180px;
+    }
+
     .actions {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
+      margin: 50px;
     }
     .actions button {
-      margin: 0 20px;
+      margin: 0 100px;
       btn-white-space: nowrap;
     }
 
@@ -59,7 +66,6 @@
 <div class="container">
     <div class="header">
         <div class="header-logo">
-            <!-- Tutaj wstaw kod dla logo -->
             <a href="/" th:href="@{/}">
                 <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna">
             </a>
@@ -70,7 +76,7 @@
                 <p>Zalogowany: <span th:text="${username}"></span></p>
             </div>
 
-            <div class="actions">
+            <div class="actions-header">
                 <a th:href="@{/logout}" class="btn btn-primary">Wyloguj</a>
                 <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
             </div>
@@ -137,14 +143,12 @@
         <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
     </div>
 
-    <a class="btn btn-light" th:href="@{/doctors}">Show all doctors</a>
+    <a class="btn btn-light" th:href="@{/doctors}">Pokaż wszystkich lekarzy</a>
 
 </div>
 
 <div class="footer">
-
     <div th:replace="~{fragments/footer.html}"></div>
-
 </div>
 
 </body>

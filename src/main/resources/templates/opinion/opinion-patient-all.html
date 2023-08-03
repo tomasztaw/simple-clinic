@@ -28,6 +28,17 @@
             margin-top: 30px;
         }
 
+
+<!--        .footer {-->
+<!--            position: fixed;-->
+<!--            left: 0;-->
+<!--            bottom: 0;-->
+<!--            width: 100%;-->
+<!--            background-color: red;-->
+<!--            color: white;-->
+<!--            text-align: center;-->
+<!--        }-->
+
         .photo-container {
             display: flex;
             justify-content: center;
@@ -41,7 +52,6 @@
             height: 280px;
             object-fit: cover;
             object-position: top;
-            /* Dodana linia */
             margin-right: 20px;
         }
 
@@ -64,6 +74,20 @@
             margin: 20px auto;
         }
 
+        .media-body__opinion {
+            font-size: 24px;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .delete-form {
+            display: inline;
+            margin-right: 50px;
+        }
+
+        .li-btn {
+            margin: 30px auto;
+
     </style>
 </head>
 
@@ -73,45 +97,47 @@
 
     <div class="header">
         <div class="header-logo">
-            <!-- Logo -->
-            <img th:src="@{/images/2135.jpg}" alt="Logo">
+            <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna">
         </div>
-        <!-- Dodatkowe elementy w nagłówku -->
         <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
     </div>
 
     <h1>Twoje Opinie</h1>
 
+    <hr>
+
     <div class="media-body">
 
         <h2>Opinie o lekarzu</h2>
         <ul th:if="${opinions.isEmpty()}">
-            <li>Brak opinii - napisz pierwszą</li>
+            <li>Brak opinii, umów się na wizytę i napisz pierwszą</li>
         </ul>
+
         <ul th:if="${not opinions.isEmpty()}">
             <li th:each="opinion : ${opinions}">
                 <ul>
-                    <li>Id: <span th:text="${opinion.opinionId}"></span></li>
+                    <li>Id opinii: <span th:text="${opinion.opinionId}"></span></li>
                     <li>Lekarz: <span
                             th:text="${opinion.doctor.name + ' ' + opinion.doctor.surname + ' - ' + opinion.doctor.title}"></span>
                     </li>
-                    <li>Data: <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></span></li>
-                    <li>Opinia: <span th:text="${opinion.comment}"></span></li>
-                    <li>
-                        <a class="btn btn-primary"
-                           th:href="@{/opinions/{opinionId}/update(opinionId=${opinion.opinionId})}" th:method="put">Edytuj</a>
-                        <p class="todo">Do zrobienia edycja</p>
-                        <form action="#" th:action="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}" th:method="DELETE">
-                            <input type="hidden" name="_method" value="DELETE" />
+                    <li>Data: <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></span>
+                    </li>
+                    <li>Opinia: <span class="media-body__opinion" th:text="${opinion.comment}"></span></li>
+                    <li class="li-btn">
+                        <form class="delete-form" action="#" th:action="@{/opinions/{opinionId}/delete(opinionId=${opinion.opinionId})}"
+                              th:method="DELETE">
+                            <input type="hidden" name="_method" value="DELETE"/>
                             <button type="submit" class="btn btn-danger">Usuń</button>
                         </form>
 
+                        <a class="btn btn-info" th:href="@{/opinions/{opinionId}/show(opinionId=${opinion.opinionId})}">Pokaż</a>
                     </li>
-
                 </ul>
-                <br>
             </li>
+
         </ul>
+
+        <hr>
 
         <div class="actions">
             <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>

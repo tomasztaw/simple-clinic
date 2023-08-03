@@ -45,7 +45,7 @@
     .actions {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
+      margin: 50px;
     }
     .actions button {
       margin-left: 100px;
@@ -76,6 +76,26 @@
         font-weight: bold;
     }
 
+    .opinia {
+        margin: 20px;
+    }
+
+    .opinia-data {
+        text-align: end;
+    }
+
+    .data-p {
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .data-span {
+        font-size: 18px;
+        font-style: italic;
+        font-weight: 100;
+    }
+
+
 
     .modal {
         display: none;
@@ -98,13 +118,17 @@
 
     .certificate-image {
         cursor: pointer;
-        width: 200px;
+        width: 300px;
         height: auto;
     }
 
     #certificate-modal-image {
         max-width: 600px;
         max-height: 600px;
+        width: 350px;
+        position: relative;
+        top: 250px;
+        left: 500px;
     }
 
     .close {
@@ -112,60 +136,34 @@
         top: 10px;
         right: 20px;
         color: #fff;
-        font-size: 100px;
+        font-size: 50px;
         font-weight: bold;
         cursor: pointer;
     }
 
-    .opinie {
-        /* Dodaj odpowiednie style dla sekcji opinii */
-    }
+    .certificates {
 
-    .opinie h1 {
-        /* Dodaj odpowiednie style dla nagłówka "Opinie o lekarzu" */
-    }
-
-    .opinia {
-        /* Dodaj odpowiednie style dla pojedynczej opinii */
-    }
-
-    .opinia-data {
-        /* Dodaj odpowiednie style dla sekcji z datą opinii */
-    }
-
-    .opinia-autor {
-        /* Dodaj odpowiednie style dla sekcji z nazwą autora opinii */
-    }
-
-    .opinia-komentarz {
-        /* Dodaj odpowiednie style dla sekcji z treścią komentarza opinii */
-    }
-
-.certificates {
-        /* Dodaj odpowiednie style dla sekcji certyfikatów */
     }
 
     .certificates h2 {
-        /* Dodaj odpowiednie style dla nagłówka "Certyfikaty" */
+        text-align: center
     }
 
     .certificate-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 3 kolumny o równej szerokości */
+        grid-template-columns: repeat(3, 1fr);
+<!--        grid-template-rows: repeat(3, 1fr);-->
         grid-gap: 10px; /* Odstępy między obrazkami */
     }
 
     .certificate-item {
-        /* Dodaj odpowiednie style dla pojedynczego certyfikatu */
+
     }
 
     .certificate-item img {
-        width: 100%; /* Obrazki wypełniają szerokość dostępnej przestrzeni */
-        height: auto; /* Proporcjonalne zachowanie wysokości */
+        width: 100%;
+        height: auto;
     }
-
-
-
 
     </style>
 </head>
@@ -248,7 +246,7 @@
                     </div>
                     <div class="col">
                         <div class="opinia-data">
-                            <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy')}"></span>
+                            <p class="data-p">data: <span class="data-span" th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy')}"></span> r.</p>
                         </div>
                     </div>
                 </div>
@@ -269,12 +267,13 @@
 
     <div class="certificates">
         <h2>Certyfikaty</h2>
+        <h3>Wersja 1</h3>
         <div class="certificate-grid">
             <div class="certificate-item">
-                <img th:src="@{/images/certyfikat1.jpeg}" alt="certyfikat">
+                <img th:src="@{/images/certyfikat2.jpeg}" alt="certyfikat">
             </div>
             <div class="certificate-item">
-                <img th:src="@{/images/certyfikat2.jpeg}" alt="certyfikat">
+                <img th:src="@{/images/certyfikat1.jpeg}" alt="certyfikat">
             </div>
             <div class="certificate-item">
                 <img th:src="@{/images/certyfikat3.jpeg}" alt="certyfikat">
@@ -287,9 +286,9 @@
 
 
 
-    // to w połowie działa
     <div class="certificates">
         <h2>Certyfikaty</h2>
+        <h3>Wersja 2</h3>
         <ul>
             <li>
                 <img class="certificate-image" th:src="@{/images/certyfikat1.jpeg}" alt="certyfikat">
