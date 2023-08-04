@@ -53,9 +53,7 @@ public interface OpinionMapper {
     default VisitDTO mapVisitWithoutOpinion(VisitEntity visitEntity) {
         return VisitDTO.builder()
                 .visitId(visitEntity.getVisitId())
-//                .doctor(mapDoctorWithoutOpinions(visitEntity.getDoctor()))
                 .doctorId(visitEntity.getDoctorId())
-//                .patient(mapPatientWithoutOpinions(visitEntity.getPatient()))
                 .patientId(visitEntity.getPatientId())
                 .note(visitEntity.getNote())
                 .dateTime(visitEntity.getDateTime())

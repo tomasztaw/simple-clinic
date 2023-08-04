@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(DoctorController.DOCTORS)
@@ -238,7 +237,7 @@ public class DoctorController {
         return ResponseEntity.ok().build();
     }
 
-    // TODO za dużo tego narobiłem :)
+    // TODO za dużo tego narobiłem :), druga obsługuje ResponseEntity
     @DeleteMapping(DELETE_ID)
     public String deleteDoctorById(
             @PathVariable Integer doctorId, HttpServletRequest request) {
@@ -274,6 +273,7 @@ public class DoctorController {
         return ResponseEntity.ok().build();
     }
 
+    // TODO przydałoby się to uprościć
     @GetMapping(SCHEDULE)
     public String getDoctorScheduleSimpleMap(@PathVariable Integer doctorId, Model model, Authentication authentication) {
         LocalDate today = LocalDate.now();

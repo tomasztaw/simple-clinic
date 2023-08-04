@@ -3,7 +3,6 @@ package pl.taw.infrastructure.database.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.taw.api.dto.OpinionDTO;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.domain.exception.NotFoundException;
 import pl.taw.infrastructure.database.entity.OpinionEntity;

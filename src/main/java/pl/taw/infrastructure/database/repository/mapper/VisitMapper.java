@@ -16,8 +16,6 @@ public interface VisitMapper {
 
     VisitMapper INSTANCE = Mappers.getMapper(VisitMapper.class);
 
-//    @Mapping(target = "opinion", ignore = true)
-//    @Mapping(target = "doctor", ignore = true)
     VisitDTO mapFromEntity(VisitEntity visitEntity);
 
     VisitEntity mapToEntity(VisitDTO visitDTO);

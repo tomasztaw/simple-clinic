@@ -8,16 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.DoctorsDTO;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(DoctorRestController.API_DOCTORS)
@@ -46,10 +42,11 @@ public class DoctorRestController {
         return doctorDAO.findById(doctorId);
     }
 
+    // TODO czy to czasem nie powinna być w wizytach???
     @GetMapping(HISTORY)
-    public ResponseEntity<List<VisitDTO>> showHistory(@PathVariable("doctorId") Integer doctorId) {
+    public ResponseEntity<VisitsDTO> showHistory(@PathVariable("doctorId") Integer doctorId) {
         DoctorDTO doctor = doctorDAO.findById(doctorId);
-        List<VisitDTO> visits = visitService.findAllVisitByDoctor(doctorId);
+        VisitsDTO visits = VisitsDTO.of(visitService.findAllVisitByDoctor(doctorId));
 
         if (doctor != null && visits != null) {
             return ResponseEntity.ok(visits);
@@ -99,7 +96,9 @@ public class DoctorRestController {
             @PathVariable("doctorId") Integer doctorId
     ) {
         DoctorEntity existingDoctor = doctorDAO.findEntityById(doctorId);
-
+        if (existingDoctor == null) {
+            return ResponseEntity.notFound().build();
+        }
         doctorDAO.delete(existingDoctor);
 
         return ResponseEntity.noContent().build();
@@ -120,7 +119,7 @@ public class DoctorRestController {
     }
 
     @PatchMapping(DOCTOR_UPDATE_PHONE)
-    public ResponseEntity<?> updateDoctorByPhone(
+    public ResponseEntity<?> updateDoctorPhone(
             @PathVariable("doctorId") Integer doctorId,
             @RequestParam(required = true) String newPhone
     ) {
@@ -134,7 +133,7 @@ public class DoctorRestController {
     }
 
     @PatchMapping(DOCTOR_UPDATE_EMAIL)
-    public ResponseEntity<?> updateDoctorByEmail(
+    public ResponseEntity<?> updateDoctorEmail(
             @PathVariable("doctorId") Integer doctorId,
             @RequestParam(required = true) String newEmail
     ) {

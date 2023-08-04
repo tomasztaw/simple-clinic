@@ -301,6 +301,7 @@ public class PatientController {
         patientJpaRepository.save(patientForUpdatePhone);
 
 //        return "redirect:/patients/dashboard/" + patient.getPatientId();
+        // po odświeżeniu strony zmienia się ścieżka do styli i nie są one ładowane
         return "redirect:/";
     }
 
@@ -327,6 +328,7 @@ public class PatientController {
         patientJpaRepository.save(patientForUpdatePhone);
 
 //        return "redirect:/patients/dashboard/" + patient.getPatientId();
+        // po odświeżeniu strony zmienia się ścieżka do styli i nie są one ładowane
         return "redirect:/";
     }
 

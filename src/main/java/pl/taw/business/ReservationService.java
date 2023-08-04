@@ -5,14 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taw.api.dto.DoctorScheduleDTO;
 import pl.taw.api.dto.ReservationDTO;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.DoctorScheduleDAO;
 import pl.taw.business.dao.ReservationDAO;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -66,7 +64,6 @@ public class ReservationService {
         }
 
         List<String> dayAndDate = nextWeekLeftDays.entrySet().stream()
-//                .map(entry -> entry.getKey() + " " + entry.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
                 .map(entry -> entry.getKey() + " " + entry.getValue())
                 .toList();
 
@@ -241,28 +238,5 @@ public class ReservationService {
 
         return null;
     }
-
-    public void createReservation(ReservationDTO reservationDTO) {
-        // Tutaj możesz umieścić logikę tworzenia rezerwacji
-        // Na przykład, walidacja danych, sprawdzanie dostępności lekarza, itp.
-        // Możesz również użyć repozytorium (np. ReservationRepository) do zapisu rezerwacji w bazie danych.
-    }
-
-    public void cancelReservation(Integer reservationId) {
-        // Tutaj możesz umieścić logikę odwoływania rezerwacji
-        // Możesz użyć repozytorium do pobrania rezerwacji na podstawie identyfikatora i zastosować odpowiednie operacje.
-    }
-
-    public List<LocalTime> getAvailableTimes(Integer doctorId, LocalDate day) {
-        // Tutaj możesz umieścić logikę pobierania dostępnych terminów rezerwacji
-        // Na podstawie identyfikatora lekarza i daty, możesz sprawdzić zajętość w danym dniu i zwrócić listę dostępnych godzin.
-        // Możesz użyć repozytorium do pobrania rezerwacji dla danego lekarza i dnia, a następnie zastosować odpowiednie operacje.
-        // Na przykład, możesz zwrócić listę godzin, które nie są zajęte na podstawie istniejących rezerwacji.
-//        return availableTimes;
-        return Collections.emptyList();
-    }
-
-
-
 
 }

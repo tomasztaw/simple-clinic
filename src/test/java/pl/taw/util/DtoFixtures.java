@@ -1,9 +1,7 @@
 package pl.taw.util;
 
 import lombok.experimental.UtilityClass;
-import pl.taw.api.dto.DoctorDTO;
-import pl.taw.api.dto.OpinionDTO;
-import pl.taw.api.dto.PatientDTO;
+import pl.taw.api.dto.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +13,8 @@ public class DtoFixtures {
     public static List<PatientDTO> patients = List.of(somePatient1(), somePatient2());
     public static List<DoctorDTO> doctors = List.of(someDoctor1(), someDoctor2(), someDoctor3());
     public static List<OpinionDTO> opinions = List.of(someOpinion1(), someOpinion2());
+    public static List<VisitDTO> visits = List.of(someVisit1(), someVisit2());
+    public static VisitsDTO visitsDTO = VisitsDTO.of(visits);
 
     public static PatientDTO somePatient1() {
         return PatientDTO.builder()
@@ -88,6 +88,28 @@ public class DtoFixtures {
                 .visitId(2)
                 .comment("Opinia napisania w nie pochlebnym tonie")
                 .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static VisitDTO someVisit1() {
+        return VisitDTO.builder()
+                .visitId(1)
+                .doctorId(5)
+                .patientId(5)
+                .note("Pacjent będzie żył")
+                .dateTime(LocalDateTime.now())
+                .status("odbyta")
+                .build();
+    }
+
+    public static VisitDTO someVisit2() {
+        return VisitDTO.builder()
+                .visitId(2)
+                .doctorId(1)
+                .patientId(5)
+                .note("Będzie co będzie")
+                .dateTime(LocalDateTime.now())
+                .status("odbyta")
                 .build();
     }
 }

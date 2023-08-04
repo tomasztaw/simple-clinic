@@ -63,8 +63,6 @@ public class OpinionController {
             @PathVariable("opinionId") Integer opinionId, Model model) {
         OpinionDTO opinion = opinionDAO.findById(opinionId);
         model.addAttribute("opinion", opinion);
-//        VisitDTO visit = visitDAO.findById(opinion.getVisit().getVisitId());
-//        model.addAttribute("visit", visit);
         VisitDTO visitDTO = visitDAO.findById(opinion.getVisitId());
         model.addAttribute("visit", visitDTO);
         return "opinion/opinion-show";
@@ -81,7 +79,6 @@ public class OpinionController {
         OpinionEntity newOpinion = OpinionEntity.builder()
                 .doctorId(doctorId)
                 .patientId(patientId)
-//                .visit(visit)
                 .visitId(visitId)
                 .comment(comment)
                 .createdAt(LocalDateTime.now())
@@ -209,19 +206,6 @@ public class OpinionController {
         System.out.println("addOpinion zostało wywołane");
 
         return "opinion-form";
-    }
-
-    // wzór dla posta - chyba do wywalenia!!!!
-    @PostMapping("/opinions/addNieMaTakiego")
-    public String addOpinion(
-            @ModelAttribute("opinionDTO") OpinionDTO opinionDTO,
-            @RequestParam("visitId") Integer visitId) {
-        // Przekształcenie visitId na obiekt VisitEntity
-        VisitDTO visit = new VisitDTO();
-        visit.setVisitId(visitId);
-        opinionDTO.setVisit(visit);
-        // Dodanie opinii do bazy danych
-        return "redirect:/opinions";
     }
 
 }

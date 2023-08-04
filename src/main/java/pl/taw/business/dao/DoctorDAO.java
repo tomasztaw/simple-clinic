@@ -4,7 +4,6 @@ import pl.taw.api.dto.DoctorDTO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 import java.util.List;
-import java.util.Set;
 
 public interface DoctorDAO {
 

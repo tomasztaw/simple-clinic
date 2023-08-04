@@ -3,7 +3,6 @@ package pl.taw.infrastructure.security;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,20 +29,6 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-//    @Bean
-//    public AuthenticationManager authManager(
-//            HttpSecurity httpSecurity,
-//            PasswordEncoder passwordEncoder,
-//            UserDetailsService userDetailService)
-//            throws Exception {
-//        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
-//                .userDetailsService(userDetailService)
-//                .passwordEncoder(passwordEncoder)
-//                .and()
-//                .build();
-//    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(
@@ -68,7 +52,6 @@ public class SecurityConfiguration {
                 .build();
     }
 
-
     @Bean  // TODO to chyba jednak nie będzie potrzebne, każdy będzie przekierowywany na stronę główną
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
@@ -77,44 +60,14 @@ public class SecurityConfiguration {
             if (roles.contains("ADMIN")) {
                 response.sendRedirect("/clinic");
             } else if (roles.contains("DOCTOR")) {
-//                response.sendRedirect("/doctors");
                 response.sendRedirect("/clinic");
             } else if (roles.contains("USER")) {
                 response.sendRedirect("/clinic");
-//                response.sendRedirect("/clinic/patients");
             } else {
                 response.sendRedirect("/welcome");
             }
         };
     }
-
-//    @Bean
-//    @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
-//    SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.csrf().disable()
-//                .authorizeHttpRequests()
-////                .requestMatchers("/clinic/welcome").permitAll()
-//                .requestMatchers("/welcome").permitAll()
-//                .requestMatchers("/register").permitAll()
-//                .requestMatchers("/register/addUser").permitAll()
-//                .requestMatchers("/templates/registration-confirmation.html").permitAll()
-//                .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**", "/register/**").permitAll()
-//                .requestMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN")
-//                //.requestMatchers("/patients/**", "/doctors/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .successHandler(authenticationSuccessHandler())
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutSuccessUrl("/welcome")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .permitAll();
-//
-//        return httpSecurity.build();
-//    }
 
     @Bean
     @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
@@ -138,19 +91,6 @@ public class SecurityConfiguration {
                 .build();
     }
 
-
-//    @Bean
-//    @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "false")
-//    SecurityFilterChain securityDisabled(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.csrf()
-//                .disable()
-//                .authorizeHttpRequests()
-//                .anyRequest()
-//                .permitAll();
-//
-//        return httpSecurity.build();
-//    }
-
     @Bean
     @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "false")
     SecurityFilterChain securityDisabled(HttpSecurity httpSecurity) throws Exception {
@@ -159,49 +99,5 @@ public class SecurityConfiguration {
                .authorizeHttpRequests(request -> request.anyRequest().permitAll())
                .build();
     }
-
-    //    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.authorizeHttpRequests()
-//                .requestMatchers("/login", "/error", "/images/oh_no.png", "/welcome").permitAll()
-//                .requestMatchers("/patients/**", "/images/**").hasAnyAuthority("USER", "DOCTOR", "ADMIN")
-//                .requestMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN")
-//                .and()
-//                .formLogin()
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutSuccessUrl("/welcome")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .permitAll();
-//
-//        return httpSecurity.build();
-//    }
-
-//    @Bean
-//    @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
-//    SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.csrf()
-//                .disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/login", "/error", "/images/**", "/clinic").permitAll()
-//                .requestMatchers("/patients/**", "/doctors/**", "/opinions/**", "/visits/**", "/reservations/**").hasAnyAuthority("ADMIN", "DOCTOR", "USER")
-//                .requestMatchers("/panel/**").hasAnyAuthority("ADMIN")
-//                .requestMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN")
-//                .requestMatchers("/api/**").hasAnyAuthority("REST_API")
-//                .and()
-//                .formLogin()
-//                .defaultSuccessUrl("/clinic") // dodane
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutSuccessUrl("/login")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .permitAll();
-//
-//        return httpSecurity.build();
-//    }
 
 }

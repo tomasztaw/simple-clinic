@@ -16,8 +16,6 @@ public class ReservationDTO {
     private Integer doctorId;
     private Integer patientId;
     private LocalDate day;
-    // zamiana na LocalTime
-//    private LocalDateTime startTimeR;
     private LocalTime startTimeR;
     private Boolean occupied;
 

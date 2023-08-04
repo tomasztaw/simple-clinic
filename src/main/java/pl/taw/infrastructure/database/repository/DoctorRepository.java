@@ -10,8 +10,6 @@ import pl.taw.infrastructure.database.repository.jpa.DoctorJpaRepository;
 import pl.taw.infrastructure.database.repository.mapper.DoctorMapper;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor

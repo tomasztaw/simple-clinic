@@ -1,9 +1,7 @@
 package pl.taw.business.dao;
 
 import pl.taw.api.dto.ReservationDTO;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.entity.ReservationEntity;
-import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.time.LocalDate;
 import java.util.List;

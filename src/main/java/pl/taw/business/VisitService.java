@@ -31,7 +31,6 @@ public class VisitService {
     }
 
     public boolean hasPatientSeenThisDoctor(Integer doctorId, Integer patientId) {
-//        return findAllVisitForBoth(doctorId, patientId).size() > 0;
         return !findAllVisitForBoth(doctorId, patientId).isEmpty();
     }
 

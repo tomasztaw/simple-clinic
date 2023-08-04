@@ -9,19 +9,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
+import pl.taw.business.dao.DoctorDAO;
+import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
+import pl.taw.util.DtoFixtures;
+import pl.taw.util.EntityFixtures;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class VisitRestControllerTest {
 
     @Mock // atrapa
     private VisitDAO visitDAO;
+
+    @Mock
+    private DoctorDAO doctorDAO;
+
+    @Mock
+    private PatientDAO patientDAO;
 
     @InjectMocks // wstrzykiwanie
     private VisitRestController visitRestController;
@@ -31,72 +38,77 @@ class VisitRestControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-//    @Test
-//    void shouldReturnsListOfVisits() {
-//        // given
-//        List<VisitDTO> visits = Arrays.asList(new VisitDTO(), new VisitDTO());
-//        when(visitDAO.findAll()).thenReturn(visits);
-//
-//        // when
-//        ResponseEntity<List<VisitDTO>> response = visitRestController.getAllVisits();
-//
-//        // then
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertEquals(visits, response.getBody());
-//        verify(visitDAO, times(1)).findAll();
-//    }
+    @Test
+    void shouldReturnsListOfVisits() {
+        // given
+        VisitsDTO visits = VisitsDTO.of(DtoFixtures.visits);
+        when(visitDAO.findAll()).thenReturn(visits.getVisits());
 
-//    @Test
-//    void shouldReturnExistingVisit() {
-//        // given
-//        Integer visitId = 1;
-//        VisitDTO visit = new VisitDTO();
-//        when(visitDAO.findById(visitId)).thenReturn(visit);
-//
-//        // when
-//        ResponseEntity<VisitDTO> response = visitRestController.getVisitById(visitId);
-//
-//        // then
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertEquals(visit, response.getBody());
-//        verify(visitDAO, times(1)).findById(visitId);
-//    }
+        // when
+        VisitsDTO response = visitRestController.getAllVisits();
 
-//    @Test
-//    void shouldReturnNotFoundWhenVisitNonExist() {
-//        // given
-//        Integer visitId = 1;
-//        when(visitDAO.findById(visitId)).thenReturn(null);
-//
-//        // when
-//        ResponseEntity<VisitDTO> response = visitRestController.getVisitById(visitId);
-//
-//        // then
-//        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-//        verify(visitDAO, times(1)).findById(visitId);
-//    }
+        // then
+        assertNotNull(response);
+        assertEquals(visits.getVisits().size(), response.getVisits().size());
+        verify(visitDAO, times(1)).findAll();
+    }
 
+
+    @Test
+    void shouldReturnExistingVisit() {
+        // given
+        Integer visitId = 1;
+        VisitDTO visit = DtoFixtures.someVisit1();
+        when(visitDAO.findById(visitId)).thenReturn(visit);
+
+        // when
+        VisitDTO response = visitRestController.visitDetails(visitId);
+
+        // then
+        assertNotNull(response);
+        assertEquals(visit, response);
+        verify(visitDAO, times(1)).findById(visitId);
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenVisitNonExist() {
+        // given
+        Integer visitId = 1;
+        when(visitDAO.findById(visitId)).thenReturn(null);
+
+        // when
+        VisitDTO response = visitRestController.visitDetails(visitId);
+
+        // then
+        assertNull(response);
+        verify(visitDAO, times(1)).findById(visitId);
+    }
+
+    // TODO mam problem z metodą saveAndReturn
 //    @Test
 //    void shouldCreateVisitAndReturnStatusCreated() {
 //        // given
-//        VisitEntity visit = new VisitEntity();
-//        VisitEntity createdVisit = new VisitEntity();
-//        when(visitDAO.saveAndReturn(visit)).thenReturn(createdVisit);
+//        VisitDTO visitDTO = DtoFixtures.someVisit1();
+//        VisitEntity visitEntity = EntityFixtures.someVisit1();
+//        VisitEntity createdVisit = EntityFixtures.someVisit1();
+//        when(visitDAO.saveAndReturn(visitEntity)).thenReturn(createdVisit);
 //
 //        // when
-//        ResponseEntity<VisitEntity> response = visitRestController.createVisit(visit);
+//        ResponseEntity<VisitDTO> response = visitRestController.addVisit(visitDTO);
 //
 //        // then
 //        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals(createdVisit, response.getBody());
-//        verify(visitDAO, times(1)).saveAndReturn(visit);
+//        assertEquals(visitDTO, response.getBody());
+//        verify(visitDAO, times(1)).saveAndReturn(visitEntity);
 //    }
 
     @Test
     void shouldUpdateVisitAndReturnUpdateVisit() {
         // given
         Integer visitId = 1;
+//        VisitEntity existingVisit = EntityFixtures.someVisit2();
         VisitEntity existingVisit = new VisitEntity();
+//        VisitEntity updatedVisit = EntityFixtures.someVisit3();
         VisitEntity updatedVisit = new VisitEntity();
         when(visitDAO.findEntityById(visitId)).thenReturn(existingVisit);
         when(visitDAO.saveAndReturn(updatedVisit)).thenReturn(updatedVisit);
@@ -127,35 +139,55 @@ class VisitRestControllerTest {
         verify(visitDAO, never()).saveAndReturn(updatedVisit);
     }
 
-//    @Test
-//    void shouldDeleteExistingVisitAndReturnNoContent() {
-//        // given
-//        Integer visitId = 1;
-//        VisitEntity existingVisit = new VisitEntity();
-//        when(visitDAO.findEntityById(visitId)).thenReturn(existingVisit);
-//
-//        // when
-//        ResponseEntity<Void> response = visitRestController.deleteVisit(visitId);
-//
-//        // then
-//        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-//        verify(visitDAO, times(1)).findEntityById(visitId);
-//        verify(visitDAO, times(1)).delete(existingVisit);
-//    }
+    @Test
+    void shouldDeleteExistingVisitAndReturnNoContent() {
+        // given
+        Integer visitId = 5;
+        VisitEntity existingVisit = EntityFixtures.someVisit5();
+        when(visitDAO.findEntityById(visitId)).thenReturn(existingVisit);
 
-//    @Test
-//    void shouldReturnNotFoundWhenTryToDeleteNonExistingVisit() {
-//        // given
-//        Integer visitId = 1;
-//        when(visitDAO.findEntityById(visitId)).thenReturn(null);
-//
-//        // when
-//        ResponseEntity<Void> response = visitRestController.deleteVisit(visitId);
-//
-//        // then
-//        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-//        verify(visitDAO, times(1)).findEntityById(visitId);
-//        verify(visitDAO, never()).delete(any());
-//    }
+        // when
+        ResponseEntity<?> response = visitRestController.deleteVisit(visitId);
+
+        // then
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).delete(existingVisit);
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenTryToDeleteNonExistingVisit() {
+        // given
+        Integer visitId = 1;
+        when(visitDAO.findEntityById(visitId)).thenReturn(null);
+
+        // when
+        ResponseEntity<?> response = visitRestController.deleteVisit(visitId);
+
+        // then
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, never()).delete(any());
+    }
+
+    @Test
+    void shouldUpdateVisitNoteAndReturnOk() {
+        // given
+        Integer visitId = 4;
+        String updatedNote = "Poprawiona notatka do wizyty";
+        VisitEntity existingVisit = EntityFixtures.someVisit4();
+
+        when(visitDAO.findEntityById(visitId)).thenReturn(existingVisit);
+
+        // when
+        ResponseEntity<?> response = visitRestController.updateVisitNote(visitId, updatedNote);
+
+        // then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(updatedNote, existingVisit.getNote());
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).save(existingVisit);
+    }
+
 
 }

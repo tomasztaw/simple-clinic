@@ -27,22 +27,23 @@ public class VisitRestController {
     public static final String VISIT_UPDATE_NOTE = "/{visitId}/note";
 
 
-
     private final VisitDAO visitDAO;
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
+
 
     @GetMapping
     public VisitsDTO getAllVisits() {
         return VisitsDTO.of(visitDAO.findAll());
     }
 
-
     @GetMapping(VISIT_ID)
     public VisitDTO visitDetails(@PathVariable("visitId") Integer visitId) {
         return visitDAO.findById(visitId);
     }
 
+
+    // TODO jest problem z metodą saveAndReturn
     @PostMapping
     @Transactional
     public ResponseEntity<VisitDTO> addVisit(
@@ -63,6 +64,7 @@ public class VisitRestController {
                 .build();
     }
 
+
     @PutMapping(VISIT_ID)
     public ResponseEntity<VisitEntity> updateVisit(
             @PathVariable("visitId") Integer visitId,
@@ -75,6 +77,7 @@ public class VisitRestController {
             if (existingVisit.getDoctor() != null) {
                 doctor = doctorDAO.findEntityById(existingVisit.getDoctor().getDoctorId());
             }
+
             PatientEntity patient = null;
             if (existingVisit.getPatient() != null) {
                 patient = patientDAO.findEntityById(existingVisit.getPatient().getPatientId());
@@ -86,6 +89,7 @@ public class VisitRestController {
             existingVisit.setNote(updatedVisit.getNote());
             existingVisit.setStatus(updatedVisit.getStatus());
 
+            // TODO tu jest chyba ten sam problem ze zwracaniem encji
             VisitEntity savedVisit = visitDAO.saveAndReturn(existingVisit);
             return ResponseEntity.ok(savedVisit);
         } else {
@@ -93,15 +97,22 @@ public class VisitRestController {
         }
     }
 
+
     @DeleteMapping(VISIT_ID)
     public ResponseEntity<?> deleteVisit(
             @PathVariable("visitId") Integer visitId
     ) {
         VisitEntity existingVisit = visitDAO.findEntityById(visitId);
+
+        if (existingVisit == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         visitDAO.delete(existingVisit);
 
         return ResponseEntity.noContent().build();
     }
+
 
     @PatchMapping(VISIT_UPDATE_NOTE)
     public ResponseEntity<?> updateVisitNote(

@@ -3,15 +3,15 @@ package pl.taw.api.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import pl.taw.api.dto.*;
+import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.OpinionDTO;
+import pl.taw.api.dto.PatientDTO;
+import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.OpinionDAO;
@@ -20,8 +20,6 @@ import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
-import pl.taw.infrastructure.database.repository.VisitRepository;
-import pl.taw.infrastructure.database.repository.jpa.VisitJpaRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -345,12 +343,5 @@ public class VisitController {
         return modelAndView;
     }
 
-
-//    @PostMapping("/{visitId}/delete")
-//    public String deleteVisit(@PathVariable("visitId") Integer visitId) {
-//        VisitEntity existingVisit = visitDAO.findEntityById(visitId);
-//        visitDAO.delete(existingVisit);
-//        return "redirect:/visits";
-//    }
 }
 

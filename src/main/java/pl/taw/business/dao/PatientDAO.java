@@ -2,7 +2,6 @@ package pl.taw.business.dao;
 
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
-import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.util.List;
 

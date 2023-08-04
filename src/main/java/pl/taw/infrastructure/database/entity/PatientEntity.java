@@ -2,9 +2,6 @@ package pl.taw.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.security.access.method.P;
-import pl.taw.infrastructure.security.UserEntity;
 
 import java.util.List;
 import java.util.Set;

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
@@ -32,7 +31,6 @@ public class ReservationEntity {
     private LocalDate day;
 
     @Column(name = "start_time_r")
-//    private LocalDateTime startTimeR; zamiana na LocalTime
     private LocalTime startTimeR;
 
     @Column(name = "occupied")

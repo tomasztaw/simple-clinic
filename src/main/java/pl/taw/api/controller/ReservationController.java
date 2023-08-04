@@ -79,7 +79,6 @@ public class ReservationController {
         ReservationEntity newReservation = ReservationEntity.builder()
                 .doctorId(doctorId)
                 .patientId(patientId)
-//                .day(LocalDate.parse(day.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .day(day)
                 .startTimeR(startTimeR)
                 .occupied(true)
@@ -157,8 +156,6 @@ public class ReservationController {
         return "reservation/reservation-patient-all";
     }
 
-
-
     @GetMapping
     public String reservationPage() {
         return "reservations";
@@ -176,7 +173,6 @@ public class ReservationController {
             @PathVariable("patientId") Integer patientId,
             @PathVariable("day") String day,
             @PathVariable("startTimeR") String startTimeR) {
-        // Przetwórz przekazane parametry i utwórz obiekt rezerwacji
         LocalDate date = LocalDate.parse(day);
         LocalTime startTime = LocalTime.parse(startTimeR, DateTimeFormatter.ofPattern("HH:mm"));
 
@@ -189,7 +185,6 @@ public class ReservationController {
                 .startTimeR(startTime)
                 .occupied(true)
                 .build();
-//                .startTimeR(LocalDateTime.of(date, startTime))
 
         reservationDAO.save(reservation);
 
