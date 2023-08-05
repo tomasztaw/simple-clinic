@@ -58,7 +58,7 @@ public class DoctorRepository implements DoctorDAO {
 
     @Override
     public DoctorEntity saveAndReturn(DoctorEntity doctorEntity) {
-        return doctorJpaRepository.save(doctorEntity);
+        return doctorJpaRepository.saveAndFlush(doctorEntity);
     }
 
     @Override

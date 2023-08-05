@@ -1,6 +1,7 @@
 package pl.taw.api.controller.rest;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,8 +15,6 @@ import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
-import pl.taw.business.dao.PatientDAO;
-import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
@@ -28,12 +27,8 @@ import static org.mockito.Mockito.*;
 
 class DoctorRestControllerTest {
 
-
     @Mock
     private DoctorDAO doctorDAO;
-
-    @Mock
-    private VisitDAO visitDAO;
 
     @Mock
     private VisitService visitService;
@@ -98,25 +93,22 @@ class DoctorRestControllerTest {
         verify(doctorDAO, times(1)).findById(doctorId);
     }
 
-    // TODO jest ta sama sytuacja z saveAndReturn!!!
-//    @Test
-//    void addDoctorShouldWorksCorrectly() {
-//        // given
-//        Integer doctorId = 3;
-//        DoctorDTO doctorDTO = DtoFixtures.someDoctor3();
-//        DoctorEntity doctorEntity = EntityFixtures.someDoctor3();
-//        Mockito.when(doctorDAO.findEntityById(doctorId)).thenReturn(doctorEntity);
-//
-//        // when
-//        ResponseEntity<DoctorDTO> response = doctorRestController.addDoctor(doctorDTO);
-//
-//        // then
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertEquals(doctorDTO, response.getBody());
-//        assertEquals(doctorId, Objects.requireNonNull(response.getBody()).getDoctorId());
-//        verify(doctorDAO, times(1)).findEntityById(doctorId);
-//        verify(doctorDAO, times(1)).saveAndReturn(doctorEntity);
-//    }
+    @Test
+    void addDoctorShouldWorksCorrectly() {
+        // given
+        DoctorDTO doctorDTO = DtoFixtures.someDoctor3();
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor3();
+        when(doctorDAO.saveAndReturn(any(DoctorEntity.class))).thenReturn(doctorEntity);
+
+        // when
+        ResponseEntity<DoctorDTO> response = doctorRestController.addDoctor(doctorDTO);
+
+        // then
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("/api/doctors/%s".formatted(doctorEntity.getDoctorId()),
+                Objects.requireNonNull(response.getHeaders().getLocation()).toString());
+        verify(doctorDAO, times(1)).saveAndReturn(any(DoctorEntity.class));
+    }
 
     @Test
     void updateDoctorShouldWorksCorrectly() {
@@ -171,18 +163,55 @@ class DoctorRestControllerTest {
     @Test
     void updateDoctorPhoneShouldWorksCorrectly() {
         // given
+        Integer doctorId = 1;
+        String newPhone = "+48 120 235 588";
+        DoctorEntity existingDoctor = EntityFixtures.someDoctor1();
+        when(doctorDAO.findEntityById(doctorId)).thenReturn(existingDoctor);
 
         // when
+        ResponseEntity<?> response = doctorRestController.updateDoctorPhone(doctorId, newPhone);
 
         // then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(doctorDAO, times(1)).findEntityById(doctorId);
+        verify(doctorDAO, times(1)).save(existingDoctor);
     }
 
     @Test
-    void updateDoctorByEmailShouldWorksCorrectly() {
+    void updateDoctorEmailShouldWorksCorrectly() {
         // given
+        Integer doctorId = 3;
+        String newEmail = "nowy.mail@eclinic.pl";
+        DoctorEntity existingDoctor = EntityFixtures.someDoctor3();
+        when(doctorDAO.findEntityById(doctorId)).thenReturn(existingDoctor);
 
         // when
+        ResponseEntity<?> response = doctorRestController.updateDoctorEmail(doctorId, newEmail);
 
         // then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(doctorDAO, times(1)).findEntityById(doctorId);
+        verify(doctorDAO, times(1)).save(existingDoctor);
     }
+
+    // TODO zwraca mi 200 zamiast 400
+    @Test
+    @Disabled("Zwraca niepoprawny status")
+    void updateDoctorWithInvalidEmailShouldReturnBadRequest() {
+        // given
+        Integer doctorId = 5;
+        String newEmail = "zly.email#eclinic.pl";
+        DoctorEntity existingDoctor = EntityFixtures.someDoctor5();
+        when(doctorDAO.findEntityById(doctorId)).thenReturn(existingDoctor);
+
+        // when
+        ResponseEntity<?> response = doctorRestController.updateDoctorEmail(doctorId, newEmail);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        verify(doctorDAO, times(1)).findEntityById(doctorId);
+        verify(doctorDAO, never()).save(any());
+    }
+
+
 }

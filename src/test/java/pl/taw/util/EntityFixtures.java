@@ -2,11 +2,14 @@ package pl.taw.util;
 
 import lombok.experimental.UtilityClass;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.entity.OpinionEntity;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 //import pl.zajavka.infrastructure.database.entity.CarToBuyEntity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @UtilityClass
@@ -208,5 +211,26 @@ public class EntityFixtures {
                 .build();
     }
 
+    public static OpinionEntity someOpinion1() {
+        return OpinionEntity.builder()
+                .opinionId(1)
+                .doctorId(2)
+                .patientId(5)
+                .visitId(8)
+                .comment("Pozytywna opinia na temat lekarza")
+                .createdAt(LocalDateTime.of(LocalDate.of(2023, 8, 4), LocalTime.of(12, 0, 0)))
+                .build();
+    }
+
+    public static OpinionEntity someOpinion2() {
+        return OpinionEntity.builder()
+                .opinionId(2)
+                .doctorId(4)
+                .patientId(5)
+                .visitId(10)
+                .comment("Neutralna opinia na temat lekarza")
+                .createdAt(LocalDateTime.of(LocalDate.of(2023, 8, 4), LocalTime.of(13, 0, 0)))
+                .build();
+    }
 
 }

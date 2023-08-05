@@ -49,6 +49,4 @@ public class OpinionEntity {
     @JoinColumn(name = "visit_id", referencedColumnName = "visit_id", insertable = false, updatable = false)
     private VisitEntity visit;
 
-
-
 }

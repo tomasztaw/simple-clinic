@@ -1,6 +1,7 @@
 package pl.taw.infrastructure.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class DoctorEntity {
     @Column(name = "phone", unique = true)
     private String phone;
 
+    @Email
     @Column(name = "email", unique = true)
     private String email;
 

@@ -68,7 +68,7 @@ public class DoctorRestController {
         DoctorEntity created = doctorDAO.saveAndReturn(doctorEntity);
 
         return ResponseEntity
-                .created(URI.create(DOCTOR_ID.concat(DOCTOR_ID_RESULT).formatted(created.getDoctorId())))
+                .created(URI.create(API_DOCTORS + DOCTOR_ID_RESULT.formatted(created.getDoctorId())))
                 .build();
     }
 
@@ -121,7 +121,7 @@ public class DoctorRestController {
     @PatchMapping(DOCTOR_UPDATE_PHONE)
     public ResponseEntity<?> updateDoctorPhone(
             @PathVariable("doctorId") Integer doctorId,
-            @RequestParam(required = true) String newPhone
+            @Valid @RequestParam(required = true) String newPhone
     ) {
         DoctorEntity existingDoctor = doctorDAO.findEntityById(doctorId);
 
@@ -135,7 +135,7 @@ public class DoctorRestController {
     @PatchMapping(DOCTOR_UPDATE_EMAIL)
     public ResponseEntity<?> updateDoctorEmail(
             @PathVariable("doctorId") Integer doctorId,
-            @RequestParam(required = true) String newEmail
+            @Valid @RequestParam(required = true) String newEmail
     ) {
         DoctorEntity existingDoctor = doctorDAO.findEntityById(doctorId);
 
@@ -145,5 +145,8 @@ public class DoctorRestController {
 
         return ResponseEntity.ok().build();
     }
+
+
+
 
 }

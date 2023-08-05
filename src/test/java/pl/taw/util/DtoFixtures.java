@@ -3,7 +3,9 @@ package pl.taw.util;
 import lombok.experimental.UtilityClass;
 import pl.taw.api.dto.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @UtilityClass
@@ -15,6 +17,8 @@ public class DtoFixtures {
     public static List<OpinionDTO> opinions = List.of(someOpinion1(), someOpinion2());
     public static List<VisitDTO> visits = List.of(someVisit1(), someVisit2());
     public static VisitsDTO visitsDTO = VisitsDTO.of(visits);
+    public static List<ReservationDTO> reservations = List.of(someReservation1(), someReservation2(), someReservation3());
+    public static ReservationsDTO reservationsDTO = ReservationsDTO.of(reservations);
 
     public static PatientDTO somePatient1() {
         return PatientDTO.builder()
@@ -112,4 +116,36 @@ public class DtoFixtures {
                 .status("odbyta")
                 .build();
     }
+
+    public static ReservationDTO someReservation1() {
+        return ReservationDTO.builder()
+                .reservationId(1)
+                .doctorId(1)
+                .patientId(1)
+                .day(LocalDate.of(2023, 8, 4))
+                .startTimeR(LocalTime.of(12, 10, 0))
+                .occupied(true)
+                .build();
+    }
+    public static ReservationDTO someReservation2() {
+        return ReservationDTO.builder()
+                .reservationId(2)
+                .doctorId(2)
+                .patientId(2)
+                .day(LocalDate.of(2023, 8, 4))
+                .startTimeR(LocalTime.of(13, 10, 0))
+                .occupied(true)
+                .build();
+    }
+    public static ReservationDTO someReservation3() {
+        return ReservationDTO.builder()
+                .reservationId(3)
+                .doctorId(5)
+                .patientId(5)
+                .day(LocalDate.of(2023, 8, 4))
+                .startTimeR(LocalTime.of(13, 30, 0))
+                .occupied(true)
+                .build();
+    }
+
 }

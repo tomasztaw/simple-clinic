@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.PatientsDTO;
 import pl.taw.api.dto.VisitDTO;
+import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -46,9 +49,9 @@ public class PatientRestController {
     }
 
     @GetMapping(HISTORY)
-    public ResponseEntity<List<VisitDTO>> showHistory(@PathVariable("patientId") Integer patientId) {
+    public ResponseEntity<VisitsDTO> showHistory(@PathVariable("patientId") Integer patientId) {
         PatientDTO patient = patientDAO.findById(patientId);
-        List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId);
+        VisitsDTO visits = VisitsDTO.of(visitService.findAllVisitByPatient(patientId));
 
         if (patient != null && visits != null) {
             return ResponseEntity.ok(visits);
@@ -103,8 +106,12 @@ public class PatientRestController {
     @DeleteMapping(PATIENT_ID)
     public ResponseEntity<?> deletePatient(@PathVariable("patientId") Integer patientId) {
         PatientEntity existingPatient = patientDAO.findEntityById(patientId);
-        patientDAO.delete(existingPatient);
-        return ResponseEntity.noContent().build();
+        if (existingPatient != null) {
+            patientDAO.delete(existingPatient);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PatchMapping(PATIENT_UPDATE_PHONE)

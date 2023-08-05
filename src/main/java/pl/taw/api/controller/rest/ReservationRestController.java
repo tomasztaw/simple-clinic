@@ -48,7 +48,7 @@ public class ReservationRestController {
     @GetMapping(BY_DATE)
     public ReservationsDTO getAllReservationsByDate(@PathVariable("day") LocalDate day) {
         ReservationsDTO reservationsByDate = ReservationsDTO.of(reservationService.findAllByDay(day));
-        if (reservationsByDate.getReservations().size() > 0) {
+        if (!reservationsByDate.getReservations().isEmpty()) {
             return reservationsByDate;
         } else {
             return ReservationsDTO.of(Collections.emptyList());

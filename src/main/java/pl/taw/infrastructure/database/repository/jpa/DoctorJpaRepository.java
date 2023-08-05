@@ -7,4 +7,7 @@ import pl.taw.infrastructure.database.entity.DoctorEntity;
 @Repository
 public interface DoctorJpaRepository extends JpaRepository<DoctorEntity, Integer> {
 
+    @Override
+    <S extends DoctorEntity> S saveAndFlush(S entity);
+
 }
