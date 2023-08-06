@@ -2,6 +2,7 @@ package pl.taw.util;
 
 import lombok.experimental.UtilityClass;
 import pl.taw.api.dto.*;
+import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -145,6 +146,17 @@ public class DtoFixtures {
                 .day(LocalDate.of(2023, 8, 4))
                 .startTimeR(LocalTime.of(13, 30, 0))
                 .occupied(true)
+                .build();
+    }
+
+    public static VisitDTO someVisit4() {
+        return VisitDTO.builder()
+                .visitId(1)
+                .doctor(someDoctor1())
+                .patient(somePatient1())
+                .dateTime(LocalDateTime.of(2023, 6, 1, 8,30, 0))
+                .note("Pacjent bardzo chory")
+                .status("odbyta")
                 .build();
     }
 

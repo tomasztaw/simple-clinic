@@ -64,7 +64,7 @@ public class PatientRepository implements PatientDAO {
     public PatientEntity saveAndReturn(PatientEntity patientEntity) {
         if (!patientJpaRepository.existsByPesel(patientEntity.getPesel())
                 && !patientJpaRepository.existsByEmail(patientEntity.getEmail())) {
-            return patientJpaRepository.save(patientEntity);
+            return patientJpaRepository.saveAndFlush(patientEntity);
         } else {
             String answer = patientJpaRepository.existsByPesel(patientEntity.getPesel()) ? "peselem" : "emailem";
             throw new RuntimeException("W systemie znajduje się już ktoś z takim %s".formatted(answer));

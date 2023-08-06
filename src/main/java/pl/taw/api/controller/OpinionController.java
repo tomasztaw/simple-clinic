@@ -46,6 +46,30 @@ public class OpinionController {
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
 
+    @GetMapping(DOCTOR_ID)
+    public String showDoctorOpinions(
+            @PathVariable("doctorId") Integer doctorId, Model model) {
+        List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
+
+        model.addAttribute("opinions", opinions);
+        model.addAttribute("doctor", doctor);
+
+        return "opinion/opinion-doctor-all";
+    }
+
+    @GetMapping(PATIENT_ID)
+    public String showPatientOpinions(
+            @PathVariable("patientId") Integer patientId, Model model) {
+        List<OpinionDTO> opinions = opinionDAO.findAllByPatient(patientId);
+        PatientDTO patient = patientDAO.findById(patientId);
+
+        model.addAttribute("opinions", opinions);
+        model.addAttribute("patient", patient);
+
+        return "opinion/opinion-patient-all";
+    }
+
     @GetMapping(PANEL)
     public String showOpinionPanel(Model model, Authentication authentication) {
         List<OpinionDTO> opinions = opinionDAO.findAll();
@@ -74,8 +98,10 @@ public class OpinionController {
             @RequestParam(value = "patientId") Integer patientId,
             @RequestParam(value = "visitId") Integer visitId,
             @RequestParam(value = "comment") String comment,
-            @RequestParam(value = "createdAt") LocalDateTime createdAt) {
-        VisitEntity visit = visitDAO.findEntityById(visitId);
+            @RequestParam(value = "createdAt") LocalDateTime createdAt,
+            HttpServletRequest request
+    ) {
+        VisitEntity visit = visitDAO.findEntityById(visitId); // na razie zostawię...
         OpinionEntity newOpinion = OpinionEntity.builder()
                 .doctorId(doctorId)
                 .patientId(patientId)
@@ -85,8 +111,9 @@ public class OpinionController {
                 .build();
 
         opinionDAO.save(newOpinion);
-        // TODO zrobić przekierowanie zależne od panelu admin/pacjent
-        return "redirect:/opinions/opinion-panel";
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
     @PostMapping(ADD_FROM_VISIT)
@@ -111,7 +138,9 @@ public class OpinionController {
 
     @PutMapping(UPDATE)
     public String updateOpinion(
-            @ModelAttribute("updateOpinion") OpinionDTO updateOpinion) {
+            @ModelAttribute("updateOpinion") OpinionDTO updateOpinion,
+            HttpServletRequest request
+    ) {
         VisitEntity visit = visitDAO.findEntityById(updateOpinion.getOpinionId());
         OpinionEntity opinionEntity = opinionDAO.findEntityById(updateOpinion.getOpinionId());
         opinionEntity.setDoctorId(updateOpinion.getDoctor().getDoctorId());
@@ -121,8 +150,9 @@ public class OpinionController {
         opinionEntity.setCreatedAt(updateOpinion.getCreatedAt());
 
         opinionDAO.save(opinionEntity);
-        // TODO zrobić przekierowanie zależne od panelu admin/pacjent
-        return "redirect:/opinions/opinion-panel";
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
     @PutMapping(UPDATE_BY_ID) // prosta aktualizacja
@@ -158,6 +188,7 @@ public class OpinionController {
 
 
     // ####################################################################################################
+    //                                      DO USUNIĘCIA ???
 
     // można coś pomyśleć o takiej stronie tylko z opiniami
     @GetMapping
@@ -165,31 +196,6 @@ public class OpinionController {
         return "opinions";
     }
 
-    // wyświetlanie opinii lekarza
-    @GetMapping(DOCTOR_ID)
-    public String showDoctorOpinions(
-            @PathVariable("doctorId") Integer doctorId, Model model) {
-        List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
-        DoctorDTO doctor = doctorDAO.findById(doctorId);
-
-        model.addAttribute("opinions", opinions);
-        model.addAttribute("doctor", doctor);
-
-        return "opinion/opinion-doctor-all";
-    }
-
-    // wyświetlanie opinii konkretnego pacjenta
-    @GetMapping(PATIENT_ID)
-    public String showPatientOpinions(
-            @PathVariable("patientId") Integer patientId, Model model) {
-        List<OpinionDTO> opinions = opinionDAO.findAllByPatient(patientId);
-        PatientDTO patient = patientDAO.findById(patientId);
-
-        model.addAttribute("opinions", opinions);
-        model.addAttribute("patient", patient);
-
-        return "opinion/opinion-patient-all";
-    }
 
     // !!! nie działa - do wywalenia
     // dodawanie opinii przez pacjenta

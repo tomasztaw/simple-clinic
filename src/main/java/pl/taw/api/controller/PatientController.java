@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -71,7 +73,6 @@ public class PatientController {
         return "patient/patient-dashboard";
     }
 
-
     @GetMapping(DASHBOARD_ID)
     public String showDashboardWithId(
             @PathVariable("patientId") Integer patientId, Model model) {
@@ -106,7 +107,6 @@ public class PatientController {
         return "update-phone";
     }
 
-    //    @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
 //    @PatchMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
     @PostMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
     public String updatePatientPhoneView(
@@ -124,8 +124,6 @@ public class PatientController {
         }
     }
 
-
-    // ok
     @GetMapping(PANEL)
     public String patientsPanel(Model model, Authentication authentication) {
         List<PatientDTO> patients = patientDAO.findAll();
@@ -138,7 +136,6 @@ public class PatientController {
         return "patient/patient-panel";
     }
 
-    // ok
     @PostMapping(ADD)
     public String addPatient(
             @RequestParam(value = "name") String name,
@@ -155,9 +152,9 @@ public class PatientController {
                 .phone(phone)
                 .email(email)
                 .build();
-        patientDAO.save(createdPatient);
+        PatientEntity saved = patientDAO.saveAndReturn(createdPatient);
         if ("login".equals(context)) {
-            int patientId = patientDAO.findByPesel(pesel).getPatientId();
+            int patientId = saved.getPatientId();
             return "redirect:dashboard/" + patientId;
         }
         String referer = request.getHeader("Referer");
@@ -176,24 +173,26 @@ public class PatientController {
                 .phone(patientDTO.getPhone())
                 .email(patientDTO.getEmail())
                 .build();
-        PatientEntity created = patientJpaRepository.save(patientEntity);
+        PatientEntity created = patientDAO.saveAndReturn(patientEntity);
         return ResponseEntity
                 .created(URI.create(PATIENTS + PATIENT_ID_RESULT.formatted(created.getPatientId())))
                 .build();
     }
 
-    // ok
     @PutMapping(UPDATE)
     public String updatePatient(
             @ModelAttribute("updatePatient") PatientDTO updatePatientDTO,
-            HttpServletRequest request) {
+            HttpServletRequest request
+    ) {
         PatientEntity existingPatient = patientDAO.findEntityById(updatePatientDTO.getPatientId());
+
         existingPatient.setName(updatePatientDTO.getName());
         existingPatient.setSurname(updatePatientDTO.getSurname());
         existingPatient.setPesel(updatePatientDTO.getPesel());
         existingPatient.setPhone(updatePatientDTO.getPhone());
         existingPatient.setEmail(updatePatientDTO.getEmail());
         patientDAO.save(existingPatient);
+
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
@@ -201,23 +200,22 @@ public class PatientController {
     @PutMapping(PATIENT_ID)
     @Transactional
     public ResponseEntity<?> updateRequestPatient(
-            @PathVariable Integer id,
+            @PathVariable Integer patientId,
             @Valid @RequestBody PatientDTO patientDTO
     ) {
-        PatientEntity existingPatient = patientJpaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "PatientEntity not found, id: [%s]".formatted(id)));
+        PatientEntity existingPatient = patientDAO.findEntityById(patientId);
+
         existingPatient.setName(patientDTO.getName());
         existingPatient.setSurname(patientDTO.getSurname());
         existingPatient.setPesel(patientDTO.getPesel());
         existingPatient.setPhone(patientDTO.getPhone());
         existingPatient.setEmail(patientDTO.getEmail());
-        patientJpaRepository.save(existingPatient);
+
+        patientDAO.save(existingPatient);
+
         return ResponseEntity.ok().build();
     }
 
-
-    // ok
     @GetMapping(SHOW)
     public String showPatient(
             @PathVariable Integer patientId,
@@ -229,6 +227,7 @@ public class PatientController {
         model.addAttribute("patient", patient);
         model.addAttribute("visits", visits);
         model.addAttribute("opinions", opinions);
+
         return "patient/patient-show";
     }
 
@@ -251,25 +250,31 @@ public class PatientController {
         return PatientsDTO.of(patientDAO.findAll());
     }
 
-    // ok
     @DeleteMapping(DELETE)
-    public String deletePatientById(
+    public ResponseEntity<String> deletePatientById(
             @PathVariable Integer patientId,
             HttpServletRequest request
     ) {
-        patientJpaRepository.deleteById(patientId);
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
+        PatientEntity existingPatient = patientDAO.findEntityById(patientId);
+        if (existingPatient != null) {
+            patientDAO.delete(existingPatient);
+            String referer = request.getHeader("Referer");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", referer);
+            return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping(PATIENT_ID)
     public ResponseEntity<?> deletePatient(
             @PathVariable Integer patientId
     ) {
-        var patientOpt = patientJpaRepository.findById(patientId);
-        if (patientOpt.isPresent()) {
-            patientJpaRepository.deleteById(patientId);
-            return ResponseEntity.ok().build();
+        PatientEntity existingPatient = patientDAO.findEntityById(patientId);
+        if (existingPatient != null) {
+            patientDAO.delete(existingPatient);
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -1,16 +1,15 @@
 package pl.taw.util;
 
 import lombok.experimental.UtilityClass;
-import pl.taw.infrastructure.database.entity.DoctorEntity;
-import pl.taw.infrastructure.database.entity.OpinionEntity;
-import pl.taw.infrastructure.database.entity.PatientEntity;
-import pl.taw.infrastructure.database.entity.VisitEntity;
-//import pl.zajavka.infrastructure.database.entity.CarToBuyEntity;
+import pl.taw.infrastructure.database.entity.*;
+import pl.taw.infrastructure.security.RoleEntity;
+import pl.taw.infrastructure.security.UserEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 @UtilityClass
 public class EntityFixtures {
@@ -23,6 +22,9 @@ public class EntityFixtures {
 
     public static List<VisitEntity> someVisitList = List.of(
             someVisit1(), someVisit2(), someVisit3(), someVisit4(), someVisit5());
+
+    public static List<ReservationEntity> someReservationList = List.of(
+            someReservation1(), someReservation2(), someReservation3());
 
     public static PatientEntity somePatient1() {
         return PatientEntity.builder()
@@ -230,6 +232,56 @@ public class EntityFixtures {
                 .visitId(10)
                 .comment("Neutralna opinia na temat lekarza")
                 .createdAt(LocalDateTime.of(LocalDate.of(2023, 8, 4), LocalTime.of(13, 0, 0)))
+                .build();
+    }
+
+    public static ReservationEntity someReservation1() {
+        return ReservationEntity.builder()
+                .reservationId(1)
+                .doctorId(1)
+                .patientId(1)
+                .day(LocalDate.of(2023, 8, 4))
+                .startTimeR(LocalTime.of(12, 10, 0))
+                .occupied(true)
+                .build();
+    }
+    public static ReservationEntity someReservation2() {
+        return ReservationEntity.builder()
+                .reservationId(2)
+                .doctorId(2)
+                .patientId(2)
+                .day(LocalDate.of(2023, 8, 4))
+                .startTimeR(LocalTime.of(13, 10, 0))
+                .occupied(true)
+                .build();
+    }
+    public static ReservationEntity someReservation3() {
+        return ReservationEntity.builder()
+                .reservationId(3)
+                .doctorId(5)
+                .patientId(5)
+                .day(LocalDate.of(2023, 8, 4))
+                .startTimeR(LocalTime.of(13, 30, 0))
+                .occupied(true)
+                .build();
+    }
+
+    public static UserEntity someUser1() {
+        return UserEntity.builder()
+                .id(1)
+                .userName("username")
+                .email("username@user.com")
+                .password("test")
+                .name("Stefan")
+                .active(true)
+                .roles(Set.of(someUserRole1()))
+                .build();
+    }
+
+    public static RoleEntity someUserRole1() {
+        return RoleEntity.builder()
+                .id(1)
+                .role("USER")
                 .build();
     }
 

@@ -21,7 +21,7 @@ import java.net.URI;
 @AllArgsConstructor
 public class VisitRestController {
 
-    public static final String API_VISITS = "/api/visits/";
+    public static final String API_VISITS = "/api/visits";
     public static final String VISIT_ID = "/{visitId}";
     public static final String VISIT_ID_RESULT = "/%s";
     public static final String VISIT_UPDATE_NOTE = "/{visitId}/note";
@@ -57,10 +57,10 @@ public class VisitRestController {
                 .status(visitDTO.getStatus())
                 .build();
 
-        VisitEntity created = visitDAO.saveAndReturn(visitEntity);
+        VisitEntity createdVisit = visitDAO.saveAndReturn(visitEntity);
 
         return ResponseEntity
-                .created(URI.create(VISIT_ID.concat(VISIT_ID_RESULT).formatted(created.getVisitId())))
+                .created(URI.create(API_VISITS + VISIT_ID_RESULT.formatted(createdVisit.getVisitId())))
                 .build();
     }
 
@@ -68,7 +68,7 @@ public class VisitRestController {
     @PutMapping(VISIT_ID)
     public ResponseEntity<VisitEntity> updateVisit(
             @PathVariable("visitId") Integer visitId,
-            @Valid @RequestBody VisitEntity updatedVisit
+            @Valid @RequestBody VisitDTO updatedVisit
     ) {
         VisitEntity existingVisit = visitDAO.findEntityById(visitId);
 
@@ -89,9 +89,8 @@ public class VisitRestController {
             existingVisit.setNote(updatedVisit.getNote());
             existingVisit.setStatus(updatedVisit.getStatus());
 
-            // TODO tu jest chyba ten sam problem ze zwracaniem encji
-            VisitEntity savedVisit = visitDAO.saveAndReturn(existingVisit);
-            return ResponseEntity.ok(savedVisit);
+            visitDAO.save(existingVisit);
+            return ResponseEntity.ok(existingVisit);
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
@@ -184,8 +185,12 @@ public class DoctorController {
     @PostMapping(ADD + VALID)
     public String addValidDoctor(
             @Valid @ModelAttribute("updateDoctor") DoctorDTO doctorDTO,
+            BindingResult bindingResult,
             HttpServletRequest request
     ) {
+        if (bindingResult.hasErrors()) {
+            return "home";
+        }
         DoctorEntity newDoctor = DoctorEntity.builder()
                 .name(doctorDTO.getName())
                 .surname(doctorDTO.getSurname())
@@ -199,7 +204,7 @@ public class DoctorController {
         if (referer != null) {
             return "redirect:" + referer;
         } else {
-            return "home";
+            return null;
         }
     }
 

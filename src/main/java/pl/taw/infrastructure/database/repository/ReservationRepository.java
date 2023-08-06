@@ -43,7 +43,7 @@ public class ReservationRepository implements ReservationDAO {
 
     @Override
     public ReservationEntity saveAndReturn(ReservationEntity reservationEntity) {
-        return reservationJpaRepository.save(reservationEntity);
+        return reservationJpaRepository.saveAndFlush(reservationEntity);
     }
 
     @Override

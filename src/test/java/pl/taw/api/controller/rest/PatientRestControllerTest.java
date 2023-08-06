@@ -1,6 +1,5 @@
 package pl.taw.api.controller.rest;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -9,22 +8,21 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.taw.api.dto.*;
+import pl.taw.api.dto.PatientDTO;
+import pl.taw.api.dto.PatientsDTO;
+import pl.taw.api.dto.VisitDTO;
+import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
-import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -126,11 +124,8 @@ class PatientRestControllerTest {
     void testShowHistory_ExistingPatientNoVisits() {
         // given
         Integer patientId = 1;
-        PatientDTO patient = null;
-        when(patientDAO.findById(patientId)).thenReturn(patient);
-
-        List<VisitDTO> emptyList = null;
-        when(visitService.findAllVisitByPatient(patientId)).thenReturn(emptyList);
+        when(patientDAO.findById(patientId)).thenReturn(null);
+        when(visitService.findAllVisitByPatient(patientId)).thenReturn(null);
 
         // when
         ResponseEntity<VisitsDTO> response = patientRestController.showHistory(patientId);

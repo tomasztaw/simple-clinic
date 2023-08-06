@@ -52,7 +52,7 @@ public class VisitRepository implements VisitDAO {
 
     @Override
     public VisitEntity saveAndReturn(VisitEntity visitEntity) {
-        return visitJpaRepository.save(visitEntity);
+        return visitJpaRepository.saveAndFlush(visitEntity);
     }
 
     @Override

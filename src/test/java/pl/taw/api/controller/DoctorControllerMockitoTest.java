@@ -19,6 +19,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ExtendedModelMap;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
 import pl.taw.business.DoctorService;
@@ -127,7 +129,8 @@ class DoctorControllerMockitoTest {
 
         // when
         Set<ConstraintViolation<DoctorDTO>> violations = validator.validate(doctorDTO);
-        String redirectUrl = doctorController.addValidDoctor(doctorDTO, request);
+        BindingResult bindingResult = new BeanPropertyBindingResult(doctorDTO, "updateDoctor");
+        String redirectUrl = doctorController.addValidDoctor(doctorDTO, bindingResult,  request);
 
         // then
         org.junit.jupiter.api.Assertions.assertTrue(violations.isEmpty());
@@ -148,7 +151,8 @@ class DoctorControllerMockitoTest {
 
         // when
         Set<ConstraintViolation<DoctorDTO>> violations = validator.validate(doctorDTO);
-        String redirectUrl = doctorController.addValidDoctor(doctorDTO, request);
+        BindingResult bindingResult = new BeanPropertyBindingResult(doctorDTO, "updateDoctor");
+        String redirectUrl = doctorController.addValidDoctor(doctorDTO, bindingResult, request);
 
         // then
         assertFalse(violations.isEmpty());
@@ -281,7 +285,7 @@ class DoctorControllerMockitoTest {
         String viewName = doctorController.showDoctorDetails(doctorId, model, authentication);
 
         // then
-        assertEquals("doctor/doctor-show-new", viewName);
+        assertEquals("doctor/doctor-show", viewName);
         assertEquals(mockDoctor, model.getAttribute("doctor"));
         assertEquals(mockWorkingHours, model.getAttribute("workingHours"));
         assertEquals(username, model.getAttribute("username"));
@@ -301,6 +305,6 @@ class DoctorControllerMockitoTest {
 
         // then
         assertEquals(doctors, model.getAttribute("doctors"));
-        assertEquals("doctor/doctors-logo", result);
+        assertEquals("doctor/doctors-all", result);
     }
 }

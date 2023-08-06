@@ -72,7 +72,6 @@ class DoctorControllerWebMvcTest {
         );
     }
 
-
     @Test
     @WithMockUser
     public void testDoctorsPanel() throws Exception {
@@ -90,7 +89,6 @@ class DoctorControllerWebMvcTest {
                 .andExpect(view().name("doctor/doctor-panel"));
 
         verify(doctorDAO, times(1)).findAll();
-
     }
 
     @Test

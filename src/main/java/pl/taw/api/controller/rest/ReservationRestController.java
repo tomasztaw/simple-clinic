@@ -71,7 +71,7 @@ public class ReservationRestController {
         ReservationEntity created = reservationDAO.saveAndReturn(reservationEntity);
 
         return ResponseEntity
-                .created(URI.create(RESERVATION_ID.concat(RESERVATION_ID_RESULT).formatted(created.getReservationId())))
+                .created(URI.create(API_RESERVATIONS + RESERVATION_ID_RESULT.formatted(created.getReservationId())))
                 .build();
     }
 
@@ -99,9 +99,12 @@ public class ReservationRestController {
             @PathVariable("reservationId") Integer reservationId
     ) {
         ReservationEntity existingReservation = reservationDAO.findEntityById(reservationId);
-        reservationDAO.delete(existingReservation);
-
-        return ResponseEntity.noContent().build();
+        if (existingReservation != null) {
+            reservationDAO.delete(existingReservation);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PatchMapping(RESERVATION_UPDATE_DATE)
