@@ -143,8 +143,8 @@ public class OpinionController {
     ) {
         VisitEntity visit = visitDAO.findEntityById(updateOpinion.getOpinionId());
         OpinionEntity opinionEntity = opinionDAO.findEntityById(updateOpinion.getOpinionId());
-        opinionEntity.setDoctorId(updateOpinion.getDoctor().getDoctorId());
-        opinionEntity.setPatientId(updateOpinion.getPatient().getPatientId());
+        opinionEntity.setDoctorId(updateOpinion.getDoctorId());
+        opinionEntity.setPatientId(updateOpinion.getPatientId());
         opinionEntity.setVisit(visit);
         opinionEntity.setComment(updateOpinion.getComment());
         opinionEntity.setCreatedAt(updateOpinion.getCreatedAt());

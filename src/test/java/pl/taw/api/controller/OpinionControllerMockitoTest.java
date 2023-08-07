@@ -177,4 +177,66 @@ class OpinionControllerMockitoTest {
         verify(request, times(1)).getHeader("Referer");
 
     }
+
+    @Test
+    public void testUpdateOpinion() {
+        // given
+        OpinionDTO updateOpinion = DtoFixtures.someOpinion1();
+        VisitEntity visit = EntityFixtures.someVisit1();
+        OpinionEntity opinionEntity = EntityFixtures.someOpinion2();
+        String referer = request.getHeader("Referer");
+        String expectedRedirect = "redirect:" + referer;
+
+        when(visitDAO.findEntityById(updateOpinion.getOpinionId())).thenReturn(visit);
+        when(opinionDAO.findEntityById(updateOpinion.getOpinionId())).thenReturn(opinionEntity);
+
+        // when
+        String result = opinionController.updateOpinion(updateOpinion, request);
+
+        // then
+        assertEquals(expectedRedirect, result);
+
+        verify(opinionDAO, times(1)).save(opinionEntity);
+        verify(opinionDAO, times(1)).findEntityById(updateOpinion.getOpinionId());
+        verify(visitDAO, times(1)).findEntityById(updateOpinion.getOpinionId());
+    }
+
+    @Test
+    public void testUpdateOpinionById() {
+        // given
+        Integer opinionId = 2;
+        String newComment = "Nowa opinia na temat wizyty...";
+        OpinionEntity opinionEntity = EntityFixtures.someOpinion2();
+        String referer = request.getHeader("Referer");
+        String expectedRedirect = "redirect:" + referer;
+
+        when(opinionDAO.findEntityById(opinionId)).thenReturn(opinionEntity);
+
+        // when
+        String result = opinionController.updateOpinionById(opinionId, newComment, request);
+
+        // then
+        assertEquals(expectedRedirect, result);
+
+        verify(opinionDAO, times(1)).save(opinionEntity);
+        verify(opinionDAO, times(1)).findEntityById(opinionId);
+    }
+
+    @Test
+    public void testDeleteOpinionById() {
+        // given
+        Integer opinionId = 1;
+        OpinionEntity opinionEntity = EntityFixtures.someOpinion1();
+        String referer = request.getHeader("Referer");
+        String expectedRedirect = "redirect:" + referer;
+
+        when(opinionDAO.findEntityById(opinionId)).thenReturn(opinionEntity);
+
+        // when
+        String result = opinionController.deleteOpinionById(opinionId, request);
+
+        // then
+        assertEquals(expectedRedirect, result);
+        verify(opinionDAO, times(1)).delete(opinionEntity);
+    }
 }

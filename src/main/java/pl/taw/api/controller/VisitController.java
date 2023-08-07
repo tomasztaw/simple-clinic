@@ -3,6 +3,7 @@ package pl.taw.api.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +44,7 @@ public class VisitController {
     public static final String EDIT = "/edit";
     public static final String DOCTOR_ID = "/doctor/{doctorId}/all";
     public static final String PATIENT_ID = "/patient/{patientId}/all";
+    public static final String PATIENT_ADD_OPINION = "/patient/{patientId}/addOpinions";
     public static final String PAGINATION = "/pagination";
 
     public static final String GENERATE = "/generate";
@@ -53,6 +55,17 @@ public class VisitController {
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
     private final OpinionDAO opinionDAO;
+
+
+    @GetMapping(VISIT_ID)
+    @ResponseBody
+    public ResponseEntity<?> getVisitById(@PathVariable("visitId") Integer visitId) {
+        VisitDTO visit = visitDAO.findById(visitId);
+        if (visit == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(visit);
+    }
 
     @GetMapping(DOCTOR_AND_PATIENT)
     public String visitsDoctorAndPatient(
@@ -79,18 +92,21 @@ public class VisitController {
     public String getPaginationVisits(@RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "5") int size,
                            Authentication authentication,
-                           Model model) {
+                           Model model
+    ) {
         Page<VisitDTO> visitsPage = visitService.getVisitsPage(page, size);
+
         model.addAttribute("visits", visitsPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", visitsPage.getTotalPages());
         model.addAttribute("selectedSize", size);
+
         return "visit/visit-pagination";
     }
 
-
     @GetMapping(PANEL)
     public String showVisitPanel(Model model, Authentication authentication) {
+
         List<VisitDTO> visits = visitDAO.findAll();
         model.addAttribute("visits", visits);
         model.addAttribute("updateVisit", new VisitEntity());
@@ -98,6 +114,7 @@ public class VisitController {
             String username = authentication.getName();
             model.addAttribute("username", username);
         }
+
         return "visit/visit-panel";
     }
 
@@ -136,7 +153,7 @@ public class VisitController {
         return "patient/patient-history";
     }
 
-    @GetMapping("/patient/{patientId}/addOpinions")
+    @GetMapping(PATIENT_ADD_OPINION)
     public String addOpinionsForVisits(@PathVariable("patientId") Integer patientId, Model model) {
         List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId).stream()
                 .filter(visit -> visit.getOpinion() == null)
@@ -148,6 +165,7 @@ public class VisitController {
 
         return "opinion/opinion-to-add";
     }
+
 
     @PostMapping(ADD)
     public String addVisit(
@@ -267,14 +285,6 @@ public class VisitController {
         model.addAttribute("visits", visits);
         return "visitList"; // TODO zrobić widok wyświetlający wszystkie wizyt
     }
-
-    @GetMapping(VISIT_ID)
-    @ResponseBody
-    public VisitDTO getVisitById(@PathVariable("visitId") Integer visitId) {
-        VisitDTO visit = visitDAO.findById(visitId);
-        return visit;
-    }
-
 
 
     @GetMapping("/new")

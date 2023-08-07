@@ -44,6 +44,7 @@ public class ReservationController {
 
     @GetMapping(PANEL)
     public String showReservationPanel(Model model, Authentication authentication) {
+
         List<ReservationDTO> reservations = reservationDAO.findAll();
         model.addAttribute("reservations", reservations);
         model.addAttribute("updateReservation", new ReservationDTO());
@@ -51,85 +52,23 @@ public class ReservationController {
             String username = authentication.getName();
             model.addAttribute("username", username);
         }
+
         return "reservation/reservation-panel";
     }
 
     @GetMapping(SHOW)
-    public String showReservation(
-            @PathVariable("reservationId") Integer reservationId, Model model) {
+    public String showReservation(@PathVariable("reservationId") Integer reservationId, Model model) {
+
         ReservationDTO reservation = reservationDAO.findById(reservationId);
-        model.addAttribute("reservation", reservation);
-        // dodawanie modelu z uczestnikami
         DoctorDTO doctor = doctorDAO.findById(reservation.getDoctorId());
         PatientDTO patient = patientDAO.findById(reservation.getPatientId());
+
+        model.addAttribute("reservation", reservation);
         model.addAttribute("doctor", doctor);
         model.addAttribute("patient", patient);
 
         return "reservation/reservation-show";
     }
-
-
-    @PostMapping(ADD)
-    public String addReservation(
-            @RequestParam(value = "doctorId") Integer doctorId,
-            @RequestParam(value = "patientId") Integer patientId,
-            @RequestParam(value = "day") LocalDate day,
-            @RequestParam(value = "startTimeR") LocalTime startTimeR) {
-
-        ReservationEntity newReservation = ReservationEntity.builder()
-                .doctorId(doctorId)
-                .patientId(patientId)
-                .day(day)
-                .startTimeR(startTimeR)
-                .occupied(true)
-                .build();
-
-        reservationDAO.save(newReservation);
-        // TODO zrobić przekierowanie zależne od panelu admin/pacjent
-        return "redirect:/reservations/panel";
-    }
-
-    @PutMapping(UPDATE)
-    public String updateReservation(
-            @ModelAttribute("updateReservation") ReservationDTO updateReservation) {
-
-        ReservationEntity reservation = reservationDAO.findEntityById(updateReservation.getReservationId());
-        reservation.setDoctorId(updateReservation.getDoctorId());
-        reservation.setPatientId(updateReservation.getPatientId());
-        reservation.setDay(updateReservation.getDay());
-        reservation.setStartTimeR(updateReservation.getStartTimeR());
-        reservation.setOccupied(true);
-
-        reservationDAO.save(reservation);
-        // TODO zrobić przekierowanie zależne od panelu admin/pacjent
-        return "redirect:/reservations/panel";
-    }
-
-    @PutMapping(UPDATE_BY_ID) // prosta aktualizacja, dzień i godzina
-    public String updateReservationTimeById(
-            @PathVariable("reservationId") Integer reservationId,
-            @RequestParam LocalDateTime newDate,
-            HttpServletRequest request) {
-
-        ReservationEntity reservation = reservationDAO.findEntityById(reservationId);
-        reservation.setDay(newDate.toLocalDate());
-        reservation.setStartTimeR(newDate.toLocalTime());
-
-        reservationDAO.save(reservation);
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-    }
-
-    @DeleteMapping(DELETE)
-    public String deleteReservationById(@PathVariable Integer reservationId, HttpServletRequest request) {
-        ReservationEntity reservationForDelete = reservationDAO.findEntityById(reservationId);
-        reservationDAO.delete(reservationForDelete);
-
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-    }
-
 
     @GetMapping(DOCTOR_ID)
     public String showDoctorReservations(
@@ -156,6 +95,18 @@ public class ReservationController {
         return "reservation/reservation-patient-all";
     }
 
+    @GetMapping(CONFIRM)
+    public String confirmReservation(
+            @RequestParam("reservationId") Integer reservationId,
+            @RequestParam("fullDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime fullDate,
+            Model model
+    ) {
+        model.addAttribute("reservationId", reservationId);
+        model.addAttribute("fullDate", fullDate);
+
+        return "reservation-confirm";
+    }
+
     @GetMapping
     public String reservationPage() {
         return "reservations";
@@ -166,7 +117,30 @@ public class ReservationController {
         return "calendar-2";
     }
 
-//    @PostMapping("/reservation/{doctorId}/{patientId}/{day}/{startTimeR}")
+
+
+    @PostMapping(ADD)
+    public String addReservation(
+            @RequestParam(value = "doctorId") Integer doctorId,
+            @RequestParam(value = "patientId") Integer patientId,
+            @RequestParam(value = "day") LocalDate day,
+            @RequestParam(value = "startTimeR") LocalTime startTimeR,
+            HttpServletRequest request
+    ) {
+        ReservationEntity newReservation = ReservationEntity.builder()
+                .doctorId(doctorId)
+                .patientId(patientId)
+                .day(day)
+                .startTimeR(startTimeR)
+                .occupied(true)
+                .build();
+
+        reservationDAO.save(newReservation);
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
     @PostMapping(ADD_PARAMS)
     public String createReservation(
             @PathVariable("doctorId") Integer doctorId,
@@ -186,23 +160,61 @@ public class ReservationController {
                 .occupied(true)
                 .build();
 
-        reservationDAO.save(reservation);
+        ReservationEntity savedReservation = reservationDAO.saveAndReturn(reservation);
 
-        return "redirect:/reservations/confirm?reservationId=" + reservation.getReservationId() +
+        return "redirect:/reservations/confirm?reservationId=" + savedReservation.getReservationId() +
                 "&fullDate=" + fullDate;
     }
 
-    @GetMapping(CONFIRM)
-    public String confirmReservation(
-            @RequestParam("reservationId") Integer reservationId,
-            @RequestParam("fullDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime fullDate,
-            Model model) {
 
-        model.addAttribute("reservationId", reservationId);
-        model.addAttribute("fullDate", fullDate);
 
-        return "reservation-confirm";
+    @PutMapping(UPDATE)
+    public String updateReservation(
+            @ModelAttribute("updateReservation") ReservationDTO updateReservation,
+            HttpServletRequest request
+    ) {
+        ReservationEntity reservation = reservationDAO.findEntityById(updateReservation.getReservationId());
+        reservation.setDoctorId(updateReservation.getDoctorId());
+        reservation.setPatientId(updateReservation.getPatientId());
+        reservation.setDay(updateReservation.getDay());
+        reservation.setStartTimeR(updateReservation.getStartTimeR());
+        reservation.setOccupied(true);
+
+        reservationDAO.save(reservation);
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
+
+    @PutMapping(UPDATE_BY_ID) // prosta aktualizacja, dzień i godzina
+    public String updateReservationTimeById(
+            @PathVariable("reservationId") Integer reservationId,
+            @RequestParam LocalDateTime newDate,
+            HttpServletRequest request) {
+
+        ReservationEntity reservation = reservationDAO.findEntityById(reservationId);
+        reservation.setDay(newDate.toLocalDate());
+        reservation.setStartTimeR(newDate.toLocalTime());
+
+        reservationDAO.save(reservation);
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
+
+    @DeleteMapping(DELETE)
+    public String deleteReservationById(@PathVariable Integer reservationId, HttpServletRequest request) {
+        ReservationEntity reservationForDelete = reservationDAO.findEntityById(reservationId);
+        reservationDAO.delete(reservationForDelete);
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
+
+
+
 
 
 }

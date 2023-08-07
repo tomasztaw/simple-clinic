@@ -1,6 +1,5 @@
 package pl.taw.api.controller;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +32,10 @@ public class RegisterController {
     private final PatientDAO patientDAO;
     private final RoleRepository roleRepository;
 
+    /**
+     * Klasę będę przerabiał i test napiszę po przeróbkach
+     * 7-08-2023 r.
+     */
 
     @GetMapping("/hello")
     public String helloFromRegister() {
