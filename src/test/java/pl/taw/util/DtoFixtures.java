@@ -72,6 +72,17 @@ public class DtoFixtures {
                 .build();
     }
 
+    public static DoctorDTO invalidDoctor() {
+        return DoctorDTO.builder()
+                .doctorId(3)
+                .name("Adam")
+                .surname("Kowalski")
+                .title("Lekarz")
+                .phone("+48 120 100 102 102")
+                .email("tomaszpiasecki#eclinic.pl")
+                .build();
+    }
+
     public static OpinionDTO someOpinion1() {
         return OpinionDTO.builder()
                 .opinionId(1)

@@ -49,6 +49,4 @@ public class DoctorEntity {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OpinionEntity> opinions;
 
-
-
 }

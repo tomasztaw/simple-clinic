@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     // to było dodane dla obsługi opisów lekarzy, pewnie będzie do usunięcia !!!
+    // ten plik jest powiązany application.yml
 
     private String folder;
 

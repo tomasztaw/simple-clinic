@@ -23,4 +23,5 @@ public class OpinionDTO {
     private VisitDTO visit;
 
     private boolean isMapped;
+
 }

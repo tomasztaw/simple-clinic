@@ -69,6 +69,7 @@ class DoctorServiceTest {
     void getWorkingHours() {
         // given
         Integer doctorId = 1;
+
         DoctorScheduleDTO schedule1 = DoctorScheduleDTO.builder()
                 .scheduleId(1)
                 .doctorId(doctorId)
@@ -76,6 +77,7 @@ class DoctorServiceTest {
                 .startTimeDs(LocalTime.of(10, 0))
                 .endTimeDs(LocalTime.of(14, 0))
                 .build();
+
         DoctorScheduleDTO schedule2 = DoctorScheduleDTO.builder()
                 .scheduleId(2)
                 .doctorId(doctorId)
@@ -118,7 +120,6 @@ class DoctorServiceTest {
         assertEquals(Arrays.asList("08:00", "08:10", "08:20", "08:30", "08:40", "08:50",
                 "09:10", "09:20", "09:30", "09:40", "09:50", "10:10", "10:20", "10:30",
                 "10:40", "10:50"), workingHours2.getAppointmentTimes());
-
     }
 
 }

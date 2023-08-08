@@ -21,7 +21,9 @@ import pl.taw.util.DtoFixtures;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -39,6 +41,12 @@ public class HomeControllerTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private Model model;
 
     @InjectMocks
     private HomeController homeController;
@@ -111,5 +119,30 @@ public class HomeControllerTest {
         public String getName() {
             return name;
         }
+    }
+
+    @Test
+    public void testHomePage() {
+        // given
+        String email = "test@exaple.com";
+        UserEntity userEntity = new UserEntity().withEmail(email);
+//        userEntity.setEmail("test@example.com");
+        PatientDTO patientDTO = DtoFixtures.somePatient1().withEmail(email);
+
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(userRepository.findByUserName(any())).thenReturn(userEntity);
+        when(patientDAO.findByEmail(any())).thenReturn(new PatientDTO());
+
+        // when
+        String viewName = homeController.homePage(model, authentication);
+
+        // then
+        assertEquals("home", viewName);
+
+        verify(model).addAttribute("username", any());
+        verify(model).addAttribute("isAdmin", anyBoolean());
+        verify(model).addAttribute("isUser", anyBoolean());
+        verify(model).addAttribute("isDoctor", anyBoolean());
+        verify(model).addAttribute("patient", patientDTO);
     }
 }

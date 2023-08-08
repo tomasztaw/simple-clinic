@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import pl.taw.api.dto.DoctorDTO;
@@ -26,6 +27,8 @@ import pl.taw.infrastructure.database.entity.VisitEntity;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -347,4 +350,107 @@ class VisitControllerMockitoTest {
         verify(visitDAO, times(1)).findEntityById(visitId);
         verify(visitDAO, times(1)).save(visitEntity);
     }
+
+    @Test
+    public void testUpdateVisitNote() {
+        // given
+        Integer visitId = 1;
+        String newNote = "Nowa notatka";
+        String referer = request.getHeader("Referer");
+        String expectedRedirect = "redirect:" + referer;
+        VisitEntity visitEntity = EntityFixtures.someVisit1();
+
+        when(visitDAO.findEntityById(visitId)).thenReturn(visitEntity);
+
+        // when
+        String result = visitController.updateVisitNote(visitId, newNote, request);
+
+        // then
+        assertEquals(expectedRedirect, result);
+
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).save(visitEntity);
+    }
+
+    @Test
+    public void testSimpleDeleteVisitById() {
+        // given
+        Integer visitId = 2;
+        String referer = "http://example.com";
+        VisitEntity visitEntity = EntityFixtures.someVisit2();
+
+        when(visitDAO.findEntityById(visitId)).thenReturn(visitEntity);
+        when(request.getHeader("Referer")).thenReturn(referer);
+
+        // when
+        String result = visitController.simpleDeleteVisitById(visitId, request);
+
+        // then
+        assertEquals("redirect:" + referer, result);
+
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).delete(visitEntity);
+        verify(request, times(1)).getHeader("Referer");
+    }
+
+    @Test
+    public void testDeleteVisitById_Success() throws URISyntaxException {
+        // given
+        Integer visitId = 1;
+        String referer = "http://example.com";
+        VisitEntity visitEntity = EntityFixtures.someVisit1();
+
+        when(visitDAO.findEntityById(visitId)).thenReturn(visitEntity);
+        when(request.getHeader("Referer")).thenReturn(referer);
+
+        // when
+        ResponseEntity<String> response = visitController.deleteVisitById(visitId, request);
+
+        // then
+        assertEquals(HttpStatus.SEE_OTHER, response.getStatusCode());
+        assertEquals(new URI(referer), response.getHeaders().getLocation());
+
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).delete(visitEntity);
+        verify(request, times(1)).getHeader("Referer");
+    }
+
+    @Test
+    public void testDeleteVisitById_NotFound() {
+        // given
+        Integer visitId = 1;
+
+        when(visitDAO.findEntityById(visitId)).thenReturn(null);
+
+        // when
+        ResponseEntity<String> response = visitController.deleteVisitById(visitId, request);
+
+        // then
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, never()).delete(any());
+    }
+
+    @Test
+    public void testDeleteVisitById_UriSyntaxError() {
+        // given
+        Integer visitId = 5;
+        String referer = "invalid-url";
+        VisitEntity visitEntity = EntityFixtures.someVisit5();
+
+        when(visitDAO.findEntityById(visitId)).thenReturn(visitEntity);
+        when(request.getHeader("Referer")).thenReturn(referer);
+
+        // when
+        ResponseEntity<String> response = visitController.deleteVisitById(visitId, request);
+
+        // then
+        assertEquals(HttpStatus.SEE_OTHER, response.getStatusCode());
+
+        verify(visitDAO, times(1)).findEntityById(visitId);
+        verify(visitDAO, times(1)).delete(visitEntity);
+        verify(request, times(1)).getHeader("Referer");
+    }
+
 }

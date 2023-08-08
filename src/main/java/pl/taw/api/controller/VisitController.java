@@ -3,6 +3,7 @@ package pl.taw.api.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -40,7 +43,8 @@ public class VisitController {
     public static final String UPDATE = "/update";
     public static final String UPDATE_ID = "/update/{visitId}";
     public static final String UPDATE_NOTE = "/{visitId}/update-note";
-    public static final String DELETE_BY_ID = "/delete/{visitId}";
+    public static final String DELETE_BY_ID_SIMPLE = "/{visitId}/delete/simple";
+    public static final String DELETE_BY_ID = "/{visitId}/delete";
     public static final String EDIT = "/edit";
     public static final String DOCTOR_ID = "/doctor/{doctorId}/all";
     public static final String PATIENT_ID = "/patient/{patientId}/all";
@@ -261,7 +265,8 @@ public class VisitController {
 
     @PatchMapping(UPDATE_NOTE)
     public String updateVisitNote(
-            @PathVariable("visitId") Integer visitId, @RequestBody String newNote, HttpServletRequest request) {
+            @PathVariable("visitId") Integer visitId, @RequestBody String newNote, HttpServletRequest request
+    ) {
         VisitEntity visitForUpdate = visitDAO.findEntityById(visitId);
         visitForUpdate.setNote(newNote);
         visitDAO.save(visitForUpdate);
@@ -269,12 +274,33 @@ public class VisitController {
         return "redirect:" + referer;
     }
 
-    @DeleteMapping(DELETE_BY_ID)
-    public String deleteVisitById(@PathVariable Integer visitId, HttpServletRequest request) {
+    @DeleteMapping(DELETE_BY_ID_SIMPLE)
+    public String simpleDeleteVisitById(@PathVariable Integer visitId, HttpServletRequest request) {
         VisitEntity visitForDelete = visitDAO.findEntityById(visitId);
         visitDAO.delete(visitForDelete);
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
+    }
+
+    @DeleteMapping(DELETE_BY_ID)
+    public ResponseEntity<String> deleteVisitById(@PathVariable Integer visitId, HttpServletRequest request) {
+        VisitEntity visitForDelete = visitDAO.findEntityById(visitId);
+        if (visitForDelete == null) {
+            return ResponseEntity.notFound().build();
+        }
+        visitDAO.delete(visitForDelete);
+
+        String referer = request.getHeader("Referer");
+        URI redirectUri;
+        try {
+            redirectUri = new URI(referer);
+        } catch (URISyntaxException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.SEE_OTHER)
+                .location(redirectUri)
+                .build();
     }
 
     // #########################################################

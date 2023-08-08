@@ -213,13 +213,17 @@ public class PatientControllerWebMvcTest {
                     "phone": "%s"
                 }
                 """.formatted(phone);
-        when(patientJpaRepository.save(any(PatientEntity.class)))
-                .thenReturn(EntityFixtures.somePatient1().withPatientId(123));
+//        when(patientJpaRepository.save(any(PatientEntity.class)))
+        PatientEntity patient = new PatientEntity();
+        PatientEntity patientEntity = EntityFixtures.somePatient1();
+        when(patientJpaRepository.save(patient))
+                .thenReturn(patientEntity);
+//                .thenReturn(EntityFixtures.somePatient1().withPatientId(123));
 
         // when, then
         if (correctPhone) {
             String expectedRedirect = PatientController.PATIENTS
-                    + PatientController.PATIENT_ID_RESULT.formatted(123);
+                    + PatientController.PATIENT_ID_RESULT.formatted(patientEntity.getPatientId());
             mockMvc.perform(post(PatientController.PATIENTS)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))

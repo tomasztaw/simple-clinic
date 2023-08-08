@@ -92,7 +92,7 @@ class DoctorRepositoryTest {
         DoctorEntity savedDoctorEntity = new DoctorEntity();
         savedDoctorEntity.setDoctorId(1);
 
-        Mockito.when(doctorJpaRepository.save(doctorEntity)).thenReturn(savedDoctorEntity);
+        Mockito.when(doctorJpaRepository.saveAndFlush(doctorEntity)).thenReturn(savedDoctorEntity);
 
         // then
         DoctorEntity result = doctorRepository.saveAndReturn(doctorEntity);

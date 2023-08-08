@@ -16,4 +16,5 @@ import java.util.List;
 public class OpinionsDTO {
 
     private List<OpinionDTO> opinions;
+
 }

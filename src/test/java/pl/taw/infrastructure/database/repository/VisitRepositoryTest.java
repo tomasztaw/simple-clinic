@@ -101,7 +101,7 @@ public class VisitRepositoryTest {
         VisitEntity savedVisitEntity = new VisitEntity();
         savedVisitEntity.setVisitId(1);
 
-        Mockito.when(visitJpaRepository.save(visitEntity)).thenReturn(savedVisitEntity);
+        Mockito.when(visitJpaRepository.saveAndFlush(visitEntity)).thenReturn(savedVisitEntity);
 
         // then
         VisitEntity result = visitRepository.saveAndReturn(visitEntity);
@@ -198,7 +198,5 @@ public class VisitRepositoryTest {
         Assertions.assertEquals(visitDTO1, result.get(0));
         Assertions.assertEquals(visitDTO2, result.get(1));
     }
-
-
 
 }

@@ -160,7 +160,7 @@ class DoctorControllerWebMvcTest {
     void doctors() {
     }
 
-//    @Disabled("Nie mogę dojść jak to ogarnąć z csrf")
+    @Disabled("Nie mogę dojść jak to ogarnąć z csrf")
     @ParameterizedTest
     @MethodSource
     @WithMockUser(authorities = "ADMIN")

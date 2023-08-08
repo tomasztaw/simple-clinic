@@ -180,7 +180,6 @@ class VisitServiceTest {
         // when
         List<VisitDTO> result = visitService.findAllVisitByDoctor(doctorId);
 
-
         // then
         verify(visitDAO, times(1)).findAllByDoctor(doctorId);
         assertEquals(visits, result);

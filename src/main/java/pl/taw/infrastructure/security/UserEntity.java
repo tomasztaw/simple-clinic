@@ -1,15 +1,13 @@
 package pl.taw.infrastructure.security;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Set;
 
 @Data
+@With
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

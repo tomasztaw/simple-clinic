@@ -16,4 +16,5 @@ import java.util.List;
 public class DoctorsDTO {
 
     private List<DoctorDTO> doctors;
+
 }
