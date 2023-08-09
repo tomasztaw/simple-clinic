@@ -86,8 +86,8 @@ public class OpinionController {
     public String showOpinion(
             @PathVariable("opinionId") Integer opinionId, Model model) {
         OpinionDTO opinion = opinionDAO.findById(opinionId);
-        model.addAttribute("opinion", opinion);
         VisitDTO visitDTO = visitDAO.findById(opinion.getVisitId());
+        model.addAttribute("opinion", opinion);
         model.addAttribute("visit", visitDTO);
         return "opinion/opinion-show";
     }

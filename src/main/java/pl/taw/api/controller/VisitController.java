@@ -157,7 +157,7 @@ public class VisitController {
         return "patient/patient-history";
     }
 
-    @GetMapping(PATIENT_ADD_OPINION)
+    @GetMapping(PATIENT_ADD_OPINION) // to jest dla widoku, a nie jako POST
     public String addOpinionsForVisits(@PathVariable("patientId") Integer patientId, Model model) {
         List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId).stream()
                 .filter(visit -> visit.getOpinion() == null)
@@ -243,7 +243,7 @@ public class VisitController {
 
     @PutMapping(UPDATE)
     public String updateVisit(
-            @ModelAttribute("updateVisit") VisitEntity updateVisit,
+            @ModelAttribute("updateVisit") VisitEntity updateVisit, // TODO zamień przy okazji na DTO i sprawdź!!!
             HttpServletRequest request
     ) {
         DoctorEntity doctor = doctorDAO.findEntityById(updateVisit.getDoctor().getDoctorId());
@@ -363,7 +363,7 @@ public class VisitController {
 
     }
 
-    @GetMapping("/{visitId}/delete")
+    @GetMapping("/{visitId}/delete/nieMaINieBedzie")
     public ModelAndView showDeleteConfirmationGETXXX(@PathVariable("visitId") Integer visitId) {
         ModelAndView modelAndView = new ModelAndView("visitDelete");
         VisitEntity existingVisit = visitDAO.findEntityById(visitId);
@@ -371,7 +371,7 @@ public class VisitController {
         return modelAndView;
     }
 
-    @DeleteMapping("/{visitId}/delete")
+    @DeleteMapping("/{visitId}/delete/nieMaTakiej")
     public ModelAndView showDeleteConfirmation(@PathVariable("visitId") Integer visitId) {
         ModelAndView modelAndView = new ModelAndView("visitDelete");
         VisitEntity existingVisit = visitDAO.findEntityById(visitId);

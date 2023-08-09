@@ -167,7 +167,6 @@ public class ReservationController {
     }
 
 
-
     @PutMapping(UPDATE)
     public String updateReservation(
             @ModelAttribute("updateReservation") ReservationDTO updateReservation,
@@ -211,10 +210,5 @@ public class ReservationController {
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
-
-
-
-
-
 
 }
