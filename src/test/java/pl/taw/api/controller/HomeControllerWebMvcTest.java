@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.taw.business.dao.PatientDAO;
+import pl.taw.infrastructure.security.UserRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +21,8 @@ class HomeControllerWebMvcTest {
 
     @MockBean
     private PatientDAO patientDAO;
+    @MockBean
+    private UserRepository userRepository;
 
     private MockMvc mockMvc;
 

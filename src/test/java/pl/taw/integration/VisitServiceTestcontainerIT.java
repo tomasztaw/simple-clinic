@@ -18,6 +18,7 @@ import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.configuration.BeanConfiguration;
+import pl.taw.util.DtoFixtures;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,23 +61,18 @@ public class VisitServiceTestcontainerIT {
         Assertions.assertNotNull(visitDAO);
     }
 
-//    @Test
-//    public void testHasPatientSeenThisDoctor_PatientHasSeenDoctor_ReturnsTrue() {
-//        int doctorId = 1;
-//        int patientId = 1;
-//        List<VisitDTO> visits = new ArrayList<>();
-//        VisitDTO visit = VisitDTO.builder()
-//                .doctorId(doctorId)
-//                .patientId(patientId)
-//                .build();
-//        visits.add(visit);
-//
-//        when(visitDAO.findAllForBoth(doctorId, patientId)).thenReturn(visits);
-//
-//        boolean hasSeenDoctor = visitService.hasPatientSeenThisDoctor(doctorId, patientId);
-//
-//        assertTrue(hasSeenDoctor);
-//    }
+    @Test
+    public void testHasPatientSeenThisDoctor_PatientHasSeenDoctor_ReturnsTrue() {
+        int doctorId = 1;
+        int patientId = 1;
+        List<VisitDTO> visits = DtoFixtures.visits.stream().map(visit -> visit.withDoctorId(doctorId).withPatientId(patientId)).toList();
+
+        when(visitDAO.findAllForBoth(doctorId, patientId)).thenReturn(visits);
+
+        boolean hasSeenDoctor = visitService.hasPatientSeenThisDoctor(doctorId, patientId);
+
+        assertTrue(hasSeenDoctor);
+    }
 
     @Test
     public void testHasPatientSeenThisDoctor_PatientHasNotSeenDoctor_ReturnsFalse() {
@@ -92,9 +88,9 @@ public class VisitServiceTestcontainerIT {
     }
 
     // TODO wróć do tego później z bazą danych dla testów
-//    @Test
-//    public void testFindAllVisitByDoctor() {
-//        int doctorId = 1;
+    @Test
+    public void testFindAllVisitByDoctor() {
+        int doctorId = 1;
 //        List<VisitDTO> expectedVisits = new ArrayList<>();
 //        VisitDTO visit1 = VisitDTO.builder().doctorId(doctorId).build();
 //        VisitDTO visit2 = VisitDTO.builder().doctorId(doctorId).build();
@@ -102,14 +98,15 @@ public class VisitServiceTestcontainerIT {
 //        expectedVisits.add(visit1);
 //        expectedVisits.add(visit2);
 //        expectedVisits.add(visit3);
-//
-//        when(visitDAO.findAllByDoctor(doctorId)).thenReturn(expectedVisits);
-//
-//        List<VisitDTO> actualVisits = visitService.findAllVisitByDoctor(doctorId);
-//
-//        assertEquals(expectedVisits, actualVisits);
+        List<VisitDTO> expectedVisits = DtoFixtures.visits.stream().map(visit -> visit.withDoctorId(doctorId)).toList();
+
+        when(visitDAO.findAllByDoctor(doctorId)).thenReturn(expectedVisits);
+
+        List<VisitDTO> actualVisits = visitService.findAllVisitByDoctor(doctorId);
+
+        assertEquals(expectedVisits, actualVisits);
 //        assertTrue(actualVisits.contains(visit2));
-//    }
+    }
 
 //    @Test
 //    public void testFindAllVisitByPatient() {

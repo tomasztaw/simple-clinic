@@ -17,7 +17,8 @@ public class HomeControllerIT extends AbstractIT {
         String url = String.format("http://localhost:%s%s", port, basePath);
 
         String page = this.testRestTemplate.getForObject(url, String.class);
-        Assertions.assertThat(page).contains("Please sign in");
+//        Assertions.assertThat(page).contains("Please sign in");
+        Assertions.assertThat(page).contains("Strona główna");
     }
 
     @Test
@@ -25,6 +26,7 @@ public class HomeControllerIT extends AbstractIT {
         String url = String.format("http://localhost:%s%s/doctors", port, basePath);
 
         String page = this.testRestTemplate.getForObject(url, String.class);
-        Assertions.assertThat(page).contains("Please sign in");
+//        Assertions.assertThat(page).contains("Please sign in");
+        Assertions.assertThat(page).contains("Lista lekarzy");
     }
 }

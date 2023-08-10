@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,21 +18,21 @@ import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.security.UserEntity;
 import pl.taw.infrastructure.security.UserRepository;
 import pl.taw.util.DtoFixtures;
+import pl.taw.util.EntityFixtures;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+//@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class HomeControllerTest {
 
     // nie działa - będzie do usunięcia
@@ -76,7 +77,6 @@ public class HomeControllerTest {
                 .andExpect(model().attributeExists("username", "isUser", "patient"));
     }
 
-    // Define a custom Authentication class for testing
     private static class CustomAuthentication implements Authentication {
         private final String name;
         private final Collection<? extends GrantedAuthority> authorities;
@@ -144,5 +144,79 @@ public class HomeControllerTest {
         verify(model).addAttribute("isUser", anyBoolean());
         verify(model).addAttribute("isDoctor", anyBoolean());
         verify(model).addAttribute("patient", patientDTO);
+    }
+
+    @Test
+    public void testHomePageWithUserAuthentication() {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getAuthorities()).thenReturn(new ArrayList<>()); // You can populate this list with GrantedAuthority instances
+
+        String username = "testUser";
+        String userEmail = "test@example.com";
+        when(authentication.getName()).thenReturn(username);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(userEmail);
+        when(userRepository.findByUserName(username)).thenReturn(userEntity);
+
+        PatientDTO patientDTO = new PatientDTO();
+        patientDTO.setEmail(userEmail);
+        when(patientDAO.findByEmail(userEmail)).thenReturn(patientDTO);
+
+        Model model = mock(Model.class);
+
+        String viewName = homeController.homePage(model, authentication);
+
+        assertEquals("home", viewName);
+
+        verify(model).addAttribute("username", username);
+        verify(model).addAttribute("isUser", true);
+        verify(model).addAttribute("patient", patientDTO);
+        verify(model, never()).addAttribute("isAdmin", any());
+        verify(model, never()).addAttribute("isDoctor", any());
+    }
+
+    @Test
+    public void testHomePageWithUserAuthentication2() {
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getAuthorities()).thenReturn(new ArrayList<>());
+
+//        String username = "testUser";
+        String username = "username";
+        String userEmail = "test@example.com";
+        when(authentication.getName()).thenReturn(username);
+
+        UserEntity userEntity = EntityFixtures.someUser1().withEmail(userEmail).withUserName(username);
+        when(userRepository.findByUserName(username)).thenReturn(userEntity);
+
+        PatientDTO patientDTO = DtoFixtures.somePatient1().withEmail(userEmail);
+        when(patientDAO.findByEmail(userEmail)).thenReturn(patientDTO);
+
+        Model model = mock(Model.class);
+
+        String viewName = homeController.homePage(model, authentication);
+
+        assertEquals("home", viewName);
+
+        verify(model).addAttribute("username", username);
+//        verify(model).addAttribute("isUser", true);
+        verify(model).addAttribute("patient", patientDTO);
+//        verify(model, never()).addAttribute("isAdmin", any());
+//        verify(model, never()).addAttribute("isDoctor", any());
+    }
+
+
+    @Test
+    public void testHomePageWithoutAuthentication() {
+        Authentication authentication = null;
+        Model model = mock(Model.class);
+
+        String viewName = homeController.homePage(model, authentication);
+
+        assertEquals("home", viewName);
+
+        verify(model, never()).addAttribute(anyString(), any());
     }
 }

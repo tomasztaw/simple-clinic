@@ -1,9 +1,7 @@
 package pl.taw.api.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,8 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.PatientDTO;
@@ -30,12 +28,8 @@ import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -61,8 +55,6 @@ class VisitControllerWebMvcTest {
     private final OpinionDAO opinionDAO;
     @MockBean
     private final Authentication authentication;
-//    @MockBean
-//    private final HttpServletRequest request;
 
 
     @Test
@@ -399,27 +391,38 @@ class VisitControllerWebMvcTest {
     }
 
     @Test
-    @WithMockUser
     public void testDeleteVisitById() throws Exception {
         // given
         Integer visitId = 4;
         VisitEntity visitEntity = EntityFixtures.someVisit4();
-//        String referer = request.getHeader("Referer");
-//        String expectedRedirect = "redirect:" + referer;
-        String referer = request().toString();
+        String referer = "http://example.com";
 
         when(visitDAO.findEntityById(visitId)).thenReturn(visitEntity);
 
         // when, then
-//        mockMvc.perform(delete("/visits/{visitId}/delete", visitId)
         mockMvc.perform(delete(VISITS.concat(DELETE_BY_ID), visitId)
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**"));
+                        .with(csrf())
+                        .header("Referer", referer))
+                .andExpect(status().isSeeOther())
+                .andExpect(redirectedUrl(referer));
 
         verify(visitDAO, times(1)).findEntityById(visitId);
         verify(visitDAO, times(1)).delete(visitEntity);
 
         verifyNoMoreInteractions(visitDAO);
+    }
+
+    @Test
+    public void testDeleteVisitByIdNotFound() throws Exception {
+        // given
+        int visitId = 1;
+
+        when(visitDAO.findEntityById(visitId)).thenReturn(null);
+
+        // when, then
+        mockMvc.perform(delete(VISITS.concat(DELETE_BY_ID), visitId))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+        verify(visitDAO, never()).delete(any());
     }
 }

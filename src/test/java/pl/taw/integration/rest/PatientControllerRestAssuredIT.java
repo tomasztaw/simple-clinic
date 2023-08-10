@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import pl.taw.api.controller.rest.PatientRestController;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.PatientsDTO;
 import pl.taw.integration.configuration.RestAssuredIntegrationTestBase;
@@ -13,6 +14,9 @@ import pl.taw.util.DtoFixtures;
 
 import java.util.regex.Pattern;
 
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
 /**
  * Test nie przechodzi, dostaje 404 i nie mogę dojść gdzie jest błąd
  * w21-29
@@ -20,6 +24,38 @@ import java.util.regex.Pattern;
 public class PatientControllerRestAssuredIT
         extends RestAssuredIntegrationTestBase
         implements PatientsControllerTestSupport, WiremockTestSupport {
+
+    @Test
+    public void testShowPatientById() {
+        baseURI = "http://localhost:9999/clinic";
+//        baseURI = "http://localhost:8080/clinic";
+
+        int patientId = 1;
+
+        given()
+                .pathParam("patientId", patientId)
+                .when()
+                .get(PatientRestController.API_PATIENTS.concat(PatientRestController.PATIENT_ID))
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", equalTo(patientId));
+    }
+
+    @Test
+    public void testGetPatients() {
+        // Ustawienie bazowego URL do twojego API
+        baseURI = "http://localhost:%s%s".formatted(port, basePath);
+//        baseURI = "http://localhost:8080/clinic";
+
+        given()
+                .when()
+                .get(PatientRestController.API_PATIENTS)
+                .then()
+                .statusCode(200)
+                .contentType("application/json");
+//                .body("size()", greaterThanOrEqualTo(0));
+    }
 
     @Test
     void thatPatientsListCanByRetrievedCorrectly() {
@@ -36,8 +72,8 @@ public class PatientControllerRestAssuredIT
         // then
         Assertions.assertThat(patientsDTO.getPatients())
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("patientId")
-                .containsAnyOf(patient1, patient2);
-//                .containsExactlyInAnyOrder(patient1, patient2);
+                .containsAnyOf(patient1, patient2)
+                .containsExactlyInAnyOrder(patient1, patient2);
     }
 
     @Test
