@@ -74,6 +74,13 @@ dependencies {
 	testImplementation "org.slf4j:slf4j-api:${wiremockSlf4jVersion}"
 	testImplementation "com.github.tomakehurst:wiremock-standalone:${wiremockVersion}"
 	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+
+	// dodane zgodnie z dokumentacją
+	testImplementation 'io.rest-assured:json-path:5.3.1'
+	testImplementation 'io.rest-assured:xml-path:5.3.1'
+	testImplementation 'io.rest-assured:json-schema-validator:5.3.1'
+	testImplementation 'io.rest-assured:spring-mock-mvc:5.3.1'
+	testImplementation 'io.rest-assured:spring-web-test-client:5.3.1'
 }
 
 dependencyManagement {

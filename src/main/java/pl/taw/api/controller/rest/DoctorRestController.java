@@ -8,12 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.DoctorsDTO;
+import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(DoctorRestController.API_DOCTORS)
@@ -43,7 +45,7 @@ public class DoctorRestController {
     }
 
     // TODO czy to czasem nie powinna być w wizytach???
-    @GetMapping(HISTORY)
+    @GetMapping(value = HISTORY, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<VisitsDTO> showHistory(@PathVariable("doctorId") Integer doctorId) {
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         VisitsDTO visits = VisitsDTO.of(visitService.findAllVisitByDoctor(doctorId));
