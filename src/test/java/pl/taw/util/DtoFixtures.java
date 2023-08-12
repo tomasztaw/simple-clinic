@@ -2,7 +2,6 @@ package pl.taw.util;
 
 import lombok.experimental.UtilityClass;
 import pl.taw.api.dto.*;
-import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -172,5 +171,46 @@ public class DtoFixtures {
                 .status("odbyta")
                 .build();
     }
+
+    public static DoctorScheduleDTO someSchedule1() {
+        return DoctorScheduleDTO.builder()
+                .scheduleId(1)
+                .doctorId(1)
+                .dayOfTheWeek(1)
+                .startTimeDs(LocalTime.of(10, 0))
+                .endTimeDs(LocalTime.of(14, 0))
+                .build();
+    }
+
+    public static DoctorScheduleDTO someSchedule2() {
+        return DoctorScheduleDTO.builder()
+                .scheduleId(2)
+                .doctorId(1)
+                .dayOfTheWeek(2)
+                .startTimeDs(LocalTime.of(10, 0))
+                .endTimeDs(LocalTime.of(14, 0))
+                .build();
+    }
+
+    public static DoctorScheduleDTO someSchedule3() {
+        return DoctorScheduleDTO.builder()
+                .scheduleId(3)
+                .doctorId(5)
+                .dayOfTheWeek(3)
+                .startTimeDs(LocalTime.of(8, 0))
+                .endTimeDs(LocalTime.of(12, 0))
+                .build();
+    }
+
+    public static DoctorScheduleDTO someSchedule4() {
+        return DoctorScheduleDTO.builder()
+                .scheduleId(4)
+                .doctorId(5)
+                .dayOfTheWeek(5)
+                .startTimeDs(LocalTime.of(11, 0))
+                .endTimeDs(LocalTime.of(15, 0))
+                .build();
+    }
+
 
 }

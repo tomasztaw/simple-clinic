@@ -285,4 +285,44 @@ public class EntityFixtures {
                 .build();
     }
 
+    public static DoctorScheduleEntity someSchedule1() {
+        return DoctorScheduleEntity.builder()
+                .scheduleId(1)
+                .doctorId(1)
+                .dayOfTheWeek(1)
+                .startTimeDs(LocalTime.of(10, 0))
+                .endTimeDs(LocalTime.of(14, 0))
+                .build();
+    }
+
+    public static DoctorScheduleEntity someSchedule2() {
+        return DoctorScheduleEntity.builder()
+                .scheduleId(2)
+                .doctorId(1)
+                .dayOfTheWeek(2)
+                .startTimeDs(LocalTime.of(10, 0))
+                .endTimeDs(LocalTime.of(14, 0))
+                .build();
+    }
+
+    public static DoctorScheduleEntity someSchedule3() {
+        return DoctorScheduleEntity.builder()
+                .scheduleId(3)
+                .doctorId(5)
+                .dayOfTheWeek(3)
+                .startTimeDs(LocalTime.of(8, 0))
+                .endTimeDs(LocalTime.of(12, 0))
+                .build();
+    }
+
+    public static DoctorScheduleEntity someSchedule4() {
+        return DoctorScheduleEntity.builder()
+                .scheduleId(4)
+                .doctorId(5)
+                .dayOfTheWeek(5)
+                .startTimeDs(LocalTime.of(11, 0))
+                .endTimeDs(LocalTime.of(15, 0))
+                .build();
+    }
+
 }

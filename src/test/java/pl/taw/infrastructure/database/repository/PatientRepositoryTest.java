@@ -1,28 +1,26 @@
 package pl.taw.infrastructure.database.repository;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
 import pl.taw.infrastructure.database.repository.mapper.PatientMapper;
+import pl.taw.util.DtoFixtures;
+import pl.taw.util.EntityFixtures;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-//@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class PatientRepositoryTest {
 
     @Mock
@@ -34,84 +32,89 @@ class PatientRepositoryTest {
     @InjectMocks
     private PatientRepository patientRepository;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void testFindAll() {
+        // given
+        PatientEntity patientEntity1 = EntityFixtures.somePatient1();
+        PatientEntity patientEntity2 = EntityFixtures.somePatient2();
+        PatientEntity patientEntity3 = EntityFixtures.somePatient3();
+        List<PatientEntity> patients = List.of(patientEntity1, patientEntity2, patientEntity3);
+        PatientDTO patientDTO1 = DtoFixtures.somePatient1();
+        PatientDTO patientDTO2 = DtoFixtures.somePatient2();
+        PatientDTO patientDTO3 = DtoFixtures.somePatient2().withPatientId(3).withName("Jan").withSurname("Wilk")
+                .withPesel("8506171818199").withPhone("+48 100 200 888").withEmail("j.wilku@wp.pl");
+        List<PatientDTO> expectedPatientDTOs = List.of(patientDTO1, patientDTO2, patientDTO3);
+
+        when(patientJpaRepository.findAll()).thenReturn(patients);
+
+        when(patientMapper.mapFromEntity(any(PatientEntity.class)))
+                .thenAnswer(invocation -> {
+            PatientEntity entity = invocation.getArgument(0);
+            int index = patients.indexOf(entity);
+            return expectedPatientDTOs.get(index);
+        });
+
         // when
-        List<PatientEntity> patients = new ArrayList<>();
-        patients.add(new PatientEntity());
-        patients.add(new PatientEntity());
-
-        Mockito.when(patientJpaRepository.findAll()).thenReturn(patients);
-
-        List<PatientDTO> expectedPatientDTOs = new ArrayList<>();
-        expectedPatientDTOs.add(new PatientDTO());
-        expectedPatientDTOs.add(new PatientDTO());
-
-        Mockito.when(patientMapper.mapFromEntity(Mockito.any(PatientEntity.class)))
-                .thenReturn(new PatientDTO());
-
-        // then
         List<PatientDTO> result = patientRepository.findAll();
 
-        // given
+        // then
         assertEquals(expectedPatientDTOs.size(), result.size());
+
+        verify(patientJpaRepository, times(1)).findAll();
+        verify(patientMapper, times(patients.size())).mapFromEntity(any(PatientEntity.class));
+        verifyNoMoreInteractions(patientJpaRepository, patientMapper);
     }
 
     @Test
     public void testFindById() {
+        // given
+        Integer patientId = 2;
+        PatientEntity patientEntity = EntityFixtures.somePatient2();
+        PatientDTO expectedPatientDTO = DtoFixtures.somePatient2().withPatientId(patientId);
+
+        when(patientJpaRepository.findById(patientId)).thenReturn(Optional.of(patientEntity));
+        when(patientMapper.mapFromEntity(patientEntity)).thenReturn(expectedPatientDTO);
+
         // when
-        Integer patientId = 1;
-        PatientEntity patientEntity = new PatientEntity();
-        patientEntity.setPatientId(patientId);
-
-        Mockito.when(patientJpaRepository.findById(patientId)).thenReturn(Optional.of(patientEntity));
-
-        PatientDTO expectedPatientDTO = new PatientDTO();
-        expectedPatientDTO.setPatientId(patientId);
-
-        Mockito.when(patientMapper.mapFromEntity(patientEntity)).thenReturn(expectedPatientDTO);
-
-        // then
         PatientDTO result = patientRepository.findById(patientId);
 
-        // given
+        // then
         assertEquals(patientId, result.getPatientId());
+
+        verify(patientJpaRepository, times(1)).findById(patientId);
+        verify(patientMapper, times(1)).mapFromEntity(patientEntity);
+        verifyNoMoreInteractions(patientJpaRepository, patientMapper);
     }
 
     @Test
     public void testFindEntityById() {
+        // given
+        Integer patientId = 5;
+        PatientEntity patientEntity = EntityFixtures.somePatient5();
+
+        when(patientJpaRepository.findById(patientId)).thenReturn(Optional.of(patientEntity));
+
         // when
-        Integer patientId = 1;
-        PatientEntity patientEntity = new PatientEntity();
-        patientEntity.setPatientId(patientId);
-
-        Mockito.when(patientJpaRepository.findById(patientId)).thenReturn(Optional.of(patientEntity));
-
-        // then
         PatientEntity result = patientRepository.findEntityById(patientId);
 
-        // given
+        // then
+        assertNotNull(result);
         assertEquals(patientId, result.getPatientId());
+
+        verify(patientJpaRepository, times(1)).findById(patientId);
+        verifyNoMoreInteractions(patientJpaRepository);
     }
 
     @Test
     public void testFindByPesel() {
         // given
         String pesel = "85061722333";
-        PatientEntity patientEntity = new PatientEntity();
-        patientEntity.setPesel(pesel);
+        PatientEntity patientEntity = EntityFixtures.somePatient4().withPesel(pesel);
+        PatientDTO expectedPatientDTO = DtoFixtures.somePatient2().withPesel(pesel);
 
-        Mockito.when(patientJpaRepository.findAll()).thenReturn(Collections.singletonList(patientEntity));
-
-        PatientDTO expectedPatientDTO = new PatientDTO();
-        expectedPatientDTO.setPesel(pesel);
-
-        Mockito.when(patientMapper.mapFromEntity(patientEntity)).thenReturn(expectedPatientDTO);
+        when(patientJpaRepository.findAll()).thenReturn(Collections.singletonList(patientEntity));
+        when(patientMapper.mapFromEntity(patientEntity)).thenReturn(expectedPatientDTO);
 
         // when
         PatientDTO result = patientRepository.findByPesel(pesel);
@@ -119,47 +122,49 @@ class PatientRepositoryTest {
         // then
         assertEquals(expectedPatientDTO, result);
         assertEquals(pesel.length(), result.getPesel().length());
-    }
+        assertSame(pesel, result.getPesel());
 
+        verify(patientJpaRepository, times(1)).findAll();
+        verify(patientMapper, times(1)).mapFromEntity(patientEntity);
+        verifyNoMoreInteractions(patientJpaRepository, patientMapper);
+    }
 
     @Test
     public void testSaveAndReturn() {
+        // given
+        PatientEntity patientEntity = EntityFixtures.somePatient1();
+        PatientEntity savedPatientEntity = patientEntity.withPatientId(2);
+
+        when(patientJpaRepository.saveAndFlush(patientEntity)).thenReturn(savedPatientEntity);
+
         // when
-        PatientEntity patientEntity = new PatientEntity();
-        PatientEntity savedPatientEntity = new PatientEntity();
-        savedPatientEntity.setPatientId(1);
-
-        Mockito.when(patientJpaRepository.saveAndFlush(patientEntity)).thenReturn(savedPatientEntity);
-
-        // then
         PatientEntity result = patientRepository.saveAndReturn(patientEntity);
 
-        // given
+        // then
         assertEquals(savedPatientEntity.getPatientId(), result.getPatientId());
+
+        verify(patientJpaRepository, times(1)).saveAndFlush(patientEntity);
+        verify(patientJpaRepository, times(1)).existsByEmail(patientEntity.getEmail());
+        verify(patientJpaRepository, times(1)).existsByPesel(patientEntity.getPesel());
+        verifyNoMoreInteractions(patientJpaRepository);
     }
 
     @Test
     public void testSave() {
         // given
-        PatientEntity patientEntity = new PatientEntity();
+        PatientEntity patientEntity = EntityFixtures.somePatient1();
 
         // when
         patientRepository.save(patientEntity);
 
         // then
-        verify(patientJpaRepository, Mockito.times(1)).save(patientEntity);
+        verify(patientJpaRepository, times(1)).save(patientEntity);
     }
 
     @Test
-    @Disabled("Muszę do tego wrócić")
     public void testSaveAndReturn_UniquePatient() {
         // given
-        PatientEntity patientEntity = PatientEntity.builder()
-                .name("Stefan")
-                .surname("Nowak")
-                .pesel("80101010266")
-                .email("stefannowak@jakis.pl")
-                .build();
+        PatientEntity patientEntity = EntityFixtures.somePatient1();
 
         BDDMockito.given(patientJpaRepository.existsByPesel(patientEntity.getPesel())).willReturn(false);
         BDDMockito.given(patientJpaRepository.existsByEmail(patientEntity.getEmail())).willReturn(false);
@@ -170,36 +175,28 @@ class PatientRepositoryTest {
 
         // then
         assertEquals(patientEntity, savedPatient);
-        BDDMockito.then(patientJpaRepository).should().save(patientEntity);
+
+        BDDMockito.then(patientJpaRepository).should().saveAndFlush(patientEntity);
     }
 
     @Test
     public void testSaveAndReturn_DuplicatePesel() {
         // given
-        PatientEntity patientEntity = PatientEntity.builder()
-                .name("Stefan")
-                .surname("Nowak")
-                .pesel("80101010266")
-                .email("stefannowak@jakis.pl")
-                .build();
+        PatientEntity patientEntity = EntityFixtures.somePatient4();
 
         BDDMockito.given(patientJpaRepository.existsByPesel(patientEntity.getPesel())).willReturn(true);
 
         // when, then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> patientRepository.saveAndReturn(patientEntity));
         assertEquals("W systemie znajduje się już ktoś z takim peselem", exception.getMessage());
-        BDDMockito.then(patientJpaRepository).should(Mockito.never()).save(patientEntity);
+
+        BDDMockito.then(patientJpaRepository).should(never()).save(patientEntity);
     }
 
     @Test
     public void testSaveAndReturn_DuplicateEmail() {
         // given
-        PatientEntity patientEntity = PatientEntity.builder()
-                .name("Stefan")
-                .surname("Nowak")
-                .pesel("80101010266")
-                .email("stefannowak@jakis.pl")
-                .build();
+        PatientEntity patientEntity = EntityFixtures.somePatient3();
 
         BDDMockito.given(patientJpaRepository.existsByPesel(patientEntity.getPesel())).willReturn(false);
         BDDMockito.given(patientJpaRepository.existsByEmail(patientEntity.getEmail())).willReturn(true);
@@ -207,7 +204,8 @@ class PatientRepositoryTest {
         // when, then
         RuntimeException exception = assertThrows(RuntimeException.class, () -> patientRepository.saveAndReturn(patientEntity));
         assertEquals("W systemie znajduje się już ktoś z takim emailem", exception.getMessage());
-        BDDMockito.then(patientJpaRepository).should(Mockito.never()).save(patientEntity);
+
+        BDDMockito.then(patientJpaRepository).should(never()).save(patientEntity);
     }
 
 
@@ -220,7 +218,7 @@ class PatientRepositoryTest {
         patientRepository.delete(patientEntity);
 
         // then
-        verify(patientJpaRepository, Mockito.times(1)).delete(patientEntity);
+        verify(patientJpaRepository, times(1)).delete(patientEntity);
     }
 
 

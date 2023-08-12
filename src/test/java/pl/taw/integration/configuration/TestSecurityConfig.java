@@ -1,4 +1,4 @@
-package pl.taw.api.controller.rest;
+package pl.taw.integration.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +16,7 @@ public class TestSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .anyRequest().permitAll() // Dla celów testowych, daj dostęp do wszystkiego
-//                        .antMatchers("/**").permitAll() // Dla celów testowych, daj dostęp do wszystkiego
+                        .anyRequest().permitAll()
                 );
         return http.build();
     }

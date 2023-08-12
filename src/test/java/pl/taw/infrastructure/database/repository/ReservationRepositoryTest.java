@@ -2,6 +2,7 @@ package pl.taw.infrastructure.database.repository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,14 +15,14 @@ import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,11 +42,11 @@ class ReservationRepositoryTest {
         // given
         ReservationEntity reservationEntity1 = EntityFixtures.someReservation1();
         ReservationEntity reservationEntity2 = EntityFixtures.someReservation2();
-        List<ReservationEntity> reservationEntities = Stream.of(reservationEntity1, reservationEntity2).collect(Collectors.toList());
+        List<ReservationEntity> reservationEntities = List.of(reservationEntity1, reservationEntity2);
 
         ReservationDTO reservationDTO1 = DtoFixtures.someReservation1();
         ReservationDTO reservationDTO2 = DtoFixtures.someReservation2();
-        List<ReservationDTO> expectedDTOs = Stream.of(reservationDTO1, reservationDTO2).collect(Collectors.toList());
+        List<ReservationDTO> expectedDTOs = List.of(reservationDTO1, reservationDTO2);
 
         when(reservationJpaRepository.findAll()).thenReturn(reservationEntities);
         when(reservationMapper.mapFromEntity(reservationEntity1)).thenReturn(reservationDTO1);
@@ -58,8 +59,8 @@ class ReservationRepositoryTest {
         assertEquals(expectedDTOs, resultDTOs);
 
         verify(reservationJpaRepository, times(1)).findAll();
-        verify(reservationMapper, times(1)).mapFromEntity(reservationEntity1);
-        verify(reservationMapper, times(1)).mapFromEntity(reservationEntity2);
+        verify(reservationMapper, times(2)).mapFromEntity(ArgumentMatchers.any(ReservationEntity.class));
+        verifyNoMoreInteractions(reservationJpaRepository, reservationMapper);
     }
 
     @Test
@@ -77,8 +78,10 @@ class ReservationRepositoryTest {
 
         // then
         assertEquals(expectedDTO, resultDTO);
+
         verify(reservationJpaRepository, times(1)).findById(reservationId);
         verify(reservationMapper, times(1)).mapFromEntity(reservationEntity);
+        verifyNoMoreInteractions(reservationJpaRepository, reservationMapper);
     }
 
     @Test
@@ -90,8 +93,10 @@ class ReservationRepositoryTest {
 
         // when, then
         assertThrows(NotFoundException.class, () -> reservationRepository.findById(reservationId));
+
         verify(reservationJpaRepository, times(1)).findById(reservationId);
         verify(reservationMapper, never()).mapFromEntity(any(ReservationEntity.class));
+        verifyNoMoreInteractions(reservationJpaRepository);
     }
 
     @Test
@@ -99,15 +104,16 @@ class ReservationRepositoryTest {
         // given
         Integer reservationId = 1;
         ReservationEntity expectedEntity = EntityFixtures.someReservation1();
-        when(reservationJpaRepository.findById(reservationId))
-                .thenReturn(Optional.of(expectedEntity));
+        when(reservationJpaRepository.findById(reservationId)).thenReturn(Optional.of(expectedEntity));
 
         // when
         ReservationEntity result = reservationRepository.findEntityById(reservationId);
 
         // then
         assertEquals(expectedEntity, result);
+
         verify(reservationJpaRepository, times(1)).findById(reservationId);
+        verifyNoMoreInteractions(reservationJpaRepository);
     }
 
     @Test
@@ -121,6 +127,7 @@ class ReservationRepositoryTest {
         assertThrows(NotFoundException.class, () -> reservationRepository.findEntityById(reservationId));
         verify(reservationJpaRepository, times(1)).findById(reservationId);
         verify(reservationMapper, never()).mapFromEntity(any(ReservationEntity.class));
+        verifyNoMoreInteractions(reservationJpaRepository);
     }
 
 
@@ -128,16 +135,19 @@ class ReservationRepositoryTest {
     public void testSaveAndReturn() {
         // given
         ReservationEntity reservationEntity = EntityFixtures.someReservation2();
+        ReservationEntity savedReservation = reservationEntity.withStartTimeR(LocalTime.of(13, 20));
 
         when(reservationJpaRepository.saveAndFlush(reservationEntity))
-                .thenReturn(reservationEntity);
+                .thenReturn(savedReservation);
 
         // when
         ReservationEntity result = reservationRepository.saveAndReturn(reservationEntity);
 
         // then
-        assertEquals(reservationEntity, result);
+        assertEquals(savedReservation, result);
+
         verify(reservationJpaRepository, times(1)).saveAndFlush(reservationEntity);
+        verifyNoMoreInteractions(reservationJpaRepository);
     }
 
     @Test
@@ -150,6 +160,7 @@ class ReservationRepositoryTest {
 
         // then
         verify(reservationJpaRepository, times(1)).save(reservationEntity);
+        verifyNoMoreInteractions(reservationJpaRepository);
     }
 
     @Test
@@ -162,6 +173,7 @@ class ReservationRepositoryTest {
 
         // then
         verify(reservationJpaRepository, times(1)).delete(reservationEntity);
+        verifyNoMoreInteractions(reservationJpaRepository);
     }
 
     @Test
@@ -170,20 +182,22 @@ class ReservationRepositoryTest {
         Integer doctorId = 1;
         ReservationEntity reservation1 = EntityFixtures.someReservation1().withDoctorId(doctorId);
         ReservationEntity reservation2 = EntityFixtures.someReservation2().withDoctorId(doctorId + 1);
-        List<ReservationEntity> allReservations = new ArrayList<>();
-        allReservations.add(reservation1);
-        allReservations.add(reservation2);
+        List<ReservationEntity> allReservations = List.of(reservation1, reservation2);
+        ReservationDTO reservationDTO = DtoFixtures.someReservation1();
 
         when(reservationJpaRepository.findAll()).thenReturn(allReservations);
-        when(reservationMapper.mapFromEntity(reservation1)).thenReturn(new ReservationDTO());
+        when(reservationMapper.mapFromEntity(reservation1)).thenReturn(reservationDTO);
 
         // when
         List<ReservationDTO> result = reservationRepository.findAllByDoctor(doctorId);
 
         // then
         assertEquals(1, result.size());
+        assertEquals(result.get(0).getDoctorId(), doctorId);
+
         verify(reservationJpaRepository, times(1)).findAll();
         verify(reservationMapper, times(1)).mapFromEntity(reservation1);
+        verifyNoMoreInteractions(reservationJpaRepository, reservationMapper);
     }
 
     @Test
@@ -203,8 +217,11 @@ class ReservationRepositoryTest {
 
         // then
         assertEquals(reservationDTOS, result);
+        assertEquals(patientId, result.get(0).getPatientId());
+
         verify(reservationJpaRepository, times(1)).findAll();
         verify(reservationMapper, times(3)).mapFromEntity(any(ReservationEntity.class));
+        verifyNoMoreInteractions(reservationJpaRepository, reservationMapper);
     }
 
     @Test
@@ -214,9 +231,7 @@ class ReservationRepositoryTest {
         ReservationEntity reservation1 = EntityFixtures.someReservation1().withDay(targetDay);
         ReservationEntity reservation2 = EntityFixtures.someReservation2().withDay(targetDay.plusDays(2));
         ReservationDTO reservationDTO = DtoFixtures.someReservation1().withDay(targetDay);
-        List<ReservationEntity> allReservations = new ArrayList<>();
-        allReservations.add(reservation1);
-        allReservations.add(reservation2);
+        List<ReservationEntity> allReservations = List.of(reservation1, reservation2);
 
         when(reservationJpaRepository.findAll()).thenReturn(allReservations);
         when(reservationMapper.mapFromEntity(reservation1)).thenReturn(reservationDTO);
@@ -227,8 +242,10 @@ class ReservationRepositoryTest {
         // then
         assertEquals(1, result.size());
         assertEquals(targetDay, result.get(0).getDay());
+
         verify(reservationJpaRepository, times(1)).findAll();
         verify(reservationMapper, times(1)).mapFromEntity(reservation1);
+        verifyNoMoreInteractions(reservationJpaRepository, reservationMapper);
     }
 
     @Test
@@ -240,10 +257,7 @@ class ReservationRepositoryTest {
         ReservationEntity reservation2 = EntityFixtures.someReservation2().withDoctorId(targetDoctorId + 1).withPatientId(targetPatientId);
         ReservationEntity reservation3 = EntityFixtures.someReservation3().withDoctorId(targetDoctorId).withPatientId(targetPatientId + 1);
         ReservationDTO expectedReservation = DtoFixtures.someReservation1().withDoctorId(targetDoctorId).withPatientId(targetPatientId);
-        List<ReservationEntity> allReservations = new ArrayList<>();
-        allReservations.add(reservation1);
-        allReservations.add(reservation2);
-        allReservations.add(reservation3);
+        List<ReservationEntity> allReservations = List.of(reservation1, reservation2, reservation3);
 
         when(reservationJpaRepository.findAll()).thenReturn(allReservations);
         when(reservationMapper.mapFromEntity(reservation1)).thenReturn(expectedReservation);
@@ -253,7 +267,11 @@ class ReservationRepositoryTest {
 
         // then
         assertEquals(1, result.size());
+        assertEquals(targetDoctorId, result.get(0).getDoctorId());
+        assertEquals(targetPatientId, result.get(0).getPatientId());
+
         verify(reservationJpaRepository, times(1)).findAll();
         verify(reservationMapper, times(1)).mapFromEntity(reservation1);
+        verifyNoMoreInteractions(reservationJpaRepository, reservationMapper);
     }
 }

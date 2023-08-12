@@ -1,31 +1,22 @@
 package pl.taw.integration.rest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.taw.api.controller.rest.TestSecurityConfig;
-import pl.taw.api.dto.DoctorDTO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
-import pl.taw.infrastructure.database.repository.DoctorRepository;
-import pl.taw.integration.configuration.RestAssuredIntegrationTestBase;
-import pl.taw.util.DtoFixtures;
+import pl.taw.integration.configuration.TestSecurityConfig;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -33,9 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static pl.taw.api.controller.rest.DoctorRestController.*;
 
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
 //import static io.restassured.module.mockmvc.RestAssuredMockMvc.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
+
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc

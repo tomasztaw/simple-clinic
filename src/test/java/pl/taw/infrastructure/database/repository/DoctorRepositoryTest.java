@@ -1,12 +1,12 @@
 package pl.taw.infrastructure.database.repository;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.repository.jpa.DoctorJpaRepository;
@@ -16,6 +16,7 @@ import pl.taw.util.EntityFixtures;
 import java.util.List;
 import java.util.Optional;
 
+@ExtendWith(MockitoExtension.class)
 class DoctorRepositoryTest {
 
     @Mock
@@ -27,14 +28,10 @@ class DoctorRepositoryTest {
     @InjectMocks
     private DoctorRepository doctorRepository;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void testFindAll() {
-        // when
+        // given
         List<DoctorEntity> doctors = EntityFixtures.someDoctorList;
         Mockito.when(doctorJpaRepository.findAll()).thenReturn(doctors);
 
@@ -42,16 +39,16 @@ class DoctorRepositoryTest {
         Mockito.when(doctorMapper.mapFromEntity(Mockito.any(DoctorEntity.class)))
                 .thenReturn(new DoctorDTO());
 
-        // then
+        // when
         List<DoctorDTO> result = doctorRepository.findAll();
 
-        // given
+        // then
         Assertions.assertEquals(expectedDoctorDTOs.size(), result.size());
     }
 
     @Test
     public void testFindById() {
-        // when
+        // given
         Integer doctorId = 1;
         DoctorEntity doctorEntity = new DoctorEntity();
         doctorEntity.setDoctorId(doctorId);
@@ -62,42 +59,42 @@ class DoctorRepositoryTest {
         DoctorDTO ecpectedDoctorDTO = new DoctorDTO();
         Mockito.when(doctorMapper.mapFromEntity(doctorEntity)).thenReturn(ecpectedDoctorDTO);
 
-        // then
+        // when
         DoctorDTO result = doctorRepository.findById(doctorId);
 
-        // given
+        // then
         Assertions.assertEquals(ecpectedDoctorDTO.getDoctorId(), result.getDoctorId());
     }
 
     @Test
     public void testFindEntityById() {
-        // when
+        // given
         Integer doctorId = 1;
         DoctorEntity doctorEntity = new DoctorEntity();
         doctorEntity.setDoctorId(doctorId);
 
         Mockito.when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctorEntity));
 
-        // then
+        // when
         DoctorEntity result = doctorRepository.findEntityById(doctorId);
 
-        // given
+        // then
         Assertions.assertEquals(doctorId, result.getDoctorId());
     }
 
     @Test
     public void testSaveAndReturn() {
-        // when
+        // given
         DoctorEntity doctorEntity = new DoctorEntity();
         DoctorEntity savedDoctorEntity = new DoctorEntity();
         savedDoctorEntity.setDoctorId(1);
 
         Mockito.when(doctorJpaRepository.saveAndFlush(doctorEntity)).thenReturn(savedDoctorEntity);
 
-        // then
+        // when
         DoctorEntity result = doctorRepository.saveAndReturn(doctorEntity);
 
-        // given
+        // then
         Assertions.assertEquals(savedDoctorEntity.getDoctorId(), result.getDoctorId());
     }
 
