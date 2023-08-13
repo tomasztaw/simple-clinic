@@ -16,6 +16,8 @@ import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 import java.net.URI;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping(DoctorRestController.API_DOCTORS)
@@ -139,16 +141,24 @@ public class DoctorRestController {
             @PathVariable("doctorId") Integer doctorId,
             @Valid @RequestParam(required = true) String newEmail
     ) {
+        if (!isValidEmail(newEmail)) {
+            return ResponseEntity.badRequest().build();
+        }
         DoctorEntity existingDoctor = doctorDAO.findEntityById(doctorId);
-
         existingDoctor.setEmail(newEmail);
-
         doctorDAO.save(existingDoctor);
 
         return ResponseEntity.ok().build();
     }
 
+    private boolean isValidEmail(String email) {
+        String emailPattern = "^[A-Za-z0-9+_.-]+@(.+)$";
 
+        Pattern pattern = Pattern.compile(emailPattern);
+        Matcher matcher = pattern.matcher(email);
+
+        return matcher.matches();
+    }
 
 
 }

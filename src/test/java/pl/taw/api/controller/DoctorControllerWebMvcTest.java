@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -39,9 +40,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static pl.taw.api.controller.DoctorController.*;
 
 @WebMvcTest(controllers = DoctorController.class)
-@AutoConfigureMockMvc(addFilters = false) // wyłączenie filtrów security dla testów MockMvc
+@AutoConfigureMockMvc(addFilters = false) // wyłączenie filtrów security dla testów Mock Mvc
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class DoctorControllerWebMvcTest {
 
@@ -65,6 +67,9 @@ class DoctorControllerWebMvcTest {
     @MockBean
     private final OpinionDAO opinionDAO;
 
+    @MockBean
+    private final Authentication authentication;
+
     @BeforeEach
     void setup() {
         SecurityContextHolder.getContext().setAuthentication(
@@ -81,7 +86,7 @@ class DoctorControllerWebMvcTest {
         when(doctorDAO.findAll()).thenReturn(doctors);
 
         // when, then
-        mockMvc.perform(get("/doctors/panel"))
+        mockMvc.perform(get(DOCTORS.concat(PANEL)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("doctors", doctors))
                 .andExpect(model().attributeExists("updateDoctor"))
@@ -89,6 +94,7 @@ class DoctorControllerWebMvcTest {
                 .andExpect(view().name("doctor/doctor-panel"));
 
         verify(doctorDAO, times(1)).findAll();
+        verify(doctorDAO, only()).findAll();
     }
 
     @Test
@@ -101,13 +107,14 @@ class DoctorControllerWebMvcTest {
         when(doctorDAO.findBySpecialization(specialization)).thenReturn(doctors);
 
         // when, then
-        mockMvc.perform(get("/doctors/specialization/{specialization}", specialization))
+        mockMvc.perform(get(DOCTORS.concat(SPECIALIZATION), specialization))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("doctors", doctors))
                 .andExpect(model().attribute("specialization", specialization))
                 .andExpect(view().name("doctor/doctors-specialization"));
 
         verify(doctorDAO, times(1)).findBySpecialization(specialization);
+        verify(doctorDAO, only()).findBySpecialization(specialization);
     }
 
     @Test
@@ -120,15 +127,15 @@ class DoctorControllerWebMvcTest {
         when(doctorDAO.findAll()).thenReturn(doctors);
 
         // when, then
-        mockMvc.perform(get("/doctors/specializations"))
+        mockMvc.perform(get(DOCTORS.concat(SPECIALIZATIONS)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("specializations", specializations))
                 .andExpect(view().name("doctor/specializations"));
 
         verify(doctorDAO, times(1)).findAll();
+        verify(doctorDAO, only()).findAll();
     }
 
-    @Disabled("tutaj jest błąd z authentication")
     @Test
     @WithMockUser
     public void testShowDoctorDetails() throws Exception {
@@ -142,28 +149,44 @@ class DoctorControllerWebMvcTest {
         when(doctorDAO.findById(doctorId)).thenReturn(doctor);
         when(doctorService.getWorkingHours(doctorId)).thenReturn(workingHours);
         when(opinionDAO.findAllByDoctor(doctorId)).thenReturn(opinions);
+        when(authentication.getName()).thenReturn("testUser");
 
         // when, then
-        mockMvc.perform(get("/doctors/{doctorId}/show", doctorId))
+        mockMvc.perform(get(DOCTORS.concat(SHOW), doctorId))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("doctor", doctor))
                 .andExpect(model().attribute("workingHours", workingHours))
                 .andExpect(model().attribute("opinions", opinions))
-                .andExpect(view().name("doctor/doctor-show-new"));
+                .andExpect(view().name("doctor/doctor-show"));
 
         verify(doctorDAO, times(1)).findById(doctorId);
         verify(doctorService, times(1)).getWorkingHours(doctorId);
         verify(opinionDAO, times(1)).findAllByDoctor(doctorId);
+        verifyNoMoreInteractions(doctorDAO, doctorService, opinionDAO);
     }
 
     @Test
-    void doctors() {
+    void doctors() throws Exception {
+        // given
+        List<DoctorDTO> doctors = DtoFixtures.doctors;
+
+        when(doctorDAO.findAll()).thenReturn(doctors);
+
+        // when, then
+        mockMvc.perform(get(DOCTORS))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("doctors", doctors))
+                .andExpect(view().name("doctor/doctors-all"));
+
+        verify(doctorDAO, times(1)).findAll();
+        verify(doctorDAO, only()).findAll();
     }
 
-    @Disabled("Nie mogę dojść jak to ogarnąć z csrf")
+//    @Disabled("Nie mogę dojść jak to ogarnąć z csrf")
     @ParameterizedTest
     @MethodSource
-    @WithMockUser(authorities = "ADMIN")
+//    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(authorities = "USER")
     void thatPhoneValidationWorksCorrectly(Boolean correctPhone, String phone) throws Exception {
         // given
         LinkedMultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();

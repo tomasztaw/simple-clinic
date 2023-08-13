@@ -1,16 +1,17 @@
 package pl.taw.api.controller.rest;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.taw.api.dto.PatientsDTO;
 import pl.taw.api.dto.ReservationDTO;
 import pl.taw.api.dto.ReservationsDTO;
 import pl.taw.business.ReservationService;
-import pl.taw.business.VisitService;
-import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.ReservationDAO;
 import pl.taw.infrastructure.database.entity.ReservationEntity;
 import pl.taw.util.DtoFixtures;
@@ -20,16 +21,14 @@ import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ReservationRestControllerTest {
-
 
     @Mock
     private ReservationDAO reservationDAO;
@@ -40,16 +39,12 @@ class ReservationRestControllerTest {
     @InjectMocks
     private ReservationRestController reservationRestController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
 
     @Test
     void getReservationsAsListShouldWorksCorrectly() {
         // given
         ReservationsDTO reservations = DtoFixtures.reservationsDTO;
+
         when(reservationDAO.findAll()).thenReturn(reservations.getReservations());
 
         // when
@@ -59,7 +54,9 @@ class ReservationRestControllerTest {
         assertThat(result, is(notNullValue()));
         assertThat(result.getReservations(), hasSize(reservations.getReservations().size()));
         assertThat(result.getReservations(), containsInAnyOrder(reservations.getReservations().toArray()));
+
         verify(reservationDAO, times(1)).findAll();
+        verify(reservationDAO, only()).findAll();
     }
 
     @Test
@@ -67,6 +64,7 @@ class ReservationRestControllerTest {
         // given
         Integer reservationId = 1;
         ReservationDTO reservation = DtoFixtures.someReservation1();
+
         when(reservationDAO.findById(reservationId)).thenReturn(reservation);
 
         // when
@@ -75,13 +73,16 @@ class ReservationRestControllerTest {
         // then
         assertThat(result, is(notNullValue()));
         assertSame(reservation, result);
+
         verify(reservationDAO, times(1)).findById(reservationId);
+        verify(reservationDAO, only()).findById(reservationId);
     }
 
     @Test
     void testReservationDetails_NonExistingReservation() {
         // given
         Integer reservationId = -1;
+
         when(reservationDAO.findById(reservationId)).thenReturn(null);
 
         // when
@@ -89,6 +90,9 @@ class ReservationRestControllerTest {
 
         // then
         assertNull(result);
+
+        verify(reservationDAO, times(1)).findById(reservationId);
+        verify(reservationDAO, only()).findById(reservationId);
     }
 
     @Test
@@ -96,6 +100,7 @@ class ReservationRestControllerTest {
         // given
         LocalDate testDate = LocalDate.of(2023, 8, 4);
         ReservationsDTO reservationsDTO = ReservationsDTO.of(DtoFixtures.reservations.stream().map(res -> res.withDay(testDate)).toList());
+
         Mockito.when(reservationService.findAllByDay(eq(testDate))).thenReturn(reservationsDTO.getReservations());
 
         // when
@@ -107,7 +112,9 @@ class ReservationRestControllerTest {
         assertTrue(result.getReservations().stream().allMatch(res -> res.getDay().equals(testDate)));
         assertFalse(result.getReservations().stream().anyMatch(res -> res.getDay().getDayOfWeek().equals(DayOfWeek.SUNDAY)));
         assertFalse(result.getReservations().stream().anyMatch(res -> res.getDay().getDayOfWeek().equals(DayOfWeek.SATURDAY)));
+
         verify(reservationService, times(1)).findAllByDay(testDate);
+        verify(reservationService, only()).findAllByDay(testDate);
     }
 
     @Test
@@ -124,7 +131,9 @@ class ReservationRestControllerTest {
         // then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(URI.create("/api/reservations/%s".formatted(savedEntity.getReservationId())), response.getHeaders().getLocation());
-        verify(reservationDAO, times(1)).saveAndReturn(savedEntity);
+
+        verify(reservationDAO, times(1)).saveAndReturn(ArgumentMatchers.any(ReservationEntity.class));
+        verify(reservationDAO, only()).saveAndReturn(ArgumentMatchers.any(ReservationEntity.class));
     }
 
     @Test
@@ -141,7 +150,10 @@ class ReservationRestControllerTest {
 
         // then
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
         verify(reservationDAO, times(1)).save(existingReservation);
+        verify(reservationDAO, times(1)).findEntityById(eq(reservationId));
+        verifyNoMoreInteractions(reservationDAO);
     }
 
     @Test
@@ -157,13 +169,17 @@ class ReservationRestControllerTest {
 
         // then
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
         verify(reservationDAO, times(1)).delete(existingReservation);
+        verify(reservationDAO, times(1)).findEntityById(reservationId);
+        verifyNoMoreInteractions(reservationDAO);
     }
 
     @Test
     void deleteReservationShouldReturnNotFound() {
         // given
         Integer reservationId = -2;
+
         when(reservationDAO.findEntityById(reservationId)).thenReturn(null);
 
         // when
@@ -171,7 +187,9 @@ class ReservationRestControllerTest {
 
         // then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
         verify(reservationDAO, never()).delete(ArgumentMatchers.any(ReservationEntity.class));
+        verify(reservationDAO, only()).findEntityById(reservationId);
     }
 
     @Test
@@ -190,7 +208,9 @@ class ReservationRestControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(newDateTime.toLocalDate(), existingReservation.getDay());
         assertEquals(newDateTime.toLocalTime(), existingReservation.getStartTimeR());
-        verify(reservationDAO).save(existingReservation);
+
+        verify(reservationDAO, times(1)).save(existingReservation);
+        verify(reservationDAO, times(1)).findEntityById(reservationId);
     }
 
 }

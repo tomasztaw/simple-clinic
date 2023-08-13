@@ -9,12 +9,16 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.repository.jpa.DoctorJpaRepository;
 import pl.taw.infrastructure.database.repository.mapper.DoctorMapper;
+import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DoctorRepositoryTest {
@@ -33,93 +37,110 @@ class DoctorRepositoryTest {
     public void testFindAll() {
         // given
         List<DoctorEntity> doctors = EntityFixtures.someDoctorList;
-        Mockito.when(doctorJpaRepository.findAll()).thenReturn(doctors);
-
         List<DoctorDTO> expectedDoctorDTOs = doctors.stream().map(doctorMapper::mapFromEntity).toList();
-        Mockito.when(doctorMapper.mapFromEntity(Mockito.any(DoctorEntity.class)))
-                .thenReturn(new DoctorDTO());
+
+        when(doctorJpaRepository.findAll()).thenReturn(doctors);
+        when(doctorMapper.mapFromEntity(any(DoctorEntity.class)))
+                .thenAnswer(invocation -> {
+                    DoctorEntity entity = invocation.getArgument(0);
+                    int index = doctors.indexOf(entity);
+                    return expectedDoctorDTOs.get(index);
+                });
 
         // when
         List<DoctorDTO> result = doctorRepository.findAll();
 
         // then
         Assertions.assertEquals(expectedDoctorDTOs.size(), result.size());
+
+        verify(doctorJpaRepository, times(1)).findAll();
+        verify(doctorMapper, times(doctors.size() * 2)).mapFromEntity(any(DoctorEntity.class));
+        verifyNoMoreInteractions(doctorJpaRepository, doctorMapper);
     }
 
     @Test
     public void testFindById() {
         // given
         Integer doctorId = 1;
-        DoctorEntity doctorEntity = new DoctorEntity();
-        doctorEntity.setDoctorId(doctorId);
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor1();
+        DoctorDTO ecpectedDoctorDTO = DtoFixtures.someDoctor1();
 
-        Mockito.when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctorEntity));
-
-
-        DoctorDTO ecpectedDoctorDTO = new DoctorDTO();
-        Mockito.when(doctorMapper.mapFromEntity(doctorEntity)).thenReturn(ecpectedDoctorDTO);
+        when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctorEntity));
+        when(doctorMapper.mapFromEntity(doctorEntity)).thenReturn(ecpectedDoctorDTO);
 
         // when
         DoctorDTO result = doctorRepository.findById(doctorId);
 
         // then
         Assertions.assertEquals(ecpectedDoctorDTO.getDoctorId(), result.getDoctorId());
+
+        verify(doctorJpaRepository, times(1)).findById(doctorId);
+        verify(doctorMapper, times(1)).mapFromEntity(doctorEntity);
+        verifyNoMoreInteractions(doctorJpaRepository, doctorMapper);
     }
 
     @Test
     public void testFindEntityById() {
         // given
-        Integer doctorId = 1;
-        DoctorEntity doctorEntity = new DoctorEntity();
-        doctorEntity.setDoctorId(doctorId);
+        Integer doctorId = 5;
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor5();
 
-        Mockito.when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctorEntity));
+        when(doctorJpaRepository.findById(doctorId)).thenReturn(Optional.of(doctorEntity));
 
         // when
         DoctorEntity result = doctorRepository.findEntityById(doctorId);
 
         // then
+        Assertions.assertNotNull(result);
         Assertions.assertEquals(doctorId, result.getDoctorId());
+
+        verify(doctorJpaRepository, times(1)).findById(doctorId);
+        verifyNoMoreInteractions(doctorJpaRepository);
+        verifyNoInteractions(doctorMapper);
     }
 
     @Test
     public void testSaveAndReturn() {
         // given
-        DoctorEntity doctorEntity = new DoctorEntity();
-        DoctorEntity savedDoctorEntity = new DoctorEntity();
-        savedDoctorEntity.setDoctorId(1);
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor2();
+        DoctorEntity savedDoctorEntity = doctorEntity.withName("Agnes");
 
-        Mockito.when(doctorJpaRepository.saveAndFlush(doctorEntity)).thenReturn(savedDoctorEntity);
+        when(doctorJpaRepository.saveAndFlush(doctorEntity)).thenReturn(savedDoctorEntity);
 
         // when
         DoctorEntity result = doctorRepository.saveAndReturn(doctorEntity);
 
         // then
         Assertions.assertEquals(savedDoctorEntity.getDoctorId(), result.getDoctorId());
+
+        verify(doctorJpaRepository, times(1)).saveAndFlush(doctorEntity);
+        verifyNoMoreInteractions(doctorJpaRepository);
     }
 
     @Test
     public void testSave() {
         // given
-        DoctorEntity doctorEntity = new DoctorEntity();
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor6();
 
         // when
         doctorRepository.save(doctorEntity);
 
         // then
-        Mockito.verify(doctorJpaRepository, Mockito.times(1)).save(doctorEntity);
+        verify(doctorJpaRepository, times(1)).save(doctorEntity);
+        verifyNoMoreInteractions(doctorJpaRepository);
     }
 
     @Test
     public void testDelete() {
         // given
-        DoctorEntity doctorEntity = new DoctorEntity();
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor4();
 
         // when
         doctorRepository.delete(doctorEntity);
 
         // then
-        Mockito.verify(doctorJpaRepository, Mockito.times(1)).delete(doctorEntity);
+        verify(doctorJpaRepository, times(1)).delete(doctorEntity);
+        verifyNoMoreInteractions(doctorJpaRepository);
     }
 
     @Test
@@ -127,10 +148,11 @@ class DoctorRepositoryTest {
         // given
         int doctorId = 0;
 
-        Mockito.when(doctorJpaRepository.findById(doctorId)).thenThrow(new RuntimeException("Id powinna być dodatnie"));
+        when(doctorJpaRepository.findById(doctorId)).thenThrow(new RuntimeException("Id powinna być dodatnie"));
 
         // when, then
         Assertions.assertThrows(RuntimeException.class, () -> doctorRepository.findById(doctorId));
+        verifyNoMoreInteractions(doctorJpaRepository);
     }
 
 

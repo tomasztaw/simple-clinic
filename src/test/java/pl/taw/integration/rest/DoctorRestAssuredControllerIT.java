@@ -117,7 +117,7 @@ class DoctorRestAssuredControllerIT {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("size()", greaterThan(0));
-//                .body("visits.doctorId", equalTo(doctorId));
+//                .body("visits[0].doctor.doctorId", equalTo(doctorId));
     }
 
     @Test

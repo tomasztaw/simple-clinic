@@ -16,24 +16,24 @@ import java.util.List;
 //@RunWith(SpringRunner.class) @ExtendWith(SpringExtension.class)
 //@ExtendWith(SpringExtension.class)
 //@AllArgsConstructor(onConstructor = @__(@Autowired))
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class DoctorRepositoryDataJpaTest extends AbstractJpaIT {
 
 
     private final DoctorRepository doctorRepository;
 
-//    @Test
-//    void thatDoctorCanBySaveCorrectly() {
-//        // given
-//        List<DoctorEntity> doctorEntities = List.of(
-//                EntityFixtures.someDoctor1(), EntityFixtures.someDoctor2(), EntityFixtures.someDoctor3());
-//        doctorRepository.saveAllAndFlush(doctorEntities);
-//
-//        // when
-//        List<DoctorDTO> doctorsFound = doctorRepository.findAll();
-//
-//        // then
-//        Assertions.assertThat(doctorsFound.size()).isEqualTo(3);
-//    }
+    @Test
+    void thatDoctorCanBySaveCorrectly() {
+        // given
+        List<DoctorEntity> doctorEntities = List.of(
+                EntityFixtures.someDoctor1(), EntityFixtures.someDoctor2(), EntityFixtures.someDoctor3());
+        doctorRepository.saveAllAndFlush(doctorEntities);
+
+        // when
+        List<DoctorDTO> doctorsFound = doctorRepository.findAll();
+
+        // then
+        Assertions.assertThat(doctorsFound.size()).isEqualTo(3);
+    }
 }

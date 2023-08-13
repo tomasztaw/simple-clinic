@@ -1,16 +1,15 @@
 package pl.taw.api.controller.rest;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.PatientsDTO;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.PatientDAO;
@@ -18,7 +17,6 @@ import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
-import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,6 +24,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class PatientRestControllerTest {
 
     @Mock
@@ -37,16 +36,12 @@ class PatientRestControllerTest {
     @InjectMocks
     private PatientRestController patientRestController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
 
     @Test
     void getPatientsShouldWorksCorrectly() {
         // given
         PatientsDTO patients = PatientsDTO.of(DtoFixtures.patients);
+
         when(patientDAO.findAll()).thenReturn(patients.getPatients());
 
         // when
@@ -56,7 +51,9 @@ class PatientRestControllerTest {
         assertThat(result, is(notNullValue()));
         assertThat(result.getPatients(), hasSize(patients.getPatients().size()));
         assertThat(result.getPatients(), containsInAnyOrder(patients.getPatients().toArray()));
+
         verify(patientDAO, times(1)).findAll();
+        verify(patientDAO, only()).findAll();
     }
 
     @Test
@@ -64,6 +61,7 @@ class PatientRestControllerTest {
         // given
         Integer patientId = 1;
         PatientDTO patient = DtoFixtures.somePatient1();
+
         when(patientDAO.findById(patientId)).thenReturn(patient);
 
         // when
@@ -72,12 +70,16 @@ class PatientRestControllerTest {
         // then
         assertSame(patient, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        verify(patientDAO, times(1)).findById(patientId);
+        verify(patientDAO, only()).findById(patientId);
     }
 
     @Test
     void testShowPatientById_NonExistingPatient() {
         // given
-        Integer patientId = 1;
+        Integer patientId = -1;
+
         when(patientDAO.findById(patientId)).thenReturn(null);
 
         // when
@@ -86,6 +88,9 @@ class PatientRestControllerTest {
         // then
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        verify(patientDAO, times(1)).findById(patientId);
+        verify(patientDAO, only()).findById(patientId);
     }
 
     @Test
@@ -93,9 +98,9 @@ class PatientRestControllerTest {
         // given
         Integer patientId = 2;
         PatientDTO patient = DtoFixtures.somePatient2();
-        when(patientDAO.findById(patientId)).thenReturn(patient);
-
         VisitsDTO visitsList = VisitsDTO.of(DtoFixtures.visits);
+
+        when(patientDAO.findById(patientId)).thenReturn(patient);
         when(visitService.findAllVisitByPatient(patientId)).thenReturn(visitsList.getVisits());
 
         // when
@@ -104,12 +109,17 @@ class PatientRestControllerTest {
         // then
         assertSame(visitsList.getVisits(), Objects.requireNonNull(response.getBody()).getVisits());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        verify(patientDAO, times(1)).findById(patientId);
+        verify(visitService, times(1)).findAllVisitByPatient(patientId);
+        verifyNoMoreInteractions(patientDAO, visitService);
     }
 
     @Test
     void testShowHistory_NonExistingPatient() {
         // given
-        Integer patientId = 1;
+        Integer patientId = -11;
+
         when(patientDAO.findById(patientId)).thenReturn(null);
 
         // when
@@ -118,21 +128,30 @@ class PatientRestControllerTest {
         // then
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        verify(patientDAO, times(1)).findById(patientId);
+        verify(patientDAO, only()).findById(patientId);
     }
 
     @Test
     void testShowHistory_ExistingPatientNoVisits() {
         // given
         Integer patientId = 1;
-        when(patientDAO.findById(patientId)).thenReturn(null);
+        PatientDTO existingPatient = DtoFixtures.somePatient1();
+
+        when(patientDAO.findById(patientId)).thenReturn(existingPatient);
         when(visitService.findAllVisitByPatient(patientId)).thenReturn(null);
 
         // when
         ResponseEntity<VisitsDTO> response = patientRestController.showHistory(patientId);
 
         // then
-        assertNull(response.getBody());
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(Objects.requireNonNull(response.getBody()).getVisits());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        verify(patientDAO, times(1)).findById(patientId);
+        verify(visitService, times(1)).findAllVisitByPatient(patientId);
+        verifyNoMoreInteractions(patientDAO, visitService);
     }
 
     @Test
@@ -158,7 +177,9 @@ class PatientRestControllerTest {
         // then
         assertEquals("Dodano pacjenta: " + name + " " + surname, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
         verify(patientDAO, times(1)).save(expectedPatientEntity);
+        verify(patientDAO, only()).save(expectedPatientEntity);
     }
 
     @Test
@@ -170,8 +191,8 @@ class PatientRestControllerTest {
         String pesel = "77013112358";
         String phone = "+48 444 888 789";
         String email = "janusz@yaho.com";
-
         PatientEntity existingPatient = EntityFixtures.somePatient5();
+
         when(patientDAO.findEntityById(patientId)).thenReturn(existingPatient);
 
         // when
@@ -187,7 +208,8 @@ class PatientRestControllerTest {
     @Test
     void testUpdatePatient_NonExistingPatient() {
         // given
-        Integer patientId = 1;
+        Integer patientId = -1;
+
         when(patientDAO.findEntityById(patientId)).thenReturn(null);
 
         // when
@@ -196,6 +218,7 @@ class PatientRestControllerTest {
 
         // then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
         verify(patientDAO, never()).save(ArgumentMatchers.any(PatientEntity.class));
     }
 
@@ -204,6 +227,7 @@ class PatientRestControllerTest {
         // given
         Integer patientId = 4;
         PatientEntity existingPatient = EntityFixtures.somePatient4();
+
         when(patientDAO.findEntityById(patientId)).thenReturn(existingPatient);
 
         // when
@@ -213,12 +237,15 @@ class PatientRestControllerTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
         verify(patientDAO, times(1)).delete(existingPatient);
+        verify(patientDAO, times(1)).findEntityById(patientId);
+        verifyNoMoreInteractions(patientDAO);
     }
 
     @Test
     void testDeletePatient_NonExistingPatient() {
         // given
-        Integer patientId = 1;
+        Integer patientId = -1;
+
         when(patientDAO.findEntityById(patientId)).thenReturn(null);
 
         // when
@@ -226,7 +253,9 @@ class PatientRestControllerTest {
 
         // then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
         verify(patientDAO, never()).delete(ArgumentMatchers.any(PatientEntity.class));
+        verify(patientDAO, only()).findEntityById(patientId);
     }
 
     @Test
@@ -245,7 +274,10 @@ class PatientRestControllerTest {
         // then
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedAnswer, response.getBody());
+
         verify(patientDAO, times(1)).save(existingPatient);
+        verify(patientDAO, times(1)).findEntityById(patientId);
+        verifyNoMoreInteractions(patientDAO);
     }
 
     @Test
@@ -253,6 +285,7 @@ class PatientRestControllerTest {
         // given
         Integer patientId = -12;
         String newPhone = "+48 555 123 777";
+
         when(patientDAO.findEntityById(patientId)).thenReturn(null);
 
         // when
@@ -260,7 +293,9 @@ class PatientRestControllerTest {
 
         // then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
         verify(patientDAO, never()).save(ArgumentMatchers.any(PatientEntity.class));
+        verify(patientDAO, only()).findEntityById(patientId);
     }
 
     @Test
@@ -280,14 +315,18 @@ class PatientRestControllerTest {
         // then
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedAnswer, response.getBody());
+
         verify(patientDAO, times(1)).save(existingPatient);
+        verify(patientDAO, times(1)).findEntityById(patientId);
+        verifyNoMoreInteractions(patientDAO);
     }
 
     @Test
     void testUpdatePatientEmail_NonExistingPatient() {
         // given
-        Integer patientId = 1;
+        Integer patientId = -1;
         String newEmail = "new.email@example.com";
+
         when(patientDAO.findEntityById(patientId)).thenReturn(null);
 
         // when
@@ -295,7 +334,9 @@ class PatientRestControllerTest {
 
         // then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
         verify(patientDAO, never()).save(ArgumentMatchers.any(PatientEntity.class));
+        verify(patientDAO, only()).findEntityById(patientId);
     }
 
 }

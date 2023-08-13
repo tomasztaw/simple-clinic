@@ -120,8 +120,10 @@ public class DoctorController {
         } catch (IOException e) {
             throw new RuntimeException("Brak pliku");
         }
-        String username = authentication.getName();
-        model.addAttribute("username", username);
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
         List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
         model.addAttribute("opinions", opinions);
 

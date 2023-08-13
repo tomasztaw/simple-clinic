@@ -11,12 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -29,15 +26,14 @@ import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.util.DtoFixtures;
+import pl.taw.util.EntityFixtures;
 import pl.taw.util.WorkingHoursFixtures;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -56,12 +52,6 @@ class DoctorControllerMockitoTest {
 
     @Mock
     private DoctorService doctorService;
-
-    @MockBean
-    private Authentication authentication;
-
-    @Mock
-    private SecurityContext securityContext;
 
     @Mock
     private HttpServletRequest request;
@@ -93,6 +83,9 @@ class DoctorControllerMockitoTest {
         assertThat(model.getAttribute("doctors")).isEqualTo(doctors);
         assertThat(model.getAttribute("username")).isEqualTo(username);
         assertEquals(new DoctorDTO(), model.getAttribute("updateDoctor"));
+
+        verify(doctorDAO, times(1)).findAll();
+        verify(doctorDAO, only()).findAll();
     }
 
     @Test
@@ -110,8 +103,10 @@ class DoctorControllerMockitoTest {
         String redirectUrl = doctorController.addDoctor(name, surname, title, phone, email, request);
 
         // then
-        verify(doctorDAO).save(any(DoctorEntity.class));
         assertEquals("redirect:http://eclinic.com/doctors/panel", redirectUrl);
+
+        verify(doctorDAO, times(1)).save(any(DoctorEntity.class));
+        verify(doctorDAO, only()).save(any(DoctorEntity.class));
     }
 
     @Test
@@ -134,8 +129,10 @@ class DoctorControllerMockitoTest {
 
         // then
         org.junit.jupiter.api.Assertions.assertTrue(violations.isEmpty());
-        verify(doctorDAO).save(any(DoctorEntity.class));
         assertEquals("redirect:http://eclinic.com/doctors/add/valid", redirectUrl);
+
+        verify(doctorDAO, times(1)).save(any(DoctorEntity.class));
+        verify(doctorDAO, only()).save(any(DoctorEntity.class));
     }
 
     @Test
@@ -157,9 +154,9 @@ class DoctorControllerMockitoTest {
         // then
         assertFalse(violations.isEmpty());
         assertNull(redirectUrl);
-//        verify(doctorDAO, never()).save(any(DoctorEntity.class));
-//        verify(doctorDAO, never()).save(any());
-//        verifyNoInteractions(doctorDAO);
+
+        verify(doctorDAO, times(1)).save(any(DoctorEntity.class));
+        verify(doctorDAO, only()).save(any(DoctorEntity.class));
     }
 
     @Test
@@ -175,45 +172,52 @@ class DoctorControllerMockitoTest {
                 .email("konstanty@eclinic.pl")
                 .build();
 
-        DoctorEntity doctorEntity = DoctorEntity.builder().doctorId(doctorId).build();
-        when(doctorDAO.findEntityById(updateDoctor.getDoctorId())).thenReturn(doctorEntity);
-
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor5().withDoctorId(doctorId);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Referer", "/doctors/panel");
 
-        // Method under test
+        when(doctorDAO.findEntityById(updateDoctor.getDoctorId())).thenReturn(doctorEntity);
+
+        // when
         String viewName = doctorController.updateDoctor(updateDoctor, request);
 
-        // Verification
+        // then
         assertEquals("redirect:/doctors/panel", viewName);
         assertEquals(updateDoctor.getDoctorId(), doctorEntity.getDoctorId());
         assertEquals(updateDoctor.getSurname(), doctorEntity.getSurname());
         assertEquals(updateDoctor.getEmail(), doctorEntity.getEmail());
-        verify(doctorDAO).save(doctorEntity);
+
+        verify(doctorDAO, times(1)).findEntityById(doctorId);
+        verify(doctorDAO, times(1)).save(doctorEntity);
+        verifyNoMoreInteractions(doctorDAO);
     }
 
     @Test
     void testDeleteDoctorById() {
         // given
         int doctorId = 1;
-        DoctorEntity doctorEntity = new DoctorEntity().withDoctorId(doctorId);
-        when(doctorDAO.findEntityById(doctorId)).thenReturn(doctorEntity);
-
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor1();
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Referer", "/doctors/panel");
+
+        when(doctorDAO.findEntityById(doctorId)).thenReturn(doctorEntity);
 
         // when
         String viewName = doctorController.deleteDoctorById(doctorId, request);
 
         // then
         assertEquals("redirect:/doctors/panel", viewName);
-        verify(doctorDAO).delete(doctorEntity);
+
+        verify(doctorDAO, times(1)).findEntityById(doctorId);
+        verify(doctorDAO, times(1)).delete(doctorEntity);
+        verifyNoMoreInteractions(doctorDAO);
     }
 
     @Test
     void testDeleteDoctorById_ThrowsEntityNotFoundException() {
         // given
-        int doctorId = 1;
+        int doctorId = -12;
+
         when(doctorDAO.findEntityById(doctorId)).thenReturn(null);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -223,6 +227,8 @@ class DoctorControllerMockitoTest {
 
         // then
         verify(doctorDAO, never()).delete(any());
+        verify(doctorDAO, times(1)).findEntityById(doctorId);
+        verify(doctorDAO, only()).findEntityById(doctorId);
     }
 
     @Test
@@ -241,6 +247,9 @@ class DoctorControllerMockitoTest {
         assertEquals("doctor/doctors-specialization", viewName);
         assertEquals(expectedList, model.getAttribute("doctors"));
         assertEquals(specialization, model.getAttribute("specialization"));
+
+        verify(doctorDAO, times(1)).findBySpecialization(specialization);
+        verify(doctorDAO, only()).findBySpecialization(specialization);
     }
 
     @Test
@@ -260,26 +269,27 @@ class DoctorControllerMockitoTest {
         // then
         assertEquals("doctor/specializations", viewName);
         assertEquals(expectedSpecializations, model.getAttribute("specializations"));
+
+        verify(doctorDAO, times(1)).findAll();
+        verify(doctorDAO, only()).findAll();
     }
 
     @Test
-    void testShowDoctorDetails() throws IOException {
+    void testShowDoctorDetails() {
         // given
         int doctorId = 1;
-        DoctorDTO mockDoctor = new DoctorDTO().withDoctorId(doctorId);
-        when(doctorDAO.findById(doctorId)).thenReturn(mockDoctor);
-
+        DoctorDTO mockDoctor = DtoFixtures.someDoctor1();
         List<OpinionDTO> opinions = Arrays.asList(DtoFixtures.someOpinion1(), DtoFixtures.someOpinion2().withDoctorId(doctorId));
-        when(opinionDAO.findAllByDoctor(doctorId)).thenReturn(opinions);
 
         ExtendedModelMap model = new ExtendedModelMap();
         List<WorkingHours> mockWorkingHours = Arrays.asList(
                 WorkingHoursFixtures.mondayHours(), WorkingHoursFixtures.fridayHours());
-
-        when(doctorService.getWorkingHours(doctorId)).thenReturn(mockWorkingHours);
-
         String username = "testUser";
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null);
+
+        when(doctorDAO.findById(doctorId)).thenReturn(mockDoctor);
+        when(opinionDAO.findAllByDoctor(doctorId)).thenReturn(opinions);
+        when(doctorService.getWorkingHours(doctorId)).thenReturn(mockWorkingHours);
 
         // given
         String viewName = doctorController.showDoctorDetails(doctorId, model, authentication);
@@ -290,6 +300,11 @@ class DoctorControllerMockitoTest {
         assertEquals(mockWorkingHours, model.getAttribute("workingHours"));
         assertEquals(username, model.getAttribute("username"));
         assertEquals(opinions, model.getAttribute("opinions"));
+
+        verify(doctorDAO, times(1)).findById(doctorId);
+        verify(opinionDAO, times(1)).findAllByDoctor(doctorId);
+        verify(doctorService, times(1)).getWorkingHours(doctorId);
+        verifyNoMoreInteractions(doctorDAO, opinionDAO, doctorService);
     }
 
     @Test
@@ -306,5 +321,8 @@ class DoctorControllerMockitoTest {
         // then
         assertEquals(doctors, model.getAttribute("doctors"));
         assertEquals("doctor/doctors-all", result);
+
+        verify(doctorDAO, times(1)).findAll();
+        verify(doctorDAO, only()).findAll();
     }
 }

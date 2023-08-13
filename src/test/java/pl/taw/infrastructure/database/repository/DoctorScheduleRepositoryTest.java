@@ -50,6 +50,7 @@ class DoctorScheduleRepositoryTest {
 
         verify(doctorScheduleJpaRepository, times(1)).findById(scheduleId);
         verifyNoMoreInteractions(doctorScheduleJpaRepository);
+        verify(doctorScheduleJpaRepository, only()).findById(scheduleId);
     }
 
     @Test
@@ -95,6 +96,7 @@ class DoctorScheduleRepositoryTest {
         verify(doctorScheduleJpaRepository, times(1)).findAll();
         verify(doctorScheduleMapper, times(2)).mapFromEntity(any(DoctorScheduleEntity.class));
         verifyNoMoreInteractions(doctorScheduleJpaRepository, doctorScheduleMapper);
+        verify(doctorScheduleJpaRepository, only()).findAll();
     }
 
     @Test
