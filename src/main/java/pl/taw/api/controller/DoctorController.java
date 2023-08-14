@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
@@ -191,7 +192,8 @@ public class DoctorController {
             HttpServletRequest request
     ) {
         if (bindingResult.hasErrors()) {
-            return "home";
+//            return "home";
+            return "error";
         }
         DoctorEntity newDoctor = DoctorEntity.builder()
                 .name(doctorDTO.getName())
@@ -206,7 +208,7 @@ public class DoctorController {
         if (referer != null) {
             return "redirect:" + referer;
         } else {
-            return null;
+            return "home";
         }
     }
 

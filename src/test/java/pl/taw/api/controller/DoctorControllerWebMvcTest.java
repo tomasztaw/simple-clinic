@@ -185,7 +185,6 @@ class DoctorControllerWebMvcTest {
 //    @Disabled("Nie mogę dojść jak to ogarnąć z csrf")
     @ParameterizedTest
     @MethodSource
-//    @WithMockUser(authorities = "ADMIN")
     @WithMockUser(authorities = "USER")
     void thatPhoneValidationWorksCorrectly(Boolean correctPhone, String phone) throws Exception {
         // given

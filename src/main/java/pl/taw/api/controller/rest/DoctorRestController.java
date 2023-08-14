@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.DoctorsDTO;
@@ -18,6 +20,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(DoctorRestController.API_DOCTORS)
@@ -34,6 +37,52 @@ public class DoctorRestController {
 
     private final DoctorDAO doctorDAO;
     private final VisitService visitService;
+
+
+    // ################### Ćwiczenie walidacji #####################
+    private final GreetingService service;
+
+    @PostMapping("walidacja")
+    public ResponseEntity<String> postWalidacja(
+            @RequestBody Greeting greeting
+    ) {
+        final String greetingMsg = service.saveGreeting(greeting);
+        return ResponseEntity
+                .accepted()
+                .body(greetingMsg);
+    }
+
+    @PostMapping("wal")
+    public ResponseEntity<String> doctorValidation(
+            @RequestBody DoctorDTO doctor
+    ) {
+        String body = service.saveDoctor(doctor);
+        return ResponseEntity
+                .accepted()
+                .body(body);
+    }
+
+//    @PostMapping("walidacja")
+//    public ResponseEntity<String> postWalidacja(
+//            @RequestBody @Valid Greeting greeting,
+//            BindingResult bindingResult
+//    ) {
+//        if (bindingResult.hasErrors()) {
+//            return ResponseEntity
+//                    .badRequest()
+//                    .body(
+//                            bindingResult.getAllErrors().stream()
+//                                    .map(ObjectError::getDefaultMessage)
+//                                    .collect(Collectors.joining())
+//                    );
+//        }
+//        final String greetingMsg = service.saveGreeting(greeting);
+//        return ResponseEntity
+//                .accepted()
+//                .body(greetingMsg);
+//    }
+
+    // #############################################################
 
     @GetMapping
     public DoctorsDTO getDoctors() {
