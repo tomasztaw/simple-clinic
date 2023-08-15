@@ -42,6 +42,11 @@ public class DoctorRestController {
     // ################### Ćwiczenie walidacji #####################
     private final GreetingService service;
 
+    @GetMapping("/error")
+    public ResponseEntity<?> thrException() {
+        return ResponseEntity.ok(service.throwException());
+    }
+
     @PostMapping("walidacja")
     public ResponseEntity<String> postWalidacja(
             @RequestBody Greeting greeting

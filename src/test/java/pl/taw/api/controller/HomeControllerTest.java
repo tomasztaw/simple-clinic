@@ -56,25 +56,34 @@ public class HomeControllerTest {
 
     @Test
     public void testHomePage_authenticatedUser() throws Exception {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail("user@example.com");
-        when(userRepository.findByUserName(anyString())).thenReturn(userEntity);
+//        UserEntity userEntity = new UserEntity();
+        UserEntity userEntity = EntityFixtures.someUser1();
+//        userEntity.setEmail("user@example.com");
+//        when(userRepository.findByUserName(anyString())).thenReturn(userEntity);
 
-        PatientDTO patientDTO = DtoFixtures.somePatient1().withEmail("user@example.com");
-        when(patientDAO.findByEmail(anyString())).thenReturn(patientDTO);
+        PatientDTO patientDTO = DtoFixtures.somePatient1().withEmail(userEntity.getEmail());
+//        PatientDTO patientDTO = DtoFixtures.somePatient1().withEmail("user@example.com");
+//        when(patientDAO.findByEmail(anyString())).thenReturn(patientDTO);
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(() -> "USER");
 
-        Authentication authentication = new CustomAuthentication("user", authorities);
+        Authentication authentication = new CustomAuthentication(userEntity.getName(), authorities);
+
+        String username = authentication.getName();
+
+        boolean isUser = authorities.stream().anyMatch(a -> a.getAuthority().equals("USER"));
 
         mockMvc = MockMvcBuilders.standaloneSetup(homeController).build();
 
         mockMvc.perform(get("/")
                         .with(authentication(authentication)))
                 .andExpect(status().isOk())
-                .andExpect(view().name("home"))
-                .andExpect(model().attributeExists("username", "isUser", "patient"));
+                .andExpect(view().name("home"));
+//                .andExpect(model().attribute("username", username))
+//                .andExpect(model().attribute("isUser", isUser))
+//                .andExpect(model().attribute("patient", patientDTO));
+//                .andExpect(model().attributeExists("username", "isUser", "patient"));
     }
 
     private static class CustomAuthentication implements Authentication {

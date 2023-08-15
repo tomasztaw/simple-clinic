@@ -192,7 +192,6 @@ public class DoctorController {
             HttpServletRequest request
     ) {
         if (bindingResult.hasErrors()) {
-//            return "home";
             return "error";
         }
         DoctorEntity newDoctor = DoctorEntity.builder()

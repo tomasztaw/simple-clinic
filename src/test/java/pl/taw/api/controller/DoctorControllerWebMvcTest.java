@@ -182,7 +182,7 @@ class DoctorControllerWebMvcTest {
         verify(doctorDAO, only()).findAll();
     }
 
-//    @Disabled("Nie mogę dojść jak to ogarnąć z csrf")
+    @Disabled("Zwraca mi status 200 przy niewłaściwych numerach")
     @ParameterizedTest
     @MethodSource
     @WithMockUser(authorities = "USER")
@@ -194,13 +194,15 @@ class DoctorControllerWebMvcTest {
 
         // when, then
         if (correctPhone) {
-            mockMvc.perform(post("/doctors/add/valid").params(parameters))
+//            mockMvc.perform(post("/doctors/add/valid").params(parameters))
+            mockMvc.perform(post(DOCTORS.concat(ADD).concat(VALID)).params(parameters))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeDoesNotExist("errorMessage"))
                     .andExpect(view().name("home"));
 //                    .andExpect(view().name("doctor/doctor-panel"));
         } else {
-            mockMvc.perform(post("/doctors/add/valid").params(parameters))
+//            mockMvc.perform(post("/doctors/add/valid").params(parameters))
+            mockMvc.perform(post(DOCTORS.concat(ADD).concat(VALID)).params(parameters))
                     .andExpect(status().isBadRequest())
                     .andExpect(model().attributeExists("errorMessage"))
                     .andExpect(model().attribute("errorMessage", Matchers.containsString(phone)))

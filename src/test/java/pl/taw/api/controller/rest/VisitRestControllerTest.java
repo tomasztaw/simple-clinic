@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
+import pl.taw.business.dao.DoctorDAO;
+import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 import pl.taw.util.DtoFixtures;
@@ -25,6 +27,14 @@ class VisitRestControllerTest {
 
     @Mock // atrapa
     private VisitDAO visitDAO;
+
+    // Pomimo tego, że te zaślepki są nieużywane, to bez nich nie przechodzi test "should Update Visit And...."
+    @Mock
+    @SuppressWarnings("unused")
+    private DoctorDAO doctorDAO;
+    @Mock
+    @SuppressWarnings("unused")
+    private PatientDAO patientDAO;
 
     @InjectMocks // wstrzykiwanie
     private VisitRestController visitRestController;
