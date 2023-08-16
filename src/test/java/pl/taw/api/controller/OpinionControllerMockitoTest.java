@@ -164,7 +164,6 @@ class OpinionControllerMockitoTest {
         Integer doctorId = 2;
         Integer patientId = 3;
         String comment = "Opinia jak opinia";
-        OpinionEntity opinia = EntityFixtures.someOpinion1();
 
         when(request.getHeader("Referer")).thenReturn("mockReferer");
 

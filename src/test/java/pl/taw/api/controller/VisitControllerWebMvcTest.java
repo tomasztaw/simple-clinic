@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static pl.taw.api.controller.VisitController.*;
 
 @WebMvcTest(controllers = VisitController.class)
-@AutoConfigureMockMvc(addFilters = false) // wyłączenie filtrów security dla testów MockMvc
+@AutoConfigureMockMvc(addFilters = false) // wyłączenie filtrów security dla testów Mock Mvc
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class VisitControllerWebMvcTest {
 
@@ -322,7 +322,7 @@ class VisitControllerWebMvcTest {
     @Test
     public void testUpdateVisit() throws Exception {
         // given
-        Integer visitId = 1;
+//        Integer visitId = 1;
         DoctorEntity doctor = EntityFixtures.someDoctor2();
         PatientEntity patient = EntityFixtures.somePatient4();
         VisitEntity visitEntity = EntityFixtures.someVisit1().withDoctorId(doctor.getDoctorId()).withDoctor(doctor).withPatientId(patient.getPatientId()).withPatient(patient);

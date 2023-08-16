@@ -38,57 +38,6 @@ public class DoctorRestController {
     private final DoctorDAO doctorDAO;
     private final VisitService visitService;
 
-
-    // ################### Ćwiczenie walidacji #####################
-    private final GreetingService service;
-
-    @GetMapping("/error")
-    public ResponseEntity<?> thrException() {
-        return ResponseEntity.ok(service.throwException());
-    }
-
-    @PostMapping("walidacja")
-    public ResponseEntity<String> postWalidacja(
-            @RequestBody Greeting greeting
-    ) {
-        final String greetingMsg = service.saveGreeting(greeting);
-        return ResponseEntity
-                .accepted()
-                .body(greetingMsg);
-    }
-
-    @PostMapping("wal")
-    public ResponseEntity<String> doctorValidation(
-            @RequestBody DoctorDTO doctor
-    ) {
-        String body = service.saveDoctor(doctor);
-        return ResponseEntity
-                .accepted()
-                .body(body);
-    }
-
-//    @PostMapping("walidacja")
-//    public ResponseEntity<String> postWalidacja(
-//            @RequestBody @Valid Greeting greeting,
-//            BindingResult bindingResult
-//    ) {
-//        if (bindingResult.hasErrors()) {
-//            return ResponseEntity
-//                    .badRequest()
-//                    .body(
-//                            bindingResult.getAllErrors().stream()
-//                                    .map(ObjectError::getDefaultMessage)
-//                                    .collect(Collectors.joining())
-//                    );
-//        }
-//        final String greetingMsg = service.saveGreeting(greeting);
-//        return ResponseEntity
-//                .accepted()
-//                .body(greetingMsg);
-//    }
-
-    // #############################################################
-
     @GetMapping
     public DoctorsDTO getDoctors() {
         return DoctorsDTO.of(doctorDAO.findAll());

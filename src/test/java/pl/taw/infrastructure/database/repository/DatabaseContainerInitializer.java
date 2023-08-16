@@ -20,7 +20,7 @@ public class DatabaseContainerInitializer
                 .withUsername(POSTGRES_USERNAME)
                 .withPassword(POSTGRES_PASSWORD);
         container.start();
-        System.setProperty("spring.datasource.url", container.getJdbcUrl());
+        System.setProperty("spring.datasource.url", container.getJdbcUrl()); // nadpisywanie adresu url na potrzeby testów
         System.setProperty("spring.datasource.username", container.getUsername());
         System.setProperty("spring.datasource.password", container.getPassword());
 

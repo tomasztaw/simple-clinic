@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE) // Oznaczenie najwyższej kolejności obsługi błędów
+//@Order(Ordered.HIGHEST_PRECEDENCE) // Oznaczenie najwyższej kolejności obsługi błędów
 public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Map<Class<?>, HttpStatus> EXCEPTION_STATUS = Map.of(

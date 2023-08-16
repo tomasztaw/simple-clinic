@@ -17,6 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
@@ -34,7 +35,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -110,7 +112,7 @@ class DoctorControllerMockitoTest {
     }
 
     @Test
-    void addValidDoctorShouldSaveDoctorAndRedirectToReferer() {
+    void addValidDoctorShouldSaveDoctorAndRedirectToReferer() throws BindException {
         // given
         DoctorDTO doctorDTO = DoctorDTO.builder()
                 .name("Franek")
@@ -145,19 +147,11 @@ class DoctorControllerMockitoTest {
                 .phone("+48 120 888 888")
                 .email("franek@kimono@eclinic.pl")
                 .build();
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
 
-        // when
-        Set<ConstraintViolation<DoctorDTO>> violations = validator.validate(doctorDTO);
-        BindingResult bindingResult = new BeanPropertyBindingResult(doctorDTO, "updateDoctor");
-        String redirectUrl = doctorController.addValidDoctor(doctorDTO, bindingResult, request);
-
-        // then
-        assertFalse(violations.isEmpty());
-//        assertNull(redirectUrl);
-        assertNotNull(redirectUrl);
-
-        verify(doctorDAO, times(1)).save(any(DoctorEntity.class));
-        verify(doctorDAO, only()).save(any(DoctorEntity.class));
+        // when, then
+        assertThrows(BindException.class, () -> doctorController.addValidDoctor(doctorDTO, bindingResult, request));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package pl.taw.business;
 
 import org.junit.jupiter.api.Test;
-import pl.taw.api.dto.DoctorScheduleDTO;
 import pl.taw.util.WorkingHoursFixtures;
 
 import java.time.LocalTime;
@@ -9,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static pl.taw.util.WorkingHoursFixtures.*;
 
 class WorkingHoursTest {
 

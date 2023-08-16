@@ -14,14 +14,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@WebMvcTest(controllers = HomeController.class)
+@WebMvcTest(controllers = HomeController.class) // tworzenie kontekstu tylko dla tego kontrolera
 @AutoConfigureMockMvc(addFilters = false)
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor(onConstructor = @__(@Autowired))  // automatyczne dodanie Autowired nad konstruktorami
 class HomeControllerWebMvcTest {
 
-    @MockBean
+    @MockBean  // tworzenie zaślepionych beanów dla kontekstu spring-a, automatyczne wstrzykiwanie
+    @SuppressWarnings("unused")
     private PatientDAO patientDAO;
+
     @MockBean
+    @SuppressWarnings("unused")
     private UserRepository userRepository;
 
     private MockMvc mockMvc;

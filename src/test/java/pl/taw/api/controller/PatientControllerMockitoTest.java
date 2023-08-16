@@ -76,8 +76,7 @@ class PatientControllerMockitoTest {
     }
 
     /**
-     * Zapisywanie, patientDAO nie działa, trzeba użyć JpaRepo
-     * w21-25.
+     * w 21-25.
      * Test jednostkowy
      */
     @Test
@@ -85,6 +84,7 @@ class PatientControllerMockitoTest {
         // given
         PatientDTO patientDTO = DtoFixtures.somePatient1();
         PatientEntity patientEntity = EntityFixtures.somePatient1();
+
         when(patientDAO.saveAndReturn(any(PatientEntity.class))).thenReturn(patientEntity);
 
         // when
@@ -222,7 +222,7 @@ class PatientControllerMockitoTest {
         when(patientDAO.findEntityById(patientDTO.getPatientId())).thenReturn(existingPatient);
 
         // when
-        String response = patientController.updatePatient(patientDTO, request);
+        patientController.updatePatient(patientDTO, request);
 
         // then
         assertThat(patientDTO.getName()).isEqualTo(existingPatient.getName());

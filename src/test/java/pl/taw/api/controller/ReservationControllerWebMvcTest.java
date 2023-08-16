@@ -32,7 +32,7 @@ import static pl.taw.api.controller.ReservationController.*;
 
 
 @WebMvcTest(controllers = ReservationController.class)
-@AutoConfigureMockMvc(addFilters = false) // wyłączenie filtrów security dla testów MockMvc
+@AutoConfigureMockMvc(addFilters = false) // wyłączenie filtrów security dla testów Mock Mvc
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class ReservationControllerWebMvcTest {
 

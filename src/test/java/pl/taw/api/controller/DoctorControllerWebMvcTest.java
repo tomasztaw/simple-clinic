@@ -3,11 +3,11 @@ package pl.taw.api.controller;
 import lombok.AllArgsConstructor;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,6 +27,7 @@ import pl.taw.business.WorkingHours;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
+import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.security.UserRepository;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.WorkingHoursFixtures;
@@ -56,12 +57,15 @@ class DoctorControllerWebMvcTest {
     private final DoctorService doctorService;
 
     @MockBean
+    @SuppressWarnings("unused")
     private final ReservationService reservationService;
 
     @MockBean
+    @SuppressWarnings("unused")
     private final PatientDAO patientDAO;
 
     @MockBean
+    @SuppressWarnings("unused")
     private final UserRepository userRepository;
 
     @MockBean
@@ -182,7 +186,6 @@ class DoctorControllerWebMvcTest {
         verify(doctorDAO, only()).findAll();
     }
 
-    @Disabled("Zwraca mi status 200 przy niewłaściwych numerach")
     @ParameterizedTest
     @MethodSource
     @WithMockUser(authorities = "USER")
@@ -194,21 +197,21 @@ class DoctorControllerWebMvcTest {
 
         // when, then
         if (correctPhone) {
-//            mockMvc.perform(post("/doctors/add/valid").params(parameters))
             mockMvc.perform(post(DOCTORS.concat(ADD).concat(VALID)).params(parameters))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeDoesNotExist("errorMessage"))
                     .andExpect(view().name("home"));
-//                    .andExpect(view().name("doctor/doctor-panel"));
+            verify(doctorDAO, times(1)).save(ArgumentMatchers.any(DoctorEntity.class));
+            verify(doctorDAO, only()).save(ArgumentMatchers.any(DoctorEntity.class));
         } else {
-//            mockMvc.perform(post("/doctors/add/valid").params(parameters))
             mockMvc.perform(post(DOCTORS.concat(ADD).concat(VALID)).params(parameters))
                     .andExpect(status().isBadRequest())
+                    .andExpect(view().name("error"))
                     .andExpect(model().attributeExists("errorMessage"))
                     .andExpect(model().attribute("errorMessage", Matchers.containsString(phone)))
-                    .andExpect(view().name("error"));
+                    .andExpect(model().attributeExists("hint"));
+            verifyNoInteractions(doctorDAO);
         }
-
     }
 
     public static Stream<Arguments> thatPhoneValidationWorksCorrectly() {

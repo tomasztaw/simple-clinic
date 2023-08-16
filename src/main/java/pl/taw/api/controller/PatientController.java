@@ -231,8 +231,7 @@ public class PatientController {
         return "patient/patient-show";
     }
 
-    @GetMapping(value = PATIENT_ID,
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = PATIENT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody // jeżeli chcę dostać odpowiedź w terminalu!!!
     public PatientDTO patientDetails(@PathVariable Integer patientId) {
         return patientDAO.findById(patientId);

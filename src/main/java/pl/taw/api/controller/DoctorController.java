@@ -11,7 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
@@ -190,9 +192,9 @@ public class DoctorController {
             @Valid @ModelAttribute("updateDoctor") DoctorDTO doctorDTO,
             BindingResult bindingResult,
             HttpServletRequest request
-    ) {
+    ) throws BindException {
         if (bindingResult.hasErrors()) {
-            return "error";
+            throw new BindException(bindingResult);
         }
         DoctorEntity newDoctor = DoctorEntity.builder()
                 .name(doctorDTO.getName())

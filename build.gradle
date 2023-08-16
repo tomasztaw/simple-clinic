@@ -75,7 +75,7 @@ dependencies {
 	testImplementation "com.github.tomakehurst:wiremock-standalone:${wiremockVersion}"
 	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
 
-	// dodane zgodnie z dokumentacją
+	// dodane zgodnie z dokumentacją dla Rest Assured
 	testImplementation 'io.rest-assured:json-path:5.3.1'
 	testImplementation 'io.rest-assured:xml-path:5.3.1'
 	testImplementation 'io.rest-assured:json-schema-validator:5.3.1'
