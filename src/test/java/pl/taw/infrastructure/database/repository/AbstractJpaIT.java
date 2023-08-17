@@ -9,9 +9,9 @@ import org.springframework.test.context.TestPropertySource;
 
 /**
  * Generyczne wykorzystanie dla wielu testów @DataJpaTest
+ * Stare rozwiązanie, teraz używamy Abstract IT
  */
 
-//@SpringBootTest
 @ComponentScan(basePackages = "pl.taw.infrastructure.database.repository")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // oznacza, że nie chcemy korzystać z wbudowanej bazy H2

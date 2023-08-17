@@ -25,7 +25,6 @@ class PatientRepositoryTest {
 
     @Mock
     private PatientJpaRepository patientJpaRepository;
-
     @Mock
     private PatientMapper patientMapper;
 

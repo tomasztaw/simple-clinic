@@ -26,4 +26,15 @@ public class ReservationRepositoryDataJpaTest extends AbstractJpaIT {
         Assertions.assertThat(all.size()).isEqualTo(1);
 
     }
+
+    @Test
+    void should2() {
+        List<ReservationEntity> reservationEntities = EntityFixtures.someReservationList;
+        reservationEntities.forEach(res -> reservationRepository.save(res));
+
+        List<ReservationDTO> result = reservationRepository.findAll();
+
+        Assertions.assertThat(reservationEntities.size()).isEqualTo(result.size());
+
+    }
 }

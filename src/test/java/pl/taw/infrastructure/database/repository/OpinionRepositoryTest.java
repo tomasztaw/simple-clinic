@@ -90,8 +90,8 @@ class OpinionRepositoryTest {
                 .withPatientId(opinionEntity.getPatientId()).withVisitId(opinionEntity.getVisitId())
                 .withComment(opinionEntity.getComment());
 
-        Mockito.when(opinionJpaRepository.findById(opinionId)).thenReturn(Optional.of(opinionEntity));
-        Mockito.when(opinionMapper.mapFromEntity(opinionEntity)).thenReturn(opinionDTO);
+        when(opinionJpaRepository.findById(opinionId)).thenReturn(Optional.of(opinionEntity));
+        when(opinionMapper.mapFromEntity(opinionEntity)).thenReturn(opinionDTO);
 
         // when
         OpinionDTO expectedOpinionDTO = opinionRepository.findById(opinionId);
@@ -114,7 +114,7 @@ class OpinionRepositoryTest {
         // given
         OpinionEntity opinion = EntityFixtures.someOpinion2();
 
-        Mockito.when(opinionJpaRepository.findById(opinion.getOpinionId())).thenReturn(Optional.of(opinion));
+        when(opinionJpaRepository.findById(opinion.getOpinionId())).thenReturn(Optional.of(opinion));
 
         // when
         OpinionEntity expectedOpinion = opinionRepository.findEntityById(opinion.getOpinionId());
@@ -139,7 +139,7 @@ class OpinionRepositoryTest {
         OpinionEntity opinion = EntityFixtures.someOpinion1();
         OpinionEntity savedOpinionEntity = opinion.withComment("Polecam");
 
-        Mockito.when(opinionJpaRepository.save(opinion)).thenReturn(savedOpinionEntity);
+        when(opinionJpaRepository.save(opinion)).thenReturn(savedOpinionEntity);
 
         // when
         OpinionEntity savedOpinion = opinionRepository.saveAndReturn(opinion);
@@ -174,10 +174,20 @@ class OpinionRepositoryTest {
         opinionRepository.delete(opinion);
 
         // then
+        verify(opinionJpaRepository, times(1)).delete(opinion);
+        verify(opinionJpaRepository, only()).delete(opinion);
+    }
+
+    @Test
+    void deleteWithoutThrow() {
+        // given
+        OpinionEntity opinion = EntityFixtures.someOpinion1();
+
+        // when, then
         assertDoesNotThrow(() -> opinionRepository.delete(opinion));
 
         verify(opinionJpaRepository, times(1)).delete(opinion);
-        Mockito.verifyNoInteractions(opinionMapper);
+        verifyNoInteractions(opinionMapper);
     }
 
     @Test
@@ -192,9 +202,9 @@ class OpinionRepositoryTest {
         OpinionDTO opinionDTO2 = DtoFixtures.someOpinion2();
         List<OpinionDTO> expectedOpinions = Arrays.asList(opinionDTO1, opinionDTO2);
 
-        Mockito.when(opinionJpaRepository.findAll()).thenReturn(opinionEntities);
-        Mockito.when(opinionMapper.mapFromEntity(opinionEntity1)).thenReturn(opinionDTO1);
-        Mockito.when(opinionMapper.mapFromEntity(opinionEntity2)).thenReturn(opinionDTO2);
+        when(opinionJpaRepository.findAll()).thenReturn(opinionEntities);
+        when(opinionMapper.mapFromEntity(opinionEntity1)).thenReturn(opinionDTO1);
+        when(opinionMapper.mapFromEntity(opinionEntity2)).thenReturn(opinionDTO2);
 
         // when
         List<OpinionDTO> result = opinionRepository.findAllByDoctor(doctorId);
@@ -222,9 +232,9 @@ class OpinionRepositoryTest {
         OpinionDTO opinionDTO2 = DtoFixtures.someOpinion2().withPatientId(patientId);
         List<OpinionDTO> expectedOpinions = Arrays.asList(opinionDTO1, opinionDTO2);
 
-        Mockito.when(opinionJpaRepository.findAll()).thenReturn(opinionEntities);
-        Mockito.when(opinionMapper.mapFromEntity(opinionEntity1)).thenReturn(opinionDTO1);
-        Mockito.when(opinionMapper.mapFromEntity(opinionEntity2)).thenReturn(opinionDTO2);
+        when(opinionJpaRepository.findAll()).thenReturn(opinionEntities);
+        when(opinionMapper.mapFromEntity(opinionEntity1)).thenReturn(opinionDTO1);
+        when(opinionMapper.mapFromEntity(opinionEntity2)).thenReturn(opinionDTO2);
 
         // when
         List<OpinionDTO> result = opinionRepository.findAllByPatient(patientId);

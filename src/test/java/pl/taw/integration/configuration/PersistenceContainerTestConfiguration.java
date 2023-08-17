@@ -12,13 +12,19 @@ import javax.sql.DataSource;
 @TestConfiguration
 public class PersistenceContainerTestConfiguration {
 
+    /**
+     * Druga konfiguracja dla testów Data Jpa i testów integracyjnych
+     * Zamiast Database Container Initializer
+     * 17-08-2023r.
+     */
+
     public static final String POSTGRES_USERNAME = "username";
     public static final String POSTGRES_PASSWORD = "password";
-    public static final String POSTGRESQL = "postgresql";
+//    public static final String POSTGRESQL = "postgresql";
     public static final String POSTGRESQL_CONTAINER = "postgres:15.3";
 
     @Bean
-    @Qualifier(POSTGRESQL)
+//    @Qualifier(POSTGRESQL)
     PostgreSQLContainer<?> postgresqlContainer() {
         PostgreSQLContainer<?> postgresqlContainer = new PostgreSQLContainer<>(POSTGRESQL_CONTAINER)
             .withUsername(POSTGRES_USERNAME)

@@ -1,71 +1,77 @@
 package pl.taw.infrastructure.database.repository;
 
+import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.taw.api.dto.DoctorScheduleDTO;
+import pl.taw.domain.exception.NotFoundException;
+import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.entity.DoctorScheduleEntity;
+import pl.taw.infrastructure.database.repository.jpa.DoctorScheduleJpaRepository;
+import pl.taw.util.EntityFixtures;
+
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-
-import pl.taw.api.dto.DoctorScheduleDTO;
-import pl.taw.domain.exception.NotFoundException;
-import pl.taw.infrastructure.database.entity.DoctorScheduleEntity;
-import pl.taw.infrastructure.database.repository.jpa.DoctorScheduleJpaRepository;
-
-@DataJpaTest
-@ActiveProfiles("test")
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class DoctorScheduleRepositoryDataJpaTest extends AbstractJpaIT {
 
-    @Autowired
+    private DoctorScheduleRepository doctorScheduleRepository;
     private DoctorScheduleJpaRepository doctorScheduleJpaRepository;
 
-    private DoctorScheduleRepository doctorScheduleRepository;
-
-    @BeforeEach
-    public void setUp() {
-        doctorScheduleRepository = new DoctorScheduleRepository(doctorScheduleJpaRepository, null); // You need to provide the DoctorScheduleMapper mock
-    }
 
     @Test
     public void findById_ExistingScheduleId_ShouldReturnCorrectSchedule() {
-        // Given
-        DoctorScheduleEntity scheduleEntity = new DoctorScheduleEntity();
-        // Initialize scheduleEntity with necessary fields
+        // given
+        DoctorScheduleEntity scheduleEntity = EntityFixtures.someSchedule1();
         DoctorScheduleEntity savedSchedule = doctorScheduleJpaRepository.save(scheduleEntity);
 
-        // When
+        // when
         DoctorScheduleEntity foundSchedule = doctorScheduleRepository.findById(savedSchedule.getScheduleId());
 
-        // Then
+        // then
         assertThat(foundSchedule).isEqualTo(savedSchedule);
     }
 
     @Test
     public void findById_NonExistingScheduleId_ShouldThrowNotFoundException() {
-        // Given
+        // given
         Integer nonExistingId = -1;
 
-        // When & Then
+        // when, then
         assertThrows(NotFoundException.class, () -> doctorScheduleRepository.findById(nonExistingId));
     }
 
     @Test
     public void findScheduleByDoctorId_ExistingDoctorId_ShouldReturnCorrectSchedules() {
-        // Given
-        Integer doctorId = 1; // Provide an existing doctorId in your database
-        // Create and save DoctorScheduleEntity instances with doctorId
+        // given
+        Integer doctorId = 1;
 
-        // When
+        // when
         List<DoctorScheduleDTO> schedules = doctorScheduleRepository.findScheduleByDoctorId(doctorId);
 
-        // Then
+        // then
         assertThat(schedules).isNotEmpty();
-        // You can further validate the content of the returned schedules
+    }
+
+    @Test
+    void testFindScheduleByDoctorId_ExistingDoctorId_ShouldReturnCorrectSchedules() {
+        // given
+        DoctorEntity doctorEntity = EntityFixtures.someDoctor7().withEmail("nowy@eclinic.pl").withPhone("+48 120 222 228");
+        DoctorScheduleEntity schedule1 = EntityFixtures.someSchedule1().withDoctorId(doctorEntity.getDoctorId()).withDoctor(doctorEntity);
+        doctorScheduleJpaRepository.saveAndFlush(schedule1);
+        DoctorScheduleEntity schedule2 = EntityFixtures.someSchedule2().withDoctorId(doctorEntity.getDoctorId()).withDoctor(doctorEntity);
+        doctorScheduleJpaRepository.saveAndFlush(schedule2);
+
+        // when
+        List<DoctorScheduleDTO> schedules = doctorScheduleRepository.findScheduleByDoctorId(doctorEntity.getDoctorId());
+
+        // then
+        assertThat(schedules).isNotEmpty();
+        assertThat(schedules).hasSize(5);
+        assertThat(schedules).allMatch(schedule -> schedule.getDoctorId().equals(doctorEntity.getDoctorId()));
     }
 
     @Test
