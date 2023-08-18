@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.domain.exception.NotFoundException;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.database.repository.config.AbstractJpaIT;
 import pl.taw.infrastructure.database.repository.jpa.DoctorJpaRepository;
 
 import java.util.List;

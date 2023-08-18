@@ -7,6 +7,7 @@ import pl.taw.api.dto.DoctorScheduleDTO;
 import pl.taw.domain.exception.NotFoundException;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.database.entity.DoctorScheduleEntity;
+import pl.taw.infrastructure.database.repository.config.AbstractJpaIT;
 import pl.taw.infrastructure.database.repository.jpa.DoctorScheduleJpaRepository;
 import pl.taw.util.EntityFixtures;
 

@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.taw.api.dto.OpinionDTO;
 import pl.taw.infrastructure.database.entity.OpinionEntity;

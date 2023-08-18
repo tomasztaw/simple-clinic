@@ -59,3 +59,10 @@ logging:
       springframework:
         security: DEBUG
 # Do usunięcia przed puszczeniem na produkcję
+
+# api pogodowe
+openweathermap:
+  apiKey: 54b6d16922202a1681364b76a0112392
+
+
+# api dogs key --->  live_8l83TWfht99FexmwTl4zSlIUmoVdHD6yk78Qf7iURyjRvX8mwHo5LzIIiRLDlpyD

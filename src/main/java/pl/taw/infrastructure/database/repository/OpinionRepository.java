@@ -61,7 +61,6 @@ public class OpinionRepository implements OpinionDAO {
                 .toList();
     }
 
-
     @Override
     public List<OpinionDTO> findAllByPatient(Integer patientId) {
         return  opinionJpaRepository.findAll().stream()

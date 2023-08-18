@@ -8,7 +8,7 @@ spring:
       ddl-auto: validate
 
   security:
-    enabled: false
+    enabled: false # wyłączenie security dla profilu testowego
 
 logging:
   level:

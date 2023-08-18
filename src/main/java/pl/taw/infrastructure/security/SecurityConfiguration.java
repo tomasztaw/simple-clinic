@@ -70,8 +70,8 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
-    SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
+    @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true) // jeżeli nie będzie podane w konfiguracji, to wartość domyślna jest true
+    public SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
@@ -93,7 +93,7 @@ public class SecurityConfiguration {
 
     @Bean
     @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "false")
-    SecurityFilterChain securityDisabled(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityDisabled(HttpSecurity httpSecurity) throws Exception {
        return httpSecurity
                .csrf(AbstractHttpConfigurer::disable)
                .authorizeHttpRequests(request -> request.anyRequest().permitAll())
