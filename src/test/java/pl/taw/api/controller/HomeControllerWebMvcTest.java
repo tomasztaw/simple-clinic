@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.security.UserRepository;
+import pl.taw.proby.jakoscpowietrza.AirQualityService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +27,11 @@ class HomeControllerWebMvcTest {
     @MockBean
     @SuppressWarnings("unused")
     private UserRepository userRepository;
+
+    // próby z api dla jakości powietrza
+    @MockBean
+    @SuppressWarnings("unused")
+    private AirQualityService airQualityService;
 
     private MockMvc mockMvc;
 

@@ -11,6 +11,7 @@ import pl.taw.api.dto.PatientDTO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.security.UserEntity;
 import pl.taw.infrastructure.security.UserRepository;
+import pl.taw.proby.jakoscpowietrza.AirQualityService;
 
 import java.util.Collection;
 
@@ -23,6 +24,9 @@ public class HomeController {
 
     private final PatientDAO patientDAO;
     private final UserRepository userRepository;
+
+    // air
+    private final AirQualityService airQualityService;
 
     @GetMapping(HOME)
     public String homePage(Model model, Authentication authentication) {
@@ -46,9 +50,28 @@ public class HomeController {
                 PatientDTO patient = patientDAO.findByEmail(user.getEmail());
                 model.addAttribute("patient", patient);
             }
+
+            // air
+            String airQuality = airQualityService.getIndexLevelName().replace("y", "a");
+            String backgroundColor = getBackgroundColor(airQuality);
+
+            model.addAttribute("airQuality", airQuality);
+            model.addAttribute("backgroundColor", backgroundColor);
+
         }
 
         return "home";
+    }
+
+    private String getBackgroundColor(String airQuantity) {
+        switch (airQuantity) {
+            case "Bardzo dobra" -> { return "rgba(0, 255, 0, 0.3)"; }
+            case "Dobra" -> { return "rgba(0, 120, 0, 0.3)"; }
+            case "Umiarkowana" -> { return "rgba(255, 255, 0, 0.3)"; }
+            case "Zła" -> { return "rgba(255, 153, 0, 0.3)"; }
+            case "Bardzo zła" -> { return "rgba(255, 0, 0, 0.3)"; }
+            default -> { return ""; }
+        }
     }
 
 }

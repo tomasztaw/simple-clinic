@@ -15,6 +15,11 @@
     <div class="banner" th:style="'background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(' + @{/images/z1.jpg} + ');'">
         <div class="navbar">
             <img th:src="@{/images/2135.jpg}" class="logo" alt="logo">
+
+            <div class="air__container" th:style="'background-color: ' + ${backgroundColor}">
+                <p>Jakość powietrza w naszej okolicy: <span th:text="${airQuality}"></span></p>
+                <a th:href="@{/air/airquality}" title="Jakość powietrza" target="_blank">Szczegóły</a>
+            </div>
             
             <div class="login-button">
                 <p>Zalogowany: <span th:text="${username}"></span></p>

@@ -14,6 +14,7 @@ import pl.taw.api.dto.PatientDTO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.security.UserEntity;
 import pl.taw.infrastructure.security.UserRepository;
+import pl.taw.proby.jakoscpowietrza.AirQualityService;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
@@ -33,6 +34,9 @@ class HomeControllerMockitoTest {
     private UserRepository userRepository;
     @Mock
     private Model model;
+    // próby z air
+    @Mock
+    private AirQualityService airQualityService;
 
     @InjectMocks
     private HomeController homeController;
@@ -50,6 +54,8 @@ class HomeControllerMockitoTest {
 
         when(userRepository.findByUserName(user.getUserName())).thenReturn(user);
         when(patientDAO.findByEmail(user.getEmail())).thenReturn(patient);
+        // air
+        when(airQualityService.getIndexLevelName()).thenReturn("Umiarkowana");
 
         // when
         String result = homeController.homePage(model, authentication);

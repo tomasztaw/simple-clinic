@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Jakość powietrza</title>
+    <style>
+        h1, h2, h3, p, ul {
+            text-align: center;
+        }
+        h1 {
+            font-size: 48px;
+            margin: 25px;
+        }
+        h2 {
+            font-size: 36px;
+            margin: 15px;
+        }
+        ul, li {
+            list-style: none;
+        }
+    </style>
+</head>
+<body th:style="'background-color: ' + ${backgroundColor}">
+<div>
+    <h1>Jakość powietrza w naszej okolicy</h1>
+    <h2>Stan: <span th:text="${indexLevelName}"></span></h2>
+    <h3>Parametry:</h3>
+    <ul>
+        <li th:each="sensorData : ${sensorDataList}">
+            Nazwa: <b><span th:text="${sensorData.param.paramName}"></span></b> wartość: <b><span th:text="${sensorData.param.idParam}"></span></b><br>
+            <br>
+        </li>
+    </ul>
+    <br>
+    <br>
+    <p>Data pomiaru: <b><span th:text="${stCalcDate}"></span></b></p>
+    <p>Dane dostarcza: <a href="https://powietrze.gios.gov.pl/" title="link" target="_blank">powietrze.gios.gov.pl</a></p>
+    <p><a href="https://powietrze.gios.gov.pl/pjp/content/api#" title="api" target="_blank">Dokumentacja API</a></p>
+    <p>Miejsce pomiaru: <a href="https://goo.gl/maps/QbiGgHJWqgwhRxr29" title="sprawdź na mapie" target="_blank">
+        wybrzeże Józefa Conrada-Korzeniowskiego 18, 50-226 Wrocław</a>
+    </p>
+</div>
+</body>
+</html>

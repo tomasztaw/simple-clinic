@@ -52,6 +52,7 @@
     float: right;
     color: white;
     font-size: 20px;
+    text-align: center;
 }
 
 /* stopka */
@@ -60,4 +61,14 @@
     text-align: center;
     color: white;
     margin-top: 20px;
+}
+
+/* air */
+.air__container {
+    border: 2px solid white;
+    border-radius: 15px;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
 }

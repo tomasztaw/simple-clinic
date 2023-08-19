@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
-import pl.taw.business.pogoda.WeatherService;
 
 @Configuration
 public class BeanConfiguration {
@@ -23,10 +22,10 @@ public class BeanConfiguration {
     }
     @Value("${openweathermap.apiKey}") // Wartość klucza API zostanie wstrzyknięta z pliku properties
     private String apiKey;
-    @Bean
-    public WeatherService weatherService(RestTemplate restTemplate) {
-        return new WeatherService(apiKey, restTemplate);
-    }
+//    @Bean
+//    public WeatherService weatherService(RestTemplate restTemplate) {
+//        return new WeatherService(apiKey, restTemplate);
+//    }
 
     // obsługiwanie PATCH w przeglądarce
     @Bean
