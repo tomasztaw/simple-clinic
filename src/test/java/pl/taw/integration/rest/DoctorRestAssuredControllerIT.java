@@ -32,6 +32,12 @@ import static pl.taw.api.controller.rest.DoctorRestController.*;
 @Import(TestSecurityConfig.class)
 class DoctorRestAssuredControllerIT {
 
+    /**
+     * Nie za bardzo rozumiem dlaczego jest to klasa nie dziedzicząca z RestAssuredIntegrationTestBase
+     *
+     *
+     */
+
     @LocalServerPort
     private int port;
 

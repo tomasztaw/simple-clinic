@@ -19,7 +19,7 @@ public interface PatientsControllerTestSupport {
 
     default PatientsDTO listPatients() {
         return requestSpecification()
-                .get(PatientRestController.API_PATIENTS) // Nie jestem pewien czy to ta końcówka
+                .get(PatientRestController.API_PATIENTS)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and()

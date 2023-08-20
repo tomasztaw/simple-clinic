@@ -32,20 +32,21 @@ public abstract class RestAssuredIntegrationTestBase
     implements ControllerTestSupport, AuthenticationTestSupport {
 
     // #####################
-//    @LocalServerPort
-//    private int serverPort;
-//
-//    @Value("${server.servlet.context-path}")
-//    private String basePath;
+    @LocalServerPort
+    private int serverPort;
 
+    @Value("${server.servlet.context-path}")
+    private String basePath;  // ścieżka bazowa (*/clinic)
     // ####################
+
     protected static WireMockServer wireMockServer;
 
     private String jSessionIdValue;
 
     @Autowired
     @SuppressWarnings("unused")
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
+//    private ObjectMapper objectMapper;
 
     @Override
     public ObjectMapper getObjectMapper() {
@@ -116,7 +117,7 @@ public abstract class RestAssuredIntegrationTestBase
                 .jackson2ObjectMapperFactory((type, s) -> objectMapper));
     }
 
-// ************************
+// ************************  Później metoda rozbita na dwie
 //    public RequestSpecification requestSpecification() {
 //        return RestAssured
 //                .given()

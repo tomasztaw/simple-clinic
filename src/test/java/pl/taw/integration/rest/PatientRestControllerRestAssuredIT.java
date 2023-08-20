@@ -4,10 +4,12 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Import;
 import pl.taw.api.controller.rest.PatientRestController;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.PatientsDTO;
 import pl.taw.integration.configuration.RestAssuredIntegrationTestBase;
+import pl.taw.integration.configuration.TestSecurityConfig;
 import pl.taw.integration.support.PatientsControllerTestSupport;
 import pl.taw.integration.support.WiremockTestSupport;
 import pl.taw.util.DtoFixtures;
@@ -18,10 +20,11 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Test nie przechodzi, dostaje 404 i nie mogę dojść gdzie jest błąd
+ * Test nie przechodzi, dostaje 404 i nie mogę dojść, gdzie jest błąd
  * w21-29
+ * Są problemy z autoryzacją, poczekam jeszcze czy będzie jak to obejść przy włączonym security
  */
-public class PatientControllerRestAssuredIT
+public class PatientRestControllerRestAssuredIT
         extends RestAssuredIntegrationTestBase
         implements PatientsControllerTestSupport, WiremockTestSupport {
 

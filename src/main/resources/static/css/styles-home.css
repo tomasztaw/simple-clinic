@@ -72,3 +72,14 @@
     color: white;
     font-weight: bold;
 }
+
+.air__container a {
+    color: white;
+    text-decoration: none;
+}
+
+.air--quality {
+    font-size 30px;
+    font-style: italic;
+    margin-top: 10px;
+}
