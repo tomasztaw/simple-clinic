@@ -17,8 +17,8 @@
             <img th:src="@{/images/2135.jpg}" class="logo" alt="logo">
 
             <div class="air__container" th:style="'background-color: ' + ${backgroundColor}">
-                <p>Jakość powietrza w naszej okolicy: <span th:text="${airQuality}"></span></p>
-                <a th:href="@{/air/airquality}" title="Jakość powietrza" target="_blank">Szczegóły</a>
+                <p>Jakość powietrza w naszej okolicy:<br> <span class="air--quality" th:text="${airQuality}"></span></p>
+                <a th:href="@{/air/airquality}" title="Jakość powietrza">Szczegóły</a>
             </div>
             
             <div class="login-button">

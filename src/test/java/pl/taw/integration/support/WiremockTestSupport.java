@@ -61,4 +61,16 @@ public interface WiremockTestSupport {
                         .withTransformerParameters(Map.of("petId", petId))
                         .withTransformers("response-template")));
     }
+
+
+    default void stubForAir(final WireMockServer wireMockServer, final Integer stationId) {
+//        wireMockServer.stubFor(WireMock.get(WireMock.urlPathEqualTo("/pjp-api/rest/aqindex/getIndex/%s".formatted(stationId)))
+        wireMockServer.stubFor(WireMock.get(WireMock.urlPathEqualTo("/aqindex/getIndex/%s".formatted(stationId)))
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("wiremock/airStationId.json")
+                        .withTransformerParameters(Map.of("stationId", stationId))
+                        .withTransformers("response-template")));
+
+    }
 }

@@ -48,9 +48,11 @@ public class PatientRestControllerRestAssuredIT
     @Test
     public void testGetPatients() {
         // Ustawienie bazowego URL do twojego API
-        baseURI = "http://localhost:%s%s".formatted(port, basePath);
+//        baseURI = "http://localhost:%s%s".formatted(port, basePath);
 //        baseURI = "http://localhost:8080/clinic";
+        baseURI = "http://localhost:%s/clinic".formatted(port);
 
+//        given().auth().preemptive().basic("tomek", "test")
         given()
                 .when()
                 .get(PatientRestController.API_PATIENTS)
@@ -71,6 +73,25 @@ public class PatientRestControllerRestAssuredIT
         savePatient(patient2);
 
         PatientsDTO patientsDTO = listPatients();
+
+        // then
+        Assertions.assertThat(patientsDTO.getPatients())
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("patientId")
+                .containsAnyOf(patient1, patient2)
+                .containsExactlyInAnyOrder(patient1, patient2);
+    }
+
+    @Test
+    void thatPatientsListCanByRetrievedCorrectlyNoAuto() {
+        // given
+        PatientDTO patient1 = DtoFixtures.somePatient1();
+        PatientDTO patient2 = DtoFixtures.somePatient2();
+
+        // when
+        savePatient(patient1);
+        savePatient(patient2);
+
+        PatientsDTO patientsDTO = listPatientsNoAuto();
 
         // then
         Assertions.assertThat(patientsDTO.getPatients())
@@ -114,6 +135,14 @@ public class PatientRestControllerRestAssuredIT
     }
 
     // w21-32
+
+    @Test
+    void testForAir() {
+        // given
+        Integer stationId = 117;
+
+        stubForAir(wireMockServer, stationId);
+    }
 
 //    @Test
 //    void thatPatientsCanBeUpdatedCorrectly() {

@@ -16,9 +16,20 @@ import pl.taw.api.dto.PatientsDTO;
 public interface PatientsControllerTestSupport {
 
     RequestSpecification requestSpecification();
+    RequestSpecification requestSpecificationNoAuthentication();
 
     default PatientsDTO listPatients() {
         return requestSpecification()
+                .get(PatientRestController.API_PATIENTS)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and()
+                .extract()
+                .as(PatientsDTO.class);
+    }
+
+    default PatientsDTO listPatientsNoAuto() {
+        return requestSpecificationNoAuthentication()
                 .get(PatientRestController.API_PATIENTS)
                 .then()
                 .statusCode(HttpStatus.OK.value())

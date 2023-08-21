@@ -1,0 +1,41 @@
+{
+  "id": "{{parameters.stationId}}",
+  "stCalcDate": "2023-08-21 14:20:12",
+  "stIndexLevel": {
+    "id": 1,
+    "indexLevelName": "Dobry"
+  },
+  "stSourceDataDate": "2023-08-21 14:00:00",
+  "so2CalcDate": "2023-08-21 14:20:12",
+  "so2IndexLevel": {
+    "id": 0,
+    "indexLevelName": "Bardzo dobry"
+  },
+  "so2SourceDataDate": "2023-08-21 14:00:00",
+  "no2CalcDate": "2023-08-21 14:20:12",
+  "no2IndexLevel": {
+    "id": 0,
+    "indexLevelName": "Bardzo dobry"
+  },
+  "no2SourceDataDate": "2023-08-21 14:00:00",
+  "pm10CalcDate": "2023-08-21 14:20:12",
+  "pm10IndexLevel": {
+    "id": 0,
+    "indexLevelName": "Bardzo dobry"
+  },
+  "pm10SourceDataDate": "2023-08-21 14:00:00",
+  "pm25CalcDate": "2023-08-21 14:20:12",
+  "pm25IndexLevel": {
+    "id": 0,
+    "indexLevelName": "Bardzo dobry"
+  },
+  "pm25SourceDataDate": "2023-08-21 14:00:00",
+  "o3CalcDate": "2023-08-21 14:20:12",
+  "o3IndexLevel": {
+    "id": 1,
+    "indexLevelName": "Dobry"
+  },
+  "o3SourceDataDate": "2023-08-21 14:00:00",
+  "stIndexStatus": true,
+  "stIndexCrParam": "OZON"
+}

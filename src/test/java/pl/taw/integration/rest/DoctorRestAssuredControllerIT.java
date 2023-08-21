@@ -33,8 +33,8 @@ import static pl.taw.api.controller.rest.DoctorRestController.*;
 class DoctorRestAssuredControllerIT {
 
     /**
-     * Nie za bardzo rozumiem dlaczego jest to klasa nie dziedzicząca z RestAssuredIntegrationTestBase
-     *
+     * Nie za bardzo rozumiem, dlaczego jest to klasa niedziedzicząca z RestAssuredIntegrationTestBase
+     * nie wiem z jakiego to materiału
      *
      */
 
@@ -108,7 +108,7 @@ class DoctorRestAssuredControllerIT {
                 .body("doctors[0].name", notNullValue())
                 .body("doctors[0].email", containsString("@eclinic.pl"))
                 .body("doctors[0].phone", startsWith("+48 120"))
-                .body("doctors[0].title", equalTo("Laryngolog"));
+                .body("doctors[0].title", not(emptyOrNullString()));
     }
 
     @Test

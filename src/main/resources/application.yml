@@ -8,6 +8,8 @@ api:
     url: https://api.cepik.gov.pl/
   petStore:
     url: https://petstore3.swagger.io/api/v3/
+  airQuality:
+    url: https://api.gios.gov.pl/pjp-api/rest/
 
 spring:
   datasource:
