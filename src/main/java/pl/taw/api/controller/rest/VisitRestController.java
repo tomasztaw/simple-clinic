@@ -2,6 +2,7 @@ package pl.taw.api.controller.rest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +33,12 @@ public class VisitRestController {
     private final PatientDAO patientDAO;
 
 
-    @GetMapping
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public VisitsDTO getAllVisits() {
         return VisitsDTO.of(visitDAO.findAll());
     }
 
-    @GetMapping(VISIT_ID)
+    @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public VisitDTO visitDetails(@PathVariable("visitId") Integer visitId) {
         return visitDAO.findById(visitId);
     }

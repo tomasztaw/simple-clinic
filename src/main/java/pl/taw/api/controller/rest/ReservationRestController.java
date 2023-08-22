@@ -15,7 +15,6 @@ import pl.taw.infrastructure.database.entity.ReservationEntity;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 @RestController
 @RequestMapping(ReservationRestController.API_RESERVATIONS)
@@ -39,19 +38,25 @@ public class ReservationRestController {
     }
 
     @GetMapping(value = RESERVATION_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ReservationDTO reservationDetails(
+    public ResponseEntity<ReservationDTO> reservationDetails(
             @PathVariable("reservationId") Integer reservationId
     ) {
-        return reservationDAO.findById(reservationId);
+        ReservationDTO reservation = reservationDAO.findById(reservationId);
+
+        if (reservation != null) {
+            return ResponseEntity.ok(reservation);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(BY_DATE)
-    public ReservationsDTO getAllReservationsByDate(@PathVariable("day") LocalDate day) {
+    public ResponseEntity<ReservationsDTO> getAllReservationsByDate(@PathVariable("day") LocalDate day) {
         ReservationsDTO reservationsByDate = ReservationsDTO.of(reservationService.findAllByDay(day));
         if (!reservationsByDate.getReservations().isEmpty()) {
-            return reservationsByDate;
+            return ResponseEntity.ok(reservationsByDate);
         } else {
-            return ReservationsDTO.of(Collections.emptyList());
+            return ResponseEntity.noContent().build();
         }
     }
 

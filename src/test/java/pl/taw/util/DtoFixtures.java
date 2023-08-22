@@ -91,7 +91,7 @@ public class DtoFixtures {
                 .patient(somePatient1())
                 .visitId(1)
                 .comment("Opinia napisania w pochlebnym tonie")
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now().minusDays(1))
                 .build();
     }
 
@@ -104,7 +104,7 @@ public class DtoFixtures {
                 .patient(somePatient2())
                 .visitId(2)
                 .comment("Opinia napisania w nie pochlebnym tonie")
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now().minusDays(1))
                 .build();
     }
 

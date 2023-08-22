@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OpinionRestController {
 
-    public static final String API_OPINIONS = "/api/opinions/nowy";
+    public static final String API_OPINIONS = "/api/opinions";  // było "/api/opinions/nowy" - jak wszystko będzie ok to usunę
     public static final String OPINION_ID = "/{opinionId}";
     public static final String COMMENTS = "/comments";
     public static final String UPDATE_BY_ID = "/{opinionId}/update";

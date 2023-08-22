@@ -6,15 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.PatientsDTO;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping(PatientRestController.API_PATIENTS)
