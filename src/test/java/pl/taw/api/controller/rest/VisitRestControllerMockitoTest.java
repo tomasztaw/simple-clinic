@@ -68,11 +68,12 @@ class VisitRestControllerMockitoTest {
         when(visitDAO.findById(visitId)).thenReturn(visit);
 
         // when
-        VisitDTO response = visitRestController.visitDetails(visitId);
+        ResponseEntity<VisitDTO> response = visitRestController.visitDetails(visitId);
 
         // then
         assertNotNull(response);
-        assertEquals(visit, response);
+        assertEquals(visit, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
 
         verify(visitDAO, times(1)).findById(visitId);
         verify(visitDAO, only()).findById(visitId);
@@ -86,10 +87,12 @@ class VisitRestControllerMockitoTest {
         when(visitDAO.findById(visitId)).thenReturn(null);
 
         // when
-        VisitDTO response = visitRestController.visitDetails(visitId);
+        ResponseEntity<VisitDTO> response = visitRestController.visitDetails(visitId);
 
         // then
-        assertNull(response);
+        assertNotNull(response);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
 
         verify(visitDAO, times(1)).findById(visitId);
         verify(visitDAO, only()).findById(visitId);

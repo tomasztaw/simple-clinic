@@ -113,7 +113,7 @@ public class ReservationRestController {
     }
 
     @PatchMapping(RESERVATION_UPDATE_DATE)
-    public ResponseEntity<?> updateReservationDate(
+    public ResponseEntity<?> updateReservationDate( // TODO można tutaj zwrócić wiadomość z nową datą
             @PathVariable("reservationId") Integer reservationId,
             @RequestParam(required = true) LocalDateTime dateTime
     ) {

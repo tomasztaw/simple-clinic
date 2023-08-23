@@ -19,7 +19,7 @@ import java.util.List;
  * Stary sposób testowania, dlatego tylko jeden przykładowy test.
  * Będziemy używać Rest Assured
  * w21-28
- * Url prowadzi pod dopisane metody dla testów, nie nie czyszczę bazy, nie robię 'postForEntity'
+ * Url prowadzi pod dopisane metody dla testów, nie czyszczę bazy, nie robię 'postForEntity'
  */
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PatientControllerTestRestTemplateIT extends AbstractIT {

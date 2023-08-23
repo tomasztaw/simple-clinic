@@ -30,8 +30,8 @@ public class PatientRestControllerRestAssuredIT
 
     @Test
     public void testShowPatientById() {
-        baseURI = "http://localhost:9999/clinic";
-//        baseURI = "http://localhost:8080/clinic";
+//        baseURI = "http://localhost:9999/clinic";
+        baseURI = "http://localhost:8080/clinic";
 
         int patientId = 1;
 

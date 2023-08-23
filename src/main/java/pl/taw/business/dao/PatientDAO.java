@@ -23,4 +23,6 @@ public interface PatientDAO {
 
     void delete(PatientEntity patientEntity);
 
+    void saveForUpdateContact(PatientEntity patientEntity);
+
 }

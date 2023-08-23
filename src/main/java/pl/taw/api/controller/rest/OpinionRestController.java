@@ -21,7 +21,6 @@ public class OpinionRestController {
     public static final String OPINION_ID = "/{opinionId}";
     public static final String COMMENTS = "/comments";
     public static final String UPDATE_BY_ID = "/{opinionId}/update";
-    public static final String DELETE_BY_ID = "/{opinionId}/delete";
     public static final String OPINION_UPDATE_NOTE = "/{opinionId}/comment";
 
 
@@ -72,10 +71,11 @@ public class OpinionRestController {
         }
     }
 
-    @DeleteMapping(DELETE_BY_ID)
-    public ResponseEntity<Void> deleteOpinionById(@PathVariable("opinionId") Integer opinionId) {
+    @DeleteMapping(OPINION_ID)
+    public ResponseEntity<?> deleteOpinionById(@PathVariable("opinionId") Integer opinionId) {
         OpinionEntity opinionForDelete = opinionDAO.findEntityById(opinionId);
         if (opinionForDelete != null) {
+            opinionDAO.delete(opinionForDelete);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -83,14 +83,16 @@ public class OpinionRestController {
     }
 
     @PatchMapping(OPINION_UPDATE_NOTE)
-    public ResponseEntity<?> updateOpinionComment(
+    public ResponseEntity<String> updateOpinionComment(
             @PathVariable("opinionId") Integer opinionId,
             @RequestParam(required = true) String updatedComment
     ) {
         OpinionEntity existingOpinion = opinionDAO.findEntityById(opinionId);
+        String answer = "Aktualizacja [%s] na nowy komentarz [%s] przebiegła pomyślnie"
+                .formatted(existingOpinion.getComment(), updatedComment);
         existingOpinion.setComment(updatedComment);
         opinionDAO.save(existingOpinion);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(answer);
     }
 }

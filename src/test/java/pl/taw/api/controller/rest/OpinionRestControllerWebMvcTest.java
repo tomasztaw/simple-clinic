@@ -174,11 +174,12 @@ class OpinionRestControllerWebMvcTest {
         when(opinionDAO.findEntityById(opinionId)).thenReturn(existingOpinion);
 
         // when, then
-        mockMvc.perform(delete(API_OPINIONS.concat(DELETE_BY_ID), opinionId))
+        mockMvc.perform(delete(API_OPINIONS.concat(OPINION_ID), opinionId))
                         .andExpect(status().isNoContent());
 
         verify(opinionDAO, times(1)).findEntityById(opinionId);
-        verify(opinionDAO, only()).findEntityById(opinionId);
+        verify(opinionDAO, times(1)).delete(existingOpinion);
+        verifyNoMoreInteractions(opinionDAO);
     }
 
     @Test
@@ -189,7 +190,7 @@ class OpinionRestControllerWebMvcTest {
         when(opinionDAO.findEntityById(opinionId)).thenReturn(null);
 
         // when, then
-        mockMvc.perform(delete(API_OPINIONS.concat(DELETE_BY_ID), opinionId))
+        mockMvc.perform(delete(API_OPINIONS.concat(OPINION_ID), opinionId))
                 .andExpect(status().isNotFound());
 
         verify(opinionDAO, times(1)).findEntityById(opinionId);

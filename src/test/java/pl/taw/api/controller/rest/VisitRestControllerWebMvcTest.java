@@ -3,21 +3,13 @@ package pl.taw.api.controller.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.dao.DoctorDAO;
@@ -27,16 +19,11 @@ import pl.taw.infrastructure.database.entity.VisitEntity;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
-import java.net.URI;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static pl.taw.api.controller.rest.ReservationRestController.*;
 import static pl.taw.api.controller.rest.VisitRestController.*;
 
 @WebMvcTest(controllers = VisitRestController.class)
@@ -47,8 +34,10 @@ class VisitRestControllerWebMvcTest {
     @MockBean
     private VisitDAO visitDAO;
     @MockBean
+    @SuppressWarnings("unused")
     private DoctorDAO doctorDAO;
     @MockBean
+    @SuppressWarnings("unused")
     private PatientDAO patientDAO;
 
     private MockMvc mockMvc;
@@ -62,17 +51,16 @@ class VisitRestControllerWebMvcTest {
 
         when(visitDAO.findAll()).thenReturn(visits.getVisits());
 
-        // when
-//        VisitsDTO response = visitRestController.getAllVisits();
-
-        // then
-//        assertNotNull(response);
-//        assertEquals(visits.getVisits().size(), response.getVisits().size());
+        // when, then
+        mockMvc.perform(get(API_VISITS))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.visits", hasSize(visits.getVisits().size())))
+                .andExpect(jsonPath("$.visits[*]", notNullValue()));
 
         verify(visitDAO, times(1)).findAll();
         verify(visitDAO, only()).findAll();
     }
-
 
     @Test
     void shouldReturnExistingVisit() throws Exception {
@@ -86,6 +74,7 @@ class VisitRestControllerWebMvcTest {
         mockMvc.perform(get(API_VISITS.concat(VISIT_ID), visitId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.visitId", is(visitId)))
                 .andExpect(content().json(objectMapper.writeValueAsString(visit)));
 
         verify(visitDAO, times(1)).findById(visitId);
@@ -103,18 +92,6 @@ class VisitRestControllerWebMvcTest {
         mockMvc.perform(get(API_VISITS.concat(VISIT_ID), visitId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-
-        // ******************************************************
-
-        // Przerób to jutro na ResponseEntity !!!!!!!!!!!!
-
-        // ******************************************************
-
-
-//        VisitDTO response = visitRestController.visitDetails(visitId);
-
-        // then
-//        assertNull(response);
 
         verify(visitDAO, times(1)).findById(visitId);
         verify(visitDAO, only()).findById(visitId);

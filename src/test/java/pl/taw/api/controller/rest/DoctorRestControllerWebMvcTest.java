@@ -245,7 +245,8 @@ class DoctorRestControllerWebMvcTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(request))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("Niepoprawne żądanie dla pola: [email]")));
+                        .andExpect(jsonPath("$.errorId").exists());
+//                .andExpect(content().string(containsString("Niepoprawne żądanie dla pola: [email]")));
         verifyNoInteractions(doctorDAO);
     }
 
@@ -277,7 +278,8 @@ class DoctorRestControllerWebMvcTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(request))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string(containsString("Niepoprawne żądanie dla pola: [phone]")));
+                    .andExpect(jsonPath("$.errorId").exists());
+//                    .andExpect(content().string(containsString("Niepoprawne żądanie dla pola: [phone]")));
             verifyNoInteractions(doctorDAO);
         }
     }

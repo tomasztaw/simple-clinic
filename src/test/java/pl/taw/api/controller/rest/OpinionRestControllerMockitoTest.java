@@ -200,7 +200,7 @@ class OpinionRestControllerMockitoTest {
         when(opinionDAO.findEntityById(opinionId)).thenReturn(existingOpinion);
 
         // when
-        ResponseEntity<Void> response = opinionRestController.deleteOpinionById(opinionId);
+        ResponseEntity<?> response = opinionRestController.deleteOpinionById(opinionId);
 
         // then
         assertThat(response, is(notNullValue()));
@@ -208,7 +208,8 @@ class OpinionRestControllerMockitoTest {
         assertNull(response.getBody());
 
         verify(opinionDAO, times(1)).findEntityById(opinionId);
-        verify(opinionDAO, only()).findEntityById(opinionId);
+        verify(opinionDAO, times(1)).delete(existingOpinion);
+        verifyNoMoreInteractions(opinionDAO);
     }
 
     @Test
@@ -219,7 +220,7 @@ class OpinionRestControllerMockitoTest {
         when(opinionDAO.findEntityById(opinionId)).thenReturn(null);
 
         // when
-        ResponseEntity<Void> response = opinionRestController.deleteOpinionById(opinionId);
+        ResponseEntity<?> response = opinionRestController.deleteOpinionById(opinionId);
 
         // then
         assertThat(response, is(notNullValue()));
@@ -237,17 +238,19 @@ class OpinionRestControllerMockitoTest {
         Integer opinionId = 2;
         String updatedComment = "Aktualizowany komentarz";
         OpinionEntity existingOpinion = EntityFixtures.someOpinion2();
+        String answer = "Aktualizacja [%s] na nowy komentarz [%s] przebiegła pomyślnie"
+                .formatted(existingOpinion.getComment(), updatedComment);
+
 
         when(opinionDAO.findEntityById(opinionId)).thenReturn(existingOpinion);
 
         // when
-        ResponseEntity<?> response = opinionRestController.updateOpinionComment(opinionId, updatedComment);
+        ResponseEntity<String> response = opinionRestController.updateOpinionComment(opinionId, updatedComment);
 
         // then
         assertThat(response, is(notNullValue()));
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNull(response.getBody());
-        assertEquals(updatedComment, existingOpinion.getComment());
+        assertEquals(answer, response.getBody());
 
         verify(opinionDAO, times(1)).findEntityById(opinionId);
         verify(opinionDAO, times(1)).save(existingOpinion);

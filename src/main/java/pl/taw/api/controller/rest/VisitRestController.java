@@ -39,12 +39,16 @@ public class VisitRestController {
     }
 
     @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public VisitDTO visitDetails(@PathVariable("visitId") Integer visitId) {
-        return visitDAO.findById(visitId);
+    public ResponseEntity<VisitDTO> visitDetails(@PathVariable("visitId") Integer visitId) {
+        VisitDTO visit = visitDAO.findById(visitId);
+        if (visit != null) {
+            return ResponseEntity.ok(visit);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
-    // TODO jest problem z metodą saveAndReturn
     @PostMapping
     @Transactional
     public ResponseEntity<VisitDTO> addVisit(
