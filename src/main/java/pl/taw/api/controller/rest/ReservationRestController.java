@@ -2,6 +2,7 @@ package pl.taw.api.controller.rest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,8 @@ public class ReservationRestController {
     }
 
     @GetMapping(BY_DATE)
-    public ResponseEntity<ReservationsDTO> getAllReservationsByDate(@PathVariable("day") LocalDate day) {
+    public ResponseEntity<ReservationsDTO> getAllReservationsByDate(
+            @PathVariable("day") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
         ReservationsDTO reservationsByDate = ReservationsDTO.of(reservationService.findAllByDay(day));
         if (!reservationsByDate.getReservations().isEmpty()) {
             return ResponseEntity.ok(reservationsByDate);

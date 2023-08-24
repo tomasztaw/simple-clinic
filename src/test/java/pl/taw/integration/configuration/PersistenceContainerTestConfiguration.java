@@ -20,18 +20,16 @@ public class PersistenceContainerTestConfiguration {
 
     public static final String POSTGRES_USERNAME = "username";
     public static final String POSTGRES_PASSWORD = "password";
-//    public static final String POSTGRESQL = "postgresql";
+    public static final String POSTGRESQL = "postgresql";
     public static final String POSTGRESQL_CONTAINER = "postgres:15.3";
 
     @Bean
-//    @Qualifier(POSTGRESQL)
+    @Qualifier(POSTGRESQL)
     PostgreSQLContainer<?> postgresqlContainer() {
         PostgreSQLContainer<?> postgresqlContainer = new PostgreSQLContainer<>(POSTGRESQL_CONTAINER)
             .withUsername(POSTGRES_USERNAME)
             .withPassword(POSTGRES_PASSWORD);
         postgresqlContainer.start();
-//        System.setProperty("spring.datasource.username", postgresqlContainer.getUsername());
-//        System.setProperty("spring.datasource.password", postgresqlContainer.getPassword());
         return postgresqlContainer;
     }
 

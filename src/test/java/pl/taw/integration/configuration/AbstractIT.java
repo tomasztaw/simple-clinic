@@ -47,5 +47,6 @@ public abstract class AbstractIT {
         // czyszczenie bazy po każdym teście
         petRepository.deleteAll(); // do usunięcia
         // nie mam deleteAll dla patient repo
+
     }
 }

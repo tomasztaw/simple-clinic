@@ -100,7 +100,8 @@ class DoctorRestAssuredControllerIT extends AbstractIT {
 
     @Test
     public void testShowDoctorById() {
-        int doctorId = 2;
+//        int doctorId = 2;
+        int doctorId = 7;
 
         given()
                 .pathParam("doctorId", doctorId)

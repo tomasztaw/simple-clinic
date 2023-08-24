@@ -52,7 +52,8 @@ public class VisitRestController {
     @PostMapping
     @Transactional
     public ResponseEntity<VisitDTO> addVisit(
-            @Valid @RequestBody VisitDTO visitDTO
+            @RequestBody VisitDTO visitDTO
+//            @Valid @RequestBody VisitDTO visitDTO
     ) {
         VisitEntity visitEntity = VisitEntity.builder()
                 .doctorId(visitDTO.getDoctorId())
@@ -62,7 +63,12 @@ public class VisitRestController {
                 .status(visitDTO.getStatus())
                 .build();
 
+        System.out.println("### przed save");
+        System.out.println("visitEntity = " + visitEntity);
+        System.out.println("visitDTO = " + visitDTO);
         VisitEntity createdVisit = visitDAO.saveAndReturn(visitEntity);
+        System.out.println("createdVisit = " + createdVisit);
+        System.out.println("### po save");
 
         return ResponseEntity
                 .created(URI.create(API_VISITS + VISIT_ID_RESULT.formatted(createdVisit.getVisitId())))
