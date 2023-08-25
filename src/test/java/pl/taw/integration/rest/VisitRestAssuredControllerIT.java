@@ -11,6 +11,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.integration.configuration.AbstractIT;
 import pl.taw.integration.configuration.TestSecurityConfig;
@@ -20,14 +21,15 @@ import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-//import static pl.taw.api.controller.rest.VisitRestController.API_VISITS;
-//import static pl.taw.api.controller.rest.VisitRestController.VISIT_ID;
+import static pl.taw.api.controller.rest.DoctorRestController.API_DOCTORS;
+import static pl.taw.api.controller.rest.DoctorRestController.DOCTOR_ID;
 import static pl.taw.api.controller.rest.VisitRestController.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(TestSecurityConfig.class)
+//@TestPropertySource(locations = "classpath:application-test.yml")
 class VisitRestAssuredControllerIT extends AbstractIT {
 
 
@@ -65,12 +67,9 @@ class VisitRestAssuredControllerIT extends AbstractIT {
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/api/visits/{visitId}")
-//                .get(API_VISITS.concat(VISIT_ID))
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON);
-//                .body("visitId", equalTo(visitId))
-//                .body("note", isA(String.class));
 
     }
 
@@ -109,6 +108,27 @@ class VisitRestAssuredControllerIT extends AbstractIT {
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
                 .header("Location", startsWith(API_VISITS));
+    }
+
+    @Test
+    void thatAddVisitWorksCorrectlyNew() {
+        VisitDTO visit = VisitDTO.builder()
+                .doctorId(1)
+                .patientId(2)
+                .note("Jakaś notatka")
+                .dateTime(LocalDateTime.of(2023, 8, 25, 11, 0))
+                .status("odbyta")
+                .build();
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(visit)
+                .when()
+                .post(API_VISITS)
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .header("Location", startsWith(API_VISITS));
+//                .header("Location", matchesPattern(API_DOCTORS + "/\\d+"));
     }
 
     @Test

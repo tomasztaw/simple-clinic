@@ -40,7 +40,7 @@ import static pl.taw.api.controller.rest.ReservationRestController.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(TestSecurityConfig.class)
-@Sql("/reservationsDataForTest.sql")
+//@Sql("/reservationsDataForTest.sql")
 public class ReservationRestAssuredControllerIT extends AbstractIT {
 
     @LocalServerPort

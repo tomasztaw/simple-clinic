@@ -165,7 +165,7 @@
 </div>
 
 <div class="validation">
-    <h2>Dodaj lekarza z walidacją (próbny formularz)</h2>
+    <h2>Dodaj lekarza z walidacją (próbny formularz - działa można zamienić)</h2>
     <form action="#" th:action="@{/doctors/add/valid}" method="POST" th:object="${updateDoctor}">
         <div class="row">
             <div class="col">
@@ -203,16 +203,15 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Dodaj lekarza</button>
+        <button type="submit" class="btn btn-primary btn-lg">Dodaj lekarza</button>
     </form>
     <br>
 
 </div>
 
 <div class="footer">
-    <p><b>© 2023 E-clinic</b></p>
 
-    <div th:replace="fragments/footer.html"></div>
+    <div th:replace="~{fragments/footer.html}"></div>
 
 </div>
 

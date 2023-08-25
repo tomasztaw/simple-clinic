@@ -8,6 +8,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+    show-sql: true
 
   security:
     enabled: false # wyłączenie security dla profilu testowego
@@ -15,3 +16,4 @@ spring:
 logging:
   level:
     root: DEBUG
+    org.hibernate: debug

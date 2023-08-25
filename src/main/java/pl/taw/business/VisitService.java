@@ -1,5 +1,8 @@
 package pl.taw.business;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.VisitDAO;
+import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.util.List;
 
@@ -16,6 +20,17 @@ import java.util.List;
 public class VisitService {
 
     private final VisitDAO visitDAO;
+
+    // #################### dodanie dla testów rest assured
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional
+    public VisitEntity saveVisit(VisitEntity visitEntity) {
+        entityManager.persist(visitEntity);
+        return visitEntity;
+    }
+    // ####################################################
 
 
     public List<VisitDTO> findAllVisitByDoctor(Integer doctorId) {

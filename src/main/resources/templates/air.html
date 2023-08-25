@@ -17,6 +17,23 @@
         ul, li {
             list-style: none;
         }
+        button {
+            width: 200px;
+            height: 60px;
+            font-size: 20px;
+            padding: 15px 0;
+            text-align: center;
+            margin: 20px 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid #009688;
+            background: blue;
+            color: #fff;
+            cursor: pointer;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+        }
     </style>
 </head>
 <body th:style="'background-color: ' + ${backgroundColor}">
@@ -32,14 +49,20 @@
     </ul>
     <br>
     <br>
+
     <p>Data pomiaru: <b><span th:text="${stCalcDate}"></span></b></p>
+
     <p>Dane dostarcza: <a href="https://powietrze.gios.gov.pl/" title="link" target="_blank">powietrze.gios.gov.pl</a></p>
+
     <p><a href="https://powietrze.gios.gov.pl/pjp/content/api#" title="api" target="_blank">Dokumentacja API</a></p>
+
+    <p><a href="https://api.gios.gov.pl/pjp-api/swagger-ui/" title="Swagger" target="_blank">Swagger</a></p>
+
     <p>Miejsce pomiaru: <a href="https://goo.gl/maps/QbiGgHJWqgwhRxr29" title="sprawdź na mapie" target="_blank">
         wybrzeże Józefa Conrada-Korzeniowskiego 18, 50-226 Wrocław</a>
     </p>
 
-    <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+    <button class="button" onclick="history.go(-1);">Powrót</button>
 
 </div>
 

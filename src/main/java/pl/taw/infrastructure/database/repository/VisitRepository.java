@@ -25,7 +25,7 @@ public class VisitRepository implements VisitDAO {
 
     @Override
     public List<VisitDTO> findAll() {
-        log.debug("Fetching all visits from the database");
+        log.debug("\n #####  Fetching all visits from the database #### \n");
         return visitJpaRepository.findAll().stream()
                 .map(visitMapper::mapFromEntity)
                 .toList();

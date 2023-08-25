@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
+import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
@@ -16,6 +17,7 @@ import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(VisitRestController.API_VISITS)
@@ -32,15 +34,33 @@ public class VisitRestController {
     private final DoctorDAO doctorDAO;
     private final PatientDAO patientDAO;
 
+    // dodane dla zapisu do bazy
+    private final VisitService visitService;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public VisitsDTO getAllVisits() {
+        System.out.println("\n ################## \n");
+
+
+        List<VisitDTO> result = visitDAO.findAll();
+        System.out.println("result.size() = " + result.size());
+
+        result.forEach(System.out::println);
+
+        System.out.println("\n ################## \n");
+
         return VisitsDTO.of(visitDAO.findAll());
     }
 
     @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<VisitDTO> visitDetails(@PathVariable("visitId") Integer visitId) {
+        System.out.println("\n ################## \n");
+
         VisitDTO visit = visitDAO.findById(visitId);
+        System.out.println("visit = " + visit);
+
+        System.out.println("\n ################## \n");
+
         if (visit != null) {
             return ResponseEntity.ok(visit);
         } else {
@@ -52,8 +72,7 @@ public class VisitRestController {
     @PostMapping
     @Transactional
     public ResponseEntity<VisitDTO> addVisit(
-            @RequestBody VisitDTO visitDTO
-//            @Valid @RequestBody VisitDTO visitDTO
+            @Valid @RequestBody VisitDTO visitDTO
     ) {
         VisitEntity visitEntity = VisitEntity.builder()
                 .doctorId(visitDTO.getDoctorId())
@@ -63,12 +82,7 @@ public class VisitRestController {
                 .status(visitDTO.getStatus())
                 .build();
 
-        System.out.println("### przed save");
-        System.out.println("visitEntity = " + visitEntity);
-        System.out.println("visitDTO = " + visitDTO);
-        VisitEntity createdVisit = visitDAO.saveAndReturn(visitEntity);
-        System.out.println("createdVisit = " + createdVisit);
-        System.out.println("### po save");
+        VisitEntity createdVisit = visitService.saveVisit(visitEntity);
 
         return ResponseEntity
                 .created(URI.create(API_VISITS + VISIT_ID_RESULT.formatted(createdVisit.getVisitId())))

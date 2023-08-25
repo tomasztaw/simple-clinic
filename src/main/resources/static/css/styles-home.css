@@ -78,8 +78,38 @@
     text-decoration: none;
 }
 
-.air--quality {
-    font-size 30px;
+.air--q {
+    font-size: 25px;
     font-style: italic;
+    font-weight: bold;
     margin-top: 10px;
+}
+
+/* grid dla admina */
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, auto);
+  gap: 20px;
+  justify-items: center;
+  align-items: center;
+  height: 30vh;
+  width: 80vw;
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+}
+
+.role-div h1 {
+    margin: 15px auto;
+}
+
+.role-div h2 {
+    margin-bottom: 50px;
+}
+
+.btn--add {
+    width: 800px;
 }
