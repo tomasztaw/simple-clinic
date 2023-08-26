@@ -78,7 +78,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/welcome").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/register/addUser").permitAll()
-                        .requestMatchers("/templates/registration-confirmation.html").permitAll()
+                        .requestMatchers("/templates/core/registration-confirmation.html").permitAll()
                         .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**", "/register/**").permitAll()
                                 .anyRequest().authenticated()
 //                        .requestMatchers(HttpMethod.DELETE, HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.PATCH).hasAnyAuthority("ADMIN", "USER", "DOCTOR")

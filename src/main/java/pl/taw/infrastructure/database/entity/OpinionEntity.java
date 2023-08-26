@@ -1,5 +1,6 @@
 package pl.taw.infrastructure.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,15 +39,18 @@ public class OpinionEntity {
     // relacje
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", insertable = false, updatable = false)
+    @JsonIgnore // adnotacja dla rekurencyjnego mapowania obiektów przez 'objectmappera'
     private DoctorEntity doctor;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", insertable = false, updatable = false)
+    @JsonIgnore
     private PatientEntity patient;
 
     // id wizyty na początku zawsze będzie null, dlatego nie ustawiłem jako klucz obcy
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "visit_id", referencedColumnName = "visit_id", insertable = false, updatable = false)
+    @JsonIgnore
     private VisitEntity visit;
 
 }

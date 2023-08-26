@@ -275,7 +275,8 @@ class PatientRestControllerWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(expectedAnswer));
 
-        verify(patientDAO, times(1)).save(existingPatient);
+//        verify(patientDAO, times(1)).save(existingPatient);
+        verify(patientDAO, times(1)).saveForUpdateContact(existingPatient);
         verify(patientDAO, times(1)).findEntityById(patientId);
         verifyNoMoreInteractions(patientDAO);
     }
@@ -314,7 +315,8 @@ class PatientRestControllerWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(expectedAnswer));
 
-        verify(patientDAO, times(1)).save(existingPatient);
+//        verify(patientDAO, times(1)).save(existingPatient);
+        verify(patientDAO, times(1)).saveForUpdateContact(existingPatient);
         verify(patientDAO, times(1)).findEntityById(patientId);
         verifyNoMoreInteractions(patientDAO);
     }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
+import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
@@ -35,6 +36,8 @@ class VisitRestControllerMockitoTest {
     @Mock
     @SuppressWarnings("unused")
     private PatientDAO patientDAO;
+    @Mock
+    private VisitService visitService;
 
     @InjectMocks // wstrzykiwanie
     private VisitRestController visitRestController;
@@ -104,7 +107,8 @@ class VisitRestControllerMockitoTest {
         VisitDTO visitDTO = DtoFixtures.someVisit4();
         VisitEntity visitEntity = EntityFixtures.someVisit1();
 
-        when(visitDAO.saveAndReturn(ArgumentMatchers.any(VisitEntity.class))).thenReturn(visitEntity);
+//        when(visitDAO.saveAndReturn(ArgumentMatchers.any(VisitEntity.class))).thenReturn(visitEntity);
+        when(visitService.saveVisit(ArgumentMatchers.any(VisitEntity.class))).thenReturn(visitEntity);
 
         // when
         ResponseEntity<VisitDTO> response = visitRestController.addVisit(visitDTO);
@@ -113,8 +117,10 @@ class VisitRestControllerMockitoTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(URI.create("/api/visits/%s".formatted(visitEntity.getVisitId())), response.getHeaders().getLocation());
 
-        verify(visitDAO, times(1)).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
-        verify(visitDAO, only()).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
+//        verify(visitDAO, times(1)).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
+//        verify(visitDAO, only()).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
+        verify(visitService, times(1)).saveVisit(ArgumentMatchers.any(VisitEntity.class));
+        verify(visitService, only()).saveVisit(ArgumentMatchers.any(VisitEntity.class));
     }
 
     @Test

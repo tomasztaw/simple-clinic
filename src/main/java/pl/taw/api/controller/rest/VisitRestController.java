@@ -39,16 +39,6 @@ public class VisitRestController {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public VisitsDTO getAllVisits() {
-        System.out.println("\n ################## \n");
-
-
-        List<VisitDTO> result = visitDAO.findAll();
-        System.out.println("result.size() = " + result.size());
-
-        result.forEach(System.out::println);
-
-        System.out.println("\n ################## \n");
-
         return VisitsDTO.of(visitDAO.findAll());
     }
 

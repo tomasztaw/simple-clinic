@@ -104,7 +104,7 @@ public class ReservationController {
         model.addAttribute("reservationId", reservationId);
         model.addAttribute("fullDate", fullDate);
 
-        return "reservation-confirm";
+        return "reservation/reservation-confirm";
     }
 
     @GetMapping

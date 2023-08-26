@@ -104,7 +104,7 @@ public class PatientController {
             @PathVariable("patientId") Integer patientId, Model model) {
         PatientDTO patient = patientDAO.findById(patientId);
         model.addAttribute("patient", patient);
-        return "update-phone";
+        return "core/update-phone";
     }
 
 //    @PatchMapping(PATIENT_UPDATE_PHONE) // "/{patientId}/phone"
@@ -366,7 +366,7 @@ public class PatientController {
 
     @GetMapping(REGISTER)
     public String registerPatient() {
-        return "register";
+        return "core/register";
     }
 
     // wyświetlanie na sztywno pacjenta o id: 5

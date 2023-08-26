@@ -163,3 +163,7 @@
 .pagination-btn {
     margin: 25px 0;
 }
+
+.btn-add {
+    width: 60vw;
+}

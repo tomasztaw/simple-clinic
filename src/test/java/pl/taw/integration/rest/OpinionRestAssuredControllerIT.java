@@ -120,7 +120,6 @@ class OpinionRestAssuredControllerIT extends AbstractIT {
     }
 
     @Test
-    @Disabled("Jest rekurencja, muszę poszukać dokładnej")
     void thatUpdateOpinionShouldWorkCorrectly() {
         int opinionId = 1;
         OpinionDTO opinion = given().when().get(API_OPINIONS.concat(OPINION_ID), opinionId).as(OpinionDTO.class);
@@ -152,8 +151,8 @@ class OpinionRestAssuredControllerIT extends AbstractIT {
                 .then()
                 .contentType(ContentType.JSON)
                 .statusCode(HttpStatus.OK.value())
-                .body("comment", equalTo("Nowy pozytywny komentarz"));
-//                .body("comment", equalTo("Nowy komentarz"));
+//                .body("comment", equalTo("Nowy pozytywny komentarz"));
+                .body("comment", equalTo("Nowy komentarz"));
     }
 
     @Test

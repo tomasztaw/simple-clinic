@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Phone</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header-logo {
+            flex-grow: 1;
+        }
+        .header-logo img {
+            max-width: 50%;
+            height: auto;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .welcome {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">
+        <a href="/" th:href="@{/}">
+            <img th:src="@{/images/2135.jpg}" alt="Logo" width="180" height="180" title="Strona główna">
+        </a>
+    </div>
+    <div class="welcome">
+        <h1>TO NA CHWILĘ OBECNĄ NIE DZIAŁ, ALE POPRAWIĘ :)</h1>
+    </div>
+    <div class="login-button">
+        <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+    </div>
+</header>
+<div class="container">
+
+    <h1 class="mt-5">Aktualizuj numer telefonu</h1>
+    <h5 class="mt-5">Format numeru (+48 xxx xxx xxx)</h5>
+    <form th:action="@{/patients/{patientId}/phone(patientId=${patient.patientId})}" method="post" class="mt-4">
+
+<!--        TUTAJ POWINNA BYĆ CHYBA "PATCH" - DO SPRAWDZENIA-->
+        <input type="hidden" th:name="_method" th:value="POST">
+        <div class="form-group">
+            <label for="newPhone">Nowy numer:</label>
+            <input type="text" id="newPhone" name="newPhone" required class="form-control">
+
+        </div>
+        <button type="submit" class="btn btn-primary">Aktualizuj</button>
+    </form>
+</div>
+<div class="footer">
+    <div th:replace="~{fragments/footer.html}"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

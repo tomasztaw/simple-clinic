@@ -275,7 +275,8 @@ class PatientRestControllerMockitoTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedAnswer, response.getBody());
 
-        verify(patientDAO, times(1)).save(existingPatient);
+//        verify(patientDAO, times(1)).save(existingPatient);
+        verify(patientDAO, times(1)).saveForUpdateContact(existingPatient);
         verify(patientDAO, times(1)).findEntityById(patientId);
         verifyNoMoreInteractions(patientDAO);
     }
@@ -316,7 +317,8 @@ class PatientRestControllerMockitoTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedAnswer, response.getBody());
 
-        verify(patientDAO, times(1)).save(existingPatient);
+//        verify(patientDAO, times(1)).save(existingPatient);
+        verify(patientDAO, times(1)).saveForUpdateContact(existingPatient);
         verify(patientDAO, times(1)).findEntityById(patientId);
         verifyNoMoreInteractions(patientDAO);
     }

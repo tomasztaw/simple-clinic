@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
+import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.business.dao.VisitDAO;
@@ -39,6 +40,8 @@ class VisitRestControllerWebMvcTest {
     @MockBean
     @SuppressWarnings("unused")
     private PatientDAO patientDAO;
+    @MockBean
+    private VisitService visitService;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
@@ -103,7 +106,8 @@ class VisitRestControllerWebMvcTest {
         VisitDTO visitDTO = DtoFixtures.someVisit4();
         VisitEntity visitEntity = EntityFixtures.someVisit1();
 
-        when(visitDAO.saveAndReturn(ArgumentMatchers.any(VisitEntity.class))).thenReturn(visitEntity);
+//        when(visitDAO.saveAndReturn(ArgumentMatchers.any(VisitEntity.class))).thenReturn(visitEntity);
+        when(visitService.saveVisit(ArgumentMatchers.any(VisitEntity.class))).thenReturn(visitEntity);
 
         // when, then
         mockMvc.perform(post(API_VISITS)
@@ -113,8 +117,10 @@ class VisitRestControllerWebMvcTest {
                 .andExpect(header().string("Location", "/api/visits/%s"
                         .formatted(visitEntity.getVisitId())));
 
-        verify(visitDAO, times(1)).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
-        verify(visitDAO, only()).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
+//        verify(visitDAO, times(1)).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
+//        verify(visitDAO, only()).saveAndReturn(ArgumentMatchers.any(VisitEntity.class));
+        verify(visitService, times(1)).saveVisit(ArgumentMatchers.any(VisitEntity.class));
+        verify(visitService, only()).saveVisit(ArgumentMatchers.any(VisitEntity.class));
     }
 
     @Test

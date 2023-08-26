@@ -16,6 +16,9 @@ import pl.taw.infrastructure.database.entity.ReservationEntity;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping(ReservationRestController.API_RESERVATIONS)
@@ -38,7 +41,8 @@ public class ReservationRestController {
         return ReservationsDTO.of(reservationDAO.findAll());
     }
 
-    @GetMapping(value = RESERVATION_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    @GetMapping(value = RESERVATION_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(RESERVATION_ID)
     public ResponseEntity<ReservationDTO> reservationDetails(
             @PathVariable("reservationId") Integer reservationId
     ) {
@@ -53,14 +57,23 @@ public class ReservationRestController {
 
     @GetMapping(BY_DATE)
     public ResponseEntity<ReservationsDTO> getAllReservationsByDate(
-            @PathVariable("day") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
-        ReservationsDTO reservationsByDate = ReservationsDTO.of(reservationService.findAllByDay(day));
-        if (!reservationsByDate.getReservations().isEmpty()) {
-            return ResponseEntity.ok(reservationsByDate);
-        } else {
-            return ResponseEntity.noContent().build();
+            @PathVariable("day") String dayString) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate day = LocalDate.parse(dayString, formatter);
+
+            List<ReservationDTO> reservations = reservationService.findAllByDay(day);
+            if (reservations.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                ReservationsDTO reservationsByDate = ReservationsDTO.of(reservations);
+                return ResponseEntity.ok(reservationsByDate);
+            }
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
+
 
     @PostMapping
     @Transactional

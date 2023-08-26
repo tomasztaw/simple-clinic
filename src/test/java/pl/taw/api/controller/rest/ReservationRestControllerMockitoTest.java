@@ -105,7 +105,7 @@ class ReservationRestControllerMockitoTest {
         Mockito.when(reservationService.findAllByDay(eq(testDate))).thenReturn(reservationsDTO.getReservations());
 
         // when
-        ResponseEntity<ReservationsDTO> result = reservationRestController.getAllReservationsByDate(testDate);
+        ResponseEntity<ReservationsDTO> result = reservationRestController.getAllReservationsByDate(testDate.toString());
 
         // then
         assertThat(result, is(notNullValue()));

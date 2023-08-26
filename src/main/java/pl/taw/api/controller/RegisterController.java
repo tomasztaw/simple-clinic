@@ -148,13 +148,13 @@ public class RegisterController {
         patientDAO.save(patient);
 
 
-        ModelAndView modelAndView = new ModelAndView("registration-confirmation");
+        ModelAndView modelAndView = new ModelAndView("core/registration-confirmation");
         return modelAndView;
     }
 
     @GetMapping
     public String registerPatient() {
-        return "register-security";
+        return "core/register-security";
     }
 
 
