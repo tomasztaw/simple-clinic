@@ -203,7 +203,7 @@ class ReservationRestControllerMockitoTest {
         when(reservationDAO.findEntityById(eq(reservationId))).thenReturn(existingReservation);
 
         // when
-        ResponseEntity<?> response = reservationRestController.updateReservationDate(reservationId, newDateTime);
+        ResponseEntity<?> response = reservationRestController.updateReservationDate(reservationId, newDateTime.toString());
 
         // then
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -37,12 +37,21 @@ public class VisitRestController {
     // dodane dla zapisu do bazy
     private final VisitService visitService;
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public VisitsDTO getAllVisits() {
-        return VisitsDTO.of(visitDAO.findAll());
+//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+//    public VisitsDTO getAllVisits() {
+//        return VisitsDTO.of(visitDAO.findAll());
+//    }
+
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<VisitDTO> getAllVisits() {
+        return visitDAO.findAll();
     }
 
-    @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+
+
+//    @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<VisitDTO> visitDetails(@PathVariable("visitId") Integer visitId) {
         System.out.println("\n ################## \n");
 
@@ -54,6 +63,7 @@ public class VisitRestController {
         if (visit != null) {
             return ResponseEntity.ok(visit);
         } else {
+            System.out.println(" \n ##################### brak wizyty \n");
             return ResponseEntity.notFound().build();
         }
     }

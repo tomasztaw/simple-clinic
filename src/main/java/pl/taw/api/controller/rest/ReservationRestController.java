@@ -41,8 +41,7 @@ public class ReservationRestController {
         return ReservationsDTO.of(reservationDAO.findAll());
     }
 
-//    @GetMapping(value = RESERVATION_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @GetMapping(RESERVATION_ID)
+    @GetMapping(value = RESERVATION_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ReservationDTO> reservationDetails(
             @PathVariable("reservationId") Integer reservationId
     ) {
@@ -130,15 +129,24 @@ public class ReservationRestController {
     @PatchMapping(RESERVATION_UPDATE_DATE)
     public ResponseEntity<?> updateReservationDate( // TODO można tutaj zwrócić wiadomość z nową datą
             @PathVariable("reservationId") Integer reservationId,
-            @RequestParam(required = true) LocalDateTime dateTime
+            @RequestParam(required = true) String dateTime
     ) {
-        ReservationEntity existingReservation = reservationDAO.findEntityById(reservationId);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime ldt = LocalDateTime.parse(dateTime, formatter);
 
-        existingReservation.setDay(dateTime.toLocalDate());
-        existingReservation.setStartTimeR(dateTime.toLocalTime());
+            ReservationEntity existingReservation = reservationDAO.findEntityById(reservationId);
 
-        reservationDAO.save(existingReservation);
+            existingReservation.setDay(ldt.toLocalDate());
+            existingReservation.setStartTimeR(ldt.toLocalTime());
 
-        return ResponseEntity.ok().build();
+            reservationDAO.save(existingReservation);
+
+            return ResponseEntity.ok().build();
+
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body("Invalid date format. Use 'yyyy-MM-dd HH:mm' format.");
+        }
+
     }
 }

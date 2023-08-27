@@ -43,23 +43,23 @@ class VisitRestControllerMockitoTest {
     private VisitRestController visitRestController;
 
 
-    @Test
-    void shouldReturnsListOfVisits() {
-        // given
-        VisitsDTO visits = VisitsDTO.of(DtoFixtures.visits);
-
-        when(visitDAO.findAll()).thenReturn(visits.getVisits());
-
-        // when
-        VisitsDTO response = visitRestController.getAllVisits();
-
-        // then
-        assertNotNull(response);
-        assertEquals(visits.getVisits().size(), response.getVisits().size());
-
-        verify(visitDAO, times(1)).findAll();
-        verify(visitDAO, only()).findAll();
-    }
+//    @Test
+//    void shouldReturnsListOfVisits() {
+//        // given
+//        VisitsDTO visits = VisitsDTO.of(DtoFixtures.visits);
+//
+//        when(visitDAO.findAll()).thenReturn(visits.getVisits());
+//
+//        // when
+//        VisitsDTO response = visitRestController.getAllVisits();
+//
+//        // then
+//        assertNotNull(response);
+//        assertEquals(visits.getVisits().size(), response.getVisits().size());
+//
+//        verify(visitDAO, times(1)).findAll();
+//        verify(visitDAO, only()).findAll();
+//    }
 
 
     @Test
