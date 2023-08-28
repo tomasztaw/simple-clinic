@@ -5,22 +5,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.DoctorsDTO;
-import pl.taw.api.dto.VisitDTO;
 import pl.taw.api.dto.VisitsDTO;
 import pl.taw.business.VisitService;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 import java.net.URI;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(DoctorRestController.API_DOCTORS)
@@ -114,7 +109,7 @@ public class DoctorRestController {
     @PatchMapping(DOCTOR_UPDATE_TITLE)
     public ResponseEntity<?> updateDoctorTitle(
             @PathVariable("doctorId") Integer doctorId,
-            @RequestParam(required = true) String newTitle
+            @RequestParam String newTitle
     ) {
         DoctorEntity existingDoctor = doctorDAO.findEntityById(doctorId);
 
@@ -128,7 +123,7 @@ public class DoctorRestController {
     @PatchMapping(DOCTOR_UPDATE_PHONE)
     public ResponseEntity<?> updateDoctorPhone(
             @PathVariable("doctorId") Integer doctorId,
-            @Valid @RequestParam(required = true) String newPhone
+            @Valid @RequestParam String newPhone
     ) {
         DoctorEntity existingDoctor = doctorDAO.findEntityById(doctorId);
 
@@ -142,7 +137,7 @@ public class DoctorRestController {
     @PatchMapping(DOCTOR_UPDATE_EMAIL)
     public ResponseEntity<?> updateDoctorEmail(
             @PathVariable("doctorId") Integer doctorId,
-            @Valid @RequestParam(required = true) String newEmail
+            @Valid @RequestParam String newEmail
     ) {
         if (!isValidEmail(newEmail)) {
             return ResponseEntity.badRequest().build();

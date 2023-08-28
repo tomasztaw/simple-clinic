@@ -153,7 +153,7 @@ class ReservationControllerMockitoTest {
         String result = reservationController.confirmReservation(reservationId, fullDate, model);
 
         // then
-        assertEquals("reservation-confirm", result);
+        assertEquals("reservation/reservation-confirm", result);
 
         verify(model).addAttribute("reservationId", reservationId);
         verify(model).addAttribute("fullDate", fullDate);

@@ -17,7 +17,6 @@ import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(VisitRestController.API_VISITS)
@@ -37,20 +36,11 @@ public class VisitRestController {
     // dodane dla zapisu do bazy
     private final VisitService visitService;
 
-//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-//    public VisitsDTO getAllVisits() {
-//        return VisitsDTO.of(visitDAO.findAll());
-//    }
-
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<VisitDTO> getAllVisits() {
-        return visitDAO.findAll();
+    public VisitsDTO getAllVisits() {
+        return VisitsDTO.of(visitDAO.findAll());
     }
 
-
-
-//    @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @GetMapping(value = VISIT_ID, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<VisitDTO> visitDetails(@PathVariable("visitId") Integer visitId) {
         System.out.println("\n ################## \n");
@@ -141,7 +131,7 @@ public class VisitRestController {
     @PatchMapping(VISIT_UPDATE_NOTE)
     public ResponseEntity<?> updateVisitNote(
             @PathVariable("visitId") Integer visitId,
-            @RequestParam(required = true) String updatedNote
+            @RequestParam String updatedNote
     ) {
         VisitEntity existingVisit = visitDAO.findEntityById(visitId);
 

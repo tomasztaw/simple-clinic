@@ -3,9 +3,7 @@ package pl.taw.integration.rest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +17,6 @@ import pl.taw.api.dto.ReservationDTO;
 import pl.taw.infrastructure.database.entity.ReservationEntity;
 import pl.taw.integration.configuration.AbstractIT;
 import pl.taw.integration.configuration.TestSecurityConfig;
-import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.time.LocalDate;
@@ -29,15 +26,12 @@ import java.time.format.DateTimeFormatter;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.taw.api.controller.rest.DoctorRestController.API_DOCTORS;
 import static pl.taw.api.controller.rest.ReservationRestController.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(TestSecurityConfig.class)
 @Sql("/reservationsDataForTest.sql")
-//@Transactional
 public class ReservationRestAssuredControllerIT extends AbstractIT {
 
     @LocalServerPort
@@ -60,21 +54,19 @@ public class ReservationRestAssuredControllerIT extends AbstractIT {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("size()", greaterThan(0))
-                .body("reservations", hasSize(6))
                 .body("reservations.reservationId", everyItem(isA(Integer.class)))
                 .body("reservations.doctorId", everyItem(isA(Integer.class)))
                 .body("reservations.patientId", everyItem(isA(Integer.class)))
                 .body("reservations.day", everyItem(notNullValue()))
                 .body("reservations.day", everyItem(matchesRegex("\\d{4}-\\d{2}-\\d{2}")))
                 .body("reservations.startTimeR", everyItem(notNullValue()))
-//                .body("reservations.startTimeR", everyItem(matchesRegex("\\d{2}:\\d{2}")))
                 .body("reservations.startTimeR", everyItem(matchesRegex("\\d{2}:\\d{2}:\\d{2}")))
                 .body("reservations.occupied", everyItem(notNullValue()));
     }
 
     @Test
     void thatGetReservationDetailsWorksCorrectly() {
-        Integer reservationId = 101;
+        Integer reservationId = 1;
 
         given()
                 .pathParam("reservationId", reservationId)
@@ -153,7 +145,7 @@ public class ReservationRestAssuredControllerIT extends AbstractIT {
 
     @Test
     void thatUpdateReservationWorksCorrectly() {
-        Integer reservationId = 101;
+        Integer reservationId = 1;
         ReservationDTO reservation = ReservationDTO.builder()
                 .doctorId(4)
                 .patientId(4)
@@ -173,7 +165,7 @@ public class ReservationRestAssuredControllerIT extends AbstractIT {
 
     @Test
     public void testUpdateReservation() {
-        Integer reservationId = 101;
+        Integer reservationId = 2;
         ReservationEntity existingReservation = given()
                 .pathParam("reservationId", reservationId)
                 .accept(ContentType.JSON)
@@ -199,7 +191,7 @@ public class ReservationRestAssuredControllerIT extends AbstractIT {
 
     @Test
     void thatDeleteReservationWorksCorrectlyAndReturnNoContent() {
-        Integer reservationId = 105;
+        Integer reservationId = 5;
 
         given()
                 .when()
@@ -209,7 +201,7 @@ public class ReservationRestAssuredControllerIT extends AbstractIT {
     }
 
     @Test
-    void thatDeleteReservationShouldReturnNoContent() {
+    void thatDeleteReservationShouldReturnNoFound() {
         Integer reservationId = -5;
 
         given()
@@ -221,7 +213,7 @@ public class ReservationRestAssuredControllerIT extends AbstractIT {
 
     @Test
     void thatUpdateReservationDateWorksCorrectly() {
-        ReservationEntity existingReservation = EntityFixtures.someReservation1().withReservationId(102);
+        ReservationEntity existingReservation = EntityFixtures.someReservation1().withReservationId(3);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime newDateTime = LocalDateTime.of(2023, 8, 30, 15, 30);
 

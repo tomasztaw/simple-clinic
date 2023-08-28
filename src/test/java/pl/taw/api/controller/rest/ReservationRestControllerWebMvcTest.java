@@ -201,9 +201,13 @@ class ReservationRestControllerWebMvcTest {
 
         when(reservationDAO.findEntityById(eq(reservationId))).thenReturn(existingReservation);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = dateTime.format(formatter);
+
         // when, then
         mockMvc.perform(patch(API_RESERVATIONS.concat(RESERVATION_UPDATE_DATE), reservationId)
-                        .param("dateTime", dateTime.toString())
+//                        .param("dateTime", dateTime.toString())
+                        .param("dateTime", formattedDateTime)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 

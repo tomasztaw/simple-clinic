@@ -149,7 +149,7 @@ class ReservationControllerWebMvcTest {
                         .param("reservationId", reservationId.toString())
                         .param("fullDate", fullDate.toString()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("reservation-confirm"))
+                .andExpect(view().name("reservation/reservation-confirm"))
                 .andExpect(model().attribute("reservationId", reservationId))
                 .andExpect(model().attribute("fullDate", fullDate));
     }

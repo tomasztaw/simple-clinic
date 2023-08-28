@@ -468,7 +468,7 @@ class PatientControllerMockitoTest {
         String result = patientController.showUpdatePhoneView(patientId, model);
 
         // then
-        assertEquals("update-phone", result);
+        assertEquals("core/update-phone", result);
         verify(model).addAttribute(eq("patient"), any(PatientDTO.class));
         verify(model).addAttribute("patient", patientDTO);
         verify(patientDAO, times(1)).findById(patientId);

@@ -16,7 +16,7 @@ import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
 @ActiveProfiles("test")
 @Import(PersistenceContainerTestConfiguration.class)
 @SpringBootTest(
-        properties = "spring.security.enabled=false", // po dodaniu tego test działa poprawnie !!!!
+        properties = "spring.security.enabled=false",
         classes = {KlinikaApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIT {

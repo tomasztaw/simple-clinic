@@ -10,6 +10,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import pl.taw.api.controller.rest.DoctorRestController;
 import pl.taw.api.controller.rest.PatientRestController;
+import pl.taw.api.controller.rest.VisitRestController;
 import pl.taw.integration.configuration.TestSecurityConfig;
 
 import static io.restassured.RestAssured.baseURI;
@@ -95,4 +96,15 @@ public class ProbyRSIT {
                 .contentType("application/json");
 //                .body("size()", greaterThanOrEqualTo(0));
     }
+
+    @Test
+    void shouldGetVisits() {
+        given()
+                .when()
+                .get(VisitRestController.API_VISITS)
+                .then()
+                .statusCode(200);
+    }
+
+
 }

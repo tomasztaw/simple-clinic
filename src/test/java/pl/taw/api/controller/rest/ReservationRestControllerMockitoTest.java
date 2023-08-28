@@ -21,6 +21,7 @@ import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -202,8 +203,11 @@ class ReservationRestControllerMockitoTest {
 
         when(reservationDAO.findEntityById(eq(reservationId))).thenReturn(existingReservation);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = newDateTime.format(formatter);
+
         // when
-        ResponseEntity<?> response = reservationRestController.updateReservationDate(reservationId, newDateTime.toString());
+        ResponseEntity<?> response = reservationRestController.updateReservationDate(reservationId, formattedDateTime);
 
         // then
         assertEquals(HttpStatus.OK, response.getStatusCode());

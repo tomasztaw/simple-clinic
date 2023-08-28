@@ -2,7 +2,6 @@ package pl.taw.api.controller.rest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,7 +128,7 @@ public class ReservationRestController {
     @PatchMapping(RESERVATION_UPDATE_DATE)
     public ResponseEntity<?> updateReservationDate( // TODO można tutaj zwrócić wiadomość z nową datą
             @PathVariable("reservationId") Integer reservationId,
-            @RequestParam(required = true) String dateTime
+            @RequestParam String dateTime
     ) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

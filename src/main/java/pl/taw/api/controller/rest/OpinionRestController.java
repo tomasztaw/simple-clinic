@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OpinionRestController {
 
-    public static final String API_OPINIONS = "/api/opinions";  // było "/api/opinions/nowy" - jak wszystko będzie ok to usunę
+    public static final String API_OPINIONS = "/api/opinions";
     public static final String OPINION_ID = "/{opinionId}";
     public static final String COMMENTS = "/comments";
     public static final String UPDATE_BY_ID = "/{opinionId}/update";
@@ -85,7 +85,7 @@ public class OpinionRestController {
     @PatchMapping(OPINION_UPDATE_NOTE)
     public ResponseEntity<String> updateOpinionComment(
             @PathVariable("opinionId") Integer opinionId,
-            @RequestParam(required = true) String updatedComment
+            @RequestParam String updatedComment
     ) {
         OpinionEntity existingOpinion = opinionDAO.findEntityById(opinionId);
         String answer = "Aktualizacja [%s] na nowy komentarz [%s] przebiegła pomyślnie"
