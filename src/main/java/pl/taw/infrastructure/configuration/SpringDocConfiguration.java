@@ -34,7 +34,7 @@ public class SpringDocConfiguration {
     private Contact contact() {
         return new Contact()
             .name("Clinic")
-            .url("https://github.taw.io")
+            .url("https://tomasztaw.github.io")
             .email("tomasz.wegrzyn.wro@gmail.com");
     }
 }

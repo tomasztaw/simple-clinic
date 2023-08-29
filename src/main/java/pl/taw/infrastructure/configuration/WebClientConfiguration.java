@@ -9,8 +9,6 @@ import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
-import pl.taw.infrastructure.petstore.ApiClient;
-import pl.taw.infrastructure.petstore.api.PetApi;
 
 @Configuration
 public class WebClientConfiguration {
@@ -18,32 +16,32 @@ public class WebClientConfiguration {
     @Value("${api.petStore.url}")
     private String petStoreUrl;
 
-    @Bean
-    public ApiClient petStoreApiClient(final ObjectMapper objectMapper) {
-        final var strategies = ExchangeStrategies
-            .builder()
-            .codecs(configurer -> {
-                configurer
-                    .defaultCodecs()
-                    .jackson2JsonEncoder(
-                        new Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON));
-                configurer
-                    .defaultCodecs()
-                    .jackson2JsonDecoder(
-                        new Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON));
-            }).build();
-        final var webClient = WebClient.builder()
-                .exchangeStrategies(strategies)
-                .build();
-
-        ApiClient apiClient = new ApiClient(webClient);
-        apiClient.setBasePath(petStoreUrl);
-        return apiClient;
-    }
-
-    @Bean
-    public PetApi petApi(final ObjectMapper objectMapper) {
-        return new PetApi(petStoreApiClient(objectMapper));
-    }
+//    @Bean
+//    public ApiClient petStoreApiClient(final ObjectMapper objectMapper) {
+//        final var strategies = ExchangeStrategies
+//            .builder()
+//            .codecs(configurer -> {
+//                configurer
+//                    .defaultCodecs()
+//                    .jackson2JsonEncoder(
+//                        new Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON));
+//                configurer
+//                    .defaultCodecs()
+//                    .jackson2JsonDecoder(
+//                        new Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON));
+//            }).build();
+//        final var webClient = WebClient.builder()
+//                .exchangeStrategies(strategies)
+//                .build();
+//
+//        ApiClient apiClient = new ApiClient(webClient);
+//        apiClient.setBasePath(petStoreUrl);
+//        return apiClient;
+//    }
+//
+//    @Bean
+//    public PetApi petApi(final ObjectMapper objectMapper) {
+//        return new PetApi(petStoreApiClient(objectMapper));
+//    }
 
 }

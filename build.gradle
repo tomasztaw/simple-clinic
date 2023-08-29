@@ -94,6 +94,7 @@ dependencyManagement {
 // https://openapi-generator.tech/docs/plugins
 // https://petstore3.swagger.io/
 // http://www.cepik.gov.pl/interfejs-dla-cepik
+// https://api.gios.gov.pl/pjp-api/swagger-ui/#/
 
 openApiGenerate {
 	generatorName = "java"
@@ -105,11 +106,14 @@ openApiGenerate {
 	])
 	outputDir = "$buildDir/generated-sources/openapi".toString()
 //	inputSpec = "$rootDir/src/main/resources/contracts/cepik-1.1.3.json".toString()
-	inputSpec = "$rootDir/src/main/resources/contracts/petstore-v3.0.2.json".toString()
+//	inputSpec = "$rootDir/src/main/resources/contracts/petstore-v3.0.2.json".toString()
+	inputSpec = "$rootDir/src/main/resources/contracts/pjp-api-v3.json".toString()
 //	apiPackage = "pl.zajavka.infrastructure.cepik.api"
-	apiPackage = "pl.taw.infrastructure.petstore.api"
+//	apiPackage = "pl.taw.infrastructure.petstore.api"
+	apiPackage = "pl.taw.infrastructure.pjp.api"
 //	modelPackage = "pl.zajavka.infrastructure.cepik.model"
-	modelPackage = "pl.taw.infrastructure.petstore.model"
+//	modelPackage = "pl.taw.infrastructure.petstore.model"
+	modelPackage = "pl.taw.infrastructure.pjp.model"
 }
 
 sourceSets {

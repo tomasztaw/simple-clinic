@@ -5,7 +5,15 @@ VALUES ('Alojzy', 'Kowalski', 'Laryngolog', 'alojzkowalski@eclinic.pl', '+48 120
 ('Jadwiga', 'Kuszyńska', 'Pediatra', 'jkuszynska@eclinic.pl', '+48 120 130 148'),
 ('Wacław', 'Piątkowski', 'Gastrolog', 'wacek@eclinic.pl', '+48 120 130 150'),
 ('Aleksander', 'Newski', 'Gastrolog', 'oleknew@eclinic.pl', '+48 120 130 152'),
-('Urszula', 'Nowakowska', 'Lekarz rodzinny', 'ulala@eclinic.pl', '+48 120 130 158');
+('Urszula', 'Nowakowska', 'Lekarz rodzinny', 'ulala@eclinic.pl', '+48 120 130 158'),
+('Paweł', 'Stękała', 'Podolog', 'p.stekala@eclinic.pl', '+48 120 130 160'),
+('Magdalena', 'Kraska', 'Ortopeda', 'm.kraska@eclinic.pl', '+48 120 130 161'),
+('Joanna', 'Wojtyniak', 'Chirurg', 'j.wojtyniak@eclinic.pl', '+48 120 130 162'),
+('Małgorzata', 'Figurska', 'Neurolog', 'm.figurska@eclinic.pl', '+48 120 130 163'),
+('Kornel', 'Kaleta', 'Okulista', 'k.kaleta@eclinic.pl', '+48 120 130 164'),
+('Adam', 'Suchy', 'Urolog', 'a.suchy@eclinic.pl', '+48 120 130 165'),
+('Feliks', 'Makowski', 'Kardiolog', 'f.mak@eclinic.pl', '+48 120 130 166'),
+('Konrad', 'Zalewski', 'Dermatolog', 'k.zalewski@eclinic.pl', '+48 120 130 167');
 
 INSERT INTO patients (name, surname, pesel, email, phone)
 VALUES ('Agata', 'Andrzejewska', '70011012345', 'aa@gmail.com', '+48 220 221 222'),

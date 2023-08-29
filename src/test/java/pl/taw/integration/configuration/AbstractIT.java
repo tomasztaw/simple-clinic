@@ -1,7 +1,6 @@
 package pl.taw.integration.configuration;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,8 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import pl.taw.KlinikaApplication;
 import pl.taw.infrastructure.database.repository.PatientRepository;
-import pl.taw.infrastructure.database.repository.forpet.PetRepository;
-import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
+import pl.taw.infrastructure.database.repository.forapi.PetRepository;
 
 @ActiveProfiles("test")
 @Import(PersistenceContainerTestConfiguration.class)
