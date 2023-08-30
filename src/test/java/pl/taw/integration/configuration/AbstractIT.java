@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import pl.taw.KlinikaApplication;
 import pl.taw.infrastructure.database.repository.PatientRepository;
-import pl.taw.infrastructure.database.repository.forapi.PetRepository;
 
 @ActiveProfiles("test")
 @Import(PersistenceContainerTestConfiguration.class)
@@ -30,11 +29,6 @@ public abstract class AbstractIT {
     @Value("${server.servlet.context-path}")
     protected String basePath;
 
-
-    // w21-28 konfiguracja: ######################
-    @Autowired
-    private PetRepository petRepository; // to będzie do usunięcia
-
     @Autowired
     private PatientRepository patientRepository;
 
@@ -43,7 +37,6 @@ public abstract class AbstractIT {
     @AfterEach
     void afterEach() {
         // czyszczenie bazy po każdym teście
-        petRepository.deleteAll(); // do usunięcia
         // nie mam deleteAll dla patient repo
 
     }

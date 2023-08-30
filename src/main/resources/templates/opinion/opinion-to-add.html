@@ -28,8 +28,6 @@
         <ul th:if="${visits.isEmpty()}">
             <li>Aktualnie nie masz żadnych opinii do dodania</li>
             <li>Umów się na wizytę</li>
-<!--            <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>-->
-
         </ul>
         <ul th:if="${not visits.isEmpty()}">
             <li th:each="visit : ${visits}">
@@ -44,20 +42,10 @@
                         <li>Status: <span th:text="${visit.status}"></span></li>
                     </ul>
                     <div class="visit-buttons">
-                        <a th:if="${visit.opinion != null}" th:href="@{/opinions/{opinionId}/edit(opinionId=${visit.opinion.opinionId})}">
-                        <button class="btn btn-primary">Zmodyfikuj opinię</button>
-                        </a>
-
-                        <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/{visitId}(visitId=${visit.visitId})}">
-                        <!--              <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/}">-->
-                        <button class="btn btn-primary">Dodaj opinię</button>
-                        </a>
-
                         <form action="#" th:action="@{/visits/show/{visitId}(visitId=${visit.visitId})}"
                               method="GET">
-                            <button type="submit" class="btn btn-info">Pokaż</button>
+                            <button type="submit" class="btn btn-info btn-lg">Pokaż</button>
                         </form>
-                        <p class="todo">obsługa "dodaj opinię"</p>
                     </div>
                 </div>
                 <br>

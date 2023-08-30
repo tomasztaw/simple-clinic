@@ -228,6 +228,7 @@ class VisitControllerWebMvcTest {
 
         when(visitService.findAllVisitByPatient(patientId)).thenReturn(visits);
         when(patientDAO.findById(patientId)).thenReturn(patient);
+        when(authentication.getName()).thenReturn("Stefan");
 
         // when, then
         mockMvc.perform(get(VISITS.concat(PATIENT_ADD_OPINION), patientId))

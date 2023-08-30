@@ -45,7 +45,4 @@ public class PatientEntity {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OpinionEntity> createdOpinions;
 
-    // dodajemy zwierzęta do konsumowania api
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "patient")
-    private Set<PetEntity> pets;
 }

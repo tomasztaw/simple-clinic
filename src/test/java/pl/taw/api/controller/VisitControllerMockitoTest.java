@@ -238,9 +238,10 @@ class VisitControllerMockitoTest {
 
         when(visitService.findAllVisitByPatient(patientId)).thenReturn(visits);
         when(patientDAO.findById(patientId)).thenReturn(patientDTO);
+        when(authentication.getName()).thenReturn("Stefan");
 
         // when
-        String viewName = visitController.addOpinionsForVisits(patientId, model);
+        String viewName = visitController.addOpinionsForVisits(patientId, authentication, model);
 
         // then
         assertEquals("opinion/opinion-to-add", viewName);

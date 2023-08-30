@@ -52,6 +52,26 @@
         .actions button {
             margin-left: 100px;
         }
+
+        ul, li {
+          list-style: none;
+        }
+
+        li {
+          margin: 20px 0;
+        }
+
+        .opinion-span {
+          font-style: italic;
+          font-size: 40px;
+          font-weight: bold;
+        }
+
+        h1 {
+          text-align: center;
+          font-size: 48px;
+          font-weight: bold;
+        }
     </style>
 </head>
 
@@ -61,7 +81,9 @@
 
     <div class="header">
     <div class="header-logo">
-      <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna">
+      <a href="/" th:href="@{/}">
+        <img th:src="@{/images/2135.jpg}" alt="Logo" title="Strona główna">
+      </a>
     </div>
     <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
   </div>
@@ -100,8 +122,9 @@
           <ul>
             <li>Id opinii: <span th:text="${opinion.opinionId}"></span></li>
             <li>Data: <span th:text="${#temporals.format(opinion.createdAt, 'dd MM yyyy HH:mm')}"></span></li>
-            <li>Opinia: <span th:text="${opinion.comment}"></span></li>
+            <li>Opinia: <span class="opinion-span" th:text="${opinion.comment}"></span></li>
             <li>Napisana przez: <span th:text="${opinion.patient.name}"></span></li>
+            <hr>
           </ul>
           <br>
         </li>

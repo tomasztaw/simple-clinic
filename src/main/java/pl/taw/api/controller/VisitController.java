@@ -158,12 +158,21 @@ public class VisitController {
     }
 
     @GetMapping(PATIENT_ADD_OPINION) // to jest dla widoku, a nie jako POST
-    public String addOpinionsForVisits(@PathVariable("patientId") Integer patientId, Model model) {
+    public String addOpinionsForVisits(
+            @PathVariable("patientId") Integer patientId,
+            Authentication authentication,
+            Model model
+    ) {
         List<VisitDTO> visits = visitService.findAllVisitByPatient(patientId).stream()
                 .filter(visit -> visit.getOpinion() == null)
                 .toList();
         PatientDTO patient = patientDAO.findById(patientId);
-
+        if (authentication != null) {
+            String username = authentication.getName();
+            if (username != null) {
+                model.addAttribute("username", username);
+            }
+        }
         model.addAttribute("visits", visits);
         model.addAttribute("patient", patient);
 

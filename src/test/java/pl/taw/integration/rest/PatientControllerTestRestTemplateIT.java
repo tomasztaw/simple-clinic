@@ -42,7 +42,7 @@ public class PatientControllerTestRestTemplateIT extends AbstractIT {
         // then
         Assertions.assertThat(body).isNotNull();
         Assertions.assertThat(body.getPatients()).hasSizeGreaterThan(0);
-        Assertions.assertThat(body.getPatients()).hasSize(6);
+        Assertions.assertThat(body.getPatients()).hasSize(21);
     }
 
     @Test
@@ -58,6 +58,6 @@ public class PatientControllerTestRestTemplateIT extends AbstractIT {
         // then
         Assertions.assertThat(body).isNotNull();
         Assertions.assertThat(body).hasSizeGreaterThan(0);
-        Assertions.assertThat(body).hasSize(6);
+        Assertions.assertThat(body).hasSize(21);
     }
 }
