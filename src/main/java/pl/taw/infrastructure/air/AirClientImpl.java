@@ -10,10 +10,10 @@ import pl.taw.infrastructure.pjp.model.StationLd;
 @AllArgsConstructor
 public class AirClientImpl {
 
-    private final Air air;
-    private final StationDataDTO stationDataDTO;
-    private final StationLd stationLd;
-    private final ApiClient apiClient;
+//    private final Air air;
+//    private final StationDataDTO stationDataDTO;
+//    private final StationLd stationLd;
+//    private final ApiClient apiClient;
 
 
 
