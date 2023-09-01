@@ -34,6 +34,16 @@
             left: 50%;
             transform: translate(-50%);
         }
+
+        .legenda { display: flex; justify-content: center; }
+        .legenda p { margin: 0 10px; font-weight: bold; }
+
+        .bd { color: rgb(0,255,0,0.3); }
+        .d { color: rgb(0,120,0,0.3); }
+        .u { color: rgb(255,255,0,0.3); }
+        .z { color: rgb(255,153,0,0.3); }
+        .bz { color: rgb(255,0,0,0.3); }
+
     </style>
 </head>
 <body th:style="'background-color: ' + ${backgroundColor}">
@@ -47,8 +57,15 @@
             <br>
         </li>
     </ul>
-    <br>
-    <br>
+
+    <div class="legenda">
+        <p>Legenda:</p>
+        <p class="bd">Bardzo dobry</p>
+        <p class="d">Dobry</p>
+        <p class="u">Umiarkowany</p>
+        <p class="z">Zły</p>
+        <p class="bz">Bardzo zły</p>
+    </div>
 
     <p>Data pomiaru: <b><span th:text="${stCalcDate}"></span></b></p>
 

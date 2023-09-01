@@ -1,7 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
   <title>Formularz do aktualizacji e-mail</title>
+
+  <style>
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 30px auto;
+    }
+
+  </style>
+
+
   <script>
     function showConfirmation() {
       if (confirm('Czy na pewno chcesz zaktualizować e-mail pacjenta? Nie jest jeszcze rozwiązany problem z kredkami!!!!')) {
@@ -13,7 +36,7 @@
   </script>
 </head>
 <body>
-<h2>Aktualizuj e-mail</h2>
+<h1>Aktualizuj e-mail</h1>
 <form th:object="${patient}" th:action="@{/patients/updateEmail}" th:method="patch" onsubmit="return showConfirmation();">
   <input type="hidden" name="_method" value="patch">
   <label for="email">E-mail:</label>
@@ -21,11 +44,11 @@
 
   <input type="hidden" th:field="*{patientId}">
 
-  <button type="submit">Aktualizuj</button>
+  <button type="submit" class="btn btn-danger disabled">Aktualizuj</button>
 </form>
 
 <br><br>
-<button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+<button class="btn btn-primary btn-lg" onclick="history.go(-1);">Powrót</button>
 
 </body>
 </html>
