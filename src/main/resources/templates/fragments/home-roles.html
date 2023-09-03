@@ -51,4 +51,9 @@
 
   </div>
 
+  <div th:unless="${isAdmin or isDoctor or isUser}" class="role-div">
+    <h1>Coś poszło nie tak...</h1>
+    <h2>Jest jakiś problem z autoryzacją</h2>
+  </div>
+
 </div>
