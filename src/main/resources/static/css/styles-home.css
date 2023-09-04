@@ -113,3 +113,7 @@
 .btn--add {
     width: 800px;
 }
+
+.btn-container a {
+    margin: 20px auto;
+}

@@ -69,6 +69,11 @@ public class DoctorController {
     private final UserRepository userRepository;
     private final OpinionDAO opinionDAO;
 
+    @GetMapping("/dashboard")
+    public String showDoctorDashboard() {
+        return "doctor/doctor-dashboard";
+    }
+
     @GetMapping
     public String doctors(Model model) {
         List<DoctorDTO> doctors = doctorDAO.findAll();

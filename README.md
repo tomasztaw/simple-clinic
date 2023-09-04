@@ -1,11 +1,9 @@
 # Aplikacja E-Clinic
 
-### Ogólne informacje o projekcie
-### Technologie użyte w aplikacji
-### Setup (jak sklonować i uruchomić kontenery)
-### Grafiki
+Projekt zaliczeniowy na koniec ścieżki zaJavka.pl
 
-# Zawartość projektu
+
+## Zawartość projektu
 * [Ogólne informacje](#ogólne-informacje)
 * [Technologie](#technologie)
 * [Setup](#setup)
@@ -37,12 +35,14 @@ Problemy z frontem, brak ładu odnośnie stylów CSS (chcę wprowadzić jeden pl
 Mam problem z security, jest tylko podstawowe działanie z logowaniem.
 Problem z docker-compose, po uruchomieniu kontenerów, aplikacji działa, ale nie mam logowania i są problemy z zasobami.
 Nie byłem w stanie przetestować za pomocą RestAssured klasy VisitRestController, nie do końca rozumiem dlaczego tylko z tą klasą są problemy.
+Nie sprawdzałem jak aplikacji wyświetla się na mniejszych ekranach.
 </details>
 
 
 ### Rozwój projekty:
 <details>
 Należy wykonać panel lekarza.
+Responsywne wyświetlanie strony w aplikacji.
 Można zrobić jakieś ładniejsze wyświetlanie dostępnych lekarzy za pomocą kart-wizytówek.
 Można pomyśleć nad zamianą Thymeleaf na TypeScript.
 Wprowadzenie dodatkowych REST API, np. jakim autobusem/tramwajem, na którą godzinę pacjent dojedzie do kliniki.
@@ -59,13 +59,16 @@ Sprawdzenie pogody na dzień wizyty.
 <li>Hibernate</li>
 <li>Flyway</li>
 <li>Thymeleaf</li>
-<li>HTML CSS JS</li>
+<li>HTML</li>
+<li>CSS</li>
+<li>BootStrap</li>
+<li>JS</li>
 <li>Docker</li>
 <li>Docker compose</li>
+<li>JUnit</li>
 <li>Mockito</li>
-<li>MockMvcTest</li>
+<li>Hamcrest</li>
 <li>RestAssured</li>
-<li>SpringDataJPA</li>
 <li>Git</li>
 </ul>
 
@@ -78,4 +81,20 @@ Administrator: <br/> login ```admin``` hasło ```admin```
 
 
 ## Grafiki
+
+### Funkcjonalności dostępne
+#### v1 osobno
+![Funkcjonalności pacjenta](src/main/resources/db/diagramy/pacjent.png)
+
+#### v1 razem
+![Funkcjonalności](src/main/resources/db/diagramy/pacjent-admin.png)
+
+#### v2
+![Funkcjonalności](src/main/resources/db/diagramy/npa.png)
+
+### W przygotowaniu
+![Funkcjonalności](src/main/resources/db/diagramy/lekarz.png)
+
+### Diagram ERD
+![Diagram ERD](src/main/resources/db/diagramy/diagram-kolory.png)
 
