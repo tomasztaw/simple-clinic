@@ -3,18 +3,14 @@ services:
   app:
     container_name: app-core
     tty: true # dodane do wyświetlania, z którego kontenera pochodzi informacja w konsoli
-#    image: simple-clinic:v2.1 # Zmienione na używanie obrazu simple-clinic:v2.1
-    build:
-      context: .
+    image: simple-clinic:v2.5
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=local
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/simple_clinic_v2
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/simple_clinic
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - VERSION=2.1
+      - VERSION=2.5
     networks:
       - spring-boot-postgres
     depends_on:
@@ -27,12 +23,13 @@ services:
     ports:
       - "5432:5432"
     environment:
-#      - POSTGRES_DB=simple_clinic_v2
       - POSTGRES_DB=simple_clinic
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+#    volumes:
+#      - db-data:/var/lib/postgresql/data_v2
     volumes:
-      - db-data:/var/lib/postgresql/data_v2
+      - /var/lib/postgresql/data_v2
     networks:
       - spring-boot-postgres
     healthcheck:
@@ -41,9 +38,9 @@ services:
       timeout: 5s
       retries: 5
 
-volumes:
-  db-data:
-    external: true # dodane !!!!
+#volumes:
+#  db-data:
+#    external: true # dodane !!!!
 
 networks:
   spring-boot-postgres:

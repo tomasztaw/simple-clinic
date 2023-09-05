@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,6 +34,7 @@ import pl.taw.infrastructure.security.UserRepository;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,6 +71,7 @@ public class DoctorController {
     private final PatientDAO patientDAO;
     private final UserRepository userRepository;
     private final OpinionDAO opinionDAO;
+    private final ResourceLoader resourceLoader;
 
     @GetMapping("/dashboard")
     public String showDoctorDashboard() {
@@ -114,20 +118,25 @@ public class DoctorController {
         model.addAttribute("doctor", doctor);
         List<WorkingHours> workingHours = doctorService.getWorkingHours(doctorId);
         model.addAttribute("workingHours", workingHours);
-        String doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
-        String defaultDescription = "src/main/resources/desc/default.txt";
-        Path filePath = Paths.get(doctorDescFile);
-        String description;
+
+        String doctorDescFile = "classpath:/desc/doctorDesc" + doctorId + ".txt";
+        String defaultDescription = "classpath:/desc/default.txt";
+
         try {
-            if (Files.exists(filePath) && Files.isRegularFile(filePath)) {
-                description = Files.readString(filePath);
+            Resource doctorResource = resourceLoader.getResource(doctorDescFile);
+            Resource defaultResource = resourceLoader.getResource(defaultDescription);
+
+            String description;
+            if (doctorResource.exists()) {
+                description = new String(doctorResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             } else {
-                description = Files.readString(Paths.get(defaultDescription));
+                description = new String(defaultResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             }
             model.addAttribute("description", description);
         } catch (IOException e) {
-            throw new RuntimeException("Brak pliku");
+            throw new RuntimeException("Błąd odczytu pliku");
         }
+
         if (authentication != null) {
             String username = authentication.getName();
             model.addAttribute("username", username);
@@ -137,6 +146,57 @@ public class DoctorController {
 
         return "doctor/doctor-show";
     }
+
+
+//    @GetMapping(SHOW)
+//    public String showDoctorDetails(
+//            @PathVariable Integer doctorId,
+//            Model model,
+//            Authentication authentication
+//    ) {
+//        DoctorDTO doctor = doctorDAO.findById(doctorId);
+//        model.addAttribute("doctor", doctor);
+//        List<WorkingHours> workingHours = doctorService.getWorkingHours(doctorId);
+//        model.addAttribute("workingHours", workingHours);
+//
+//        String isRunningInDocker = System.getenv("RUNNING_IN_DOCKER");
+//
+//        String currentWorkingDirectory = System.getProperty("user.dir");
+//        System.out.println("\n\n ################## \ncurrentWorkingDirectory = " + currentWorkingDirectory);
+//
+////        String doctorDescFile;
+////        String defaultDescription;
+////        if (isRunningInDocker != null && isRunningInDocker.equals("true")) {
+////            doctorDescFile = currentWorkingDirectory + "/app/src/main/resources/desc/doctorDesc" + doctorId + ".txt";
+////            defaultDescription = currentWorkingDirectory + "/app/src/main/resources/desc/default.txt";
+////        } else {
+////            doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
+////            defaultDescription = "src/main/resources/desc/default.txt";
+////        }
+//
+//        String doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
+//        String defaultDescription = "src/main/resources/desc/default.txt";
+//        Path filePath = Paths.get(doctorDescFile);
+//        String description;
+//        try {
+//            if (Files.exists(filePath) && Files.isRegularFile(filePath)) {
+//                description = Files.readString(filePath);
+//            } else {
+//                description = Files.readString(Paths.get(defaultDescription));
+//            }
+//            model.addAttribute("description", description);
+//        } catch (IOException e) {
+//            throw new RuntimeException("Brak pliku");
+//        }
+//        if (authentication != null) {
+//            String username = authentication.getName();
+//            model.addAttribute("username", username);
+//        }
+//        List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
+//        model.addAttribute("opinions", opinions);
+//
+//        return "doctor/doctor-show";
+//    }
 
     @GetMapping(PANEL)
     public String doctorsPanel(Model model) {
