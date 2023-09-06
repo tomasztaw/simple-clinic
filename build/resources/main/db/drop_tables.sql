@@ -1,7 +1,3 @@
-DROP TABLE IF EXISTS zajavka_user_role;
-DROP TABLE IF EXISTS zajavka_user;
-DROP TABLE IF EXISTS zajavka_role;
-
 DROP TABLE IF EXISTS app_user_role CASCADE;
 DROP TABLE IF EXISTS app_role CASCADE;
 DROP TABLE IF EXISTS app_user CASCADE;

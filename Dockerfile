@@ -1,8 +1,9 @@
 FROM eclipse-temurin:17
 
-#COPY build/libs/*.jar app.jar
 COPY build/libs/*.jar /app.jar
-COPY src/main/resources/desc /app/desc
+COPY src/main/resources/ /app/resources/
+#kopiuje wszystko do kontenera
+COPY . .
 
 WORKDIR /app
 

@@ -148,56 +148,6 @@ public class DoctorController {
     }
 
 
-//    @GetMapping(SHOW)
-//    public String showDoctorDetails(
-//            @PathVariable Integer doctorId,
-//            Model model,
-//            Authentication authentication
-//    ) {
-//        DoctorDTO doctor = doctorDAO.findById(doctorId);
-//        model.addAttribute("doctor", doctor);
-//        List<WorkingHours> workingHours = doctorService.getWorkingHours(doctorId);
-//        model.addAttribute("workingHours", workingHours);
-//
-//        String isRunningInDocker = System.getenv("RUNNING_IN_DOCKER");
-//
-//        String currentWorkingDirectory = System.getProperty("user.dir");
-//        System.out.println("\n\n ################## \ncurrentWorkingDirectory = " + currentWorkingDirectory);
-//
-////        String doctorDescFile;
-////        String defaultDescription;
-////        if (isRunningInDocker != null && isRunningInDocker.equals("true")) {
-////            doctorDescFile = currentWorkingDirectory + "/app/src/main/resources/desc/doctorDesc" + doctorId + ".txt";
-////            defaultDescription = currentWorkingDirectory + "/app/src/main/resources/desc/default.txt";
-////        } else {
-////            doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
-////            defaultDescription = "src/main/resources/desc/default.txt";
-////        }
-//
-//        String doctorDescFile = "src/main/resources/desc/doctorDesc" + doctorId + ".txt";
-//        String defaultDescription = "src/main/resources/desc/default.txt";
-//        Path filePath = Paths.get(doctorDescFile);
-//        String description;
-//        try {
-//            if (Files.exists(filePath) && Files.isRegularFile(filePath)) {
-//                description = Files.readString(filePath);
-//            } else {
-//                description = Files.readString(Paths.get(defaultDescription));
-//            }
-//            model.addAttribute("description", description);
-//        } catch (IOException e) {
-//            throw new RuntimeException("Brak pliku");
-//        }
-//        if (authentication != null) {
-//            String username = authentication.getName();
-//            model.addAttribute("username", username);
-//        }
-//        List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctorId);
-//        model.addAttribute("opinions", opinions);
-//
-//        return "doctor/doctor-show";
-//    }
-
     @GetMapping(PANEL)
     public String doctorsPanel(Model model) {
         List<DoctorDTO> doctors = doctorDAO.findAll();

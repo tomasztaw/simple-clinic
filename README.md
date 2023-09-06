@@ -49,7 +49,7 @@ Wprowadzenie dodatkowych REST API, np. jakim autobusem/tramwajem, na którą god
 Sprawdzenie pogody na dzień wizyty.
 </details>
 
-## Technologie
+## 🛠 Technologie
 <ul>
 <li>Java</li>
 <li>Spring</li>
@@ -76,21 +76,22 @@ Sprawdzenie pogody na dzień wizyty.
 ## Setup
 Klonowanie repozytorium:```git clone https://github.com/tomasztaw/simple-clinic.git``` <br/>
 Wystartuj kontenery ```docker-compouse up```<br/><br/>
-Przykładowy użytkownik: <br/> login ```tomek``` hasło ```test```<br/>
-Administrator: <br/> login ```admin``` hasło ```admin```
+
+Strona powitalna: ```localhost:8080/clinic/welcome```
+```bash
+  localhost:8080/clinic/welcome
+```
+
+Przykładowy użytkownik: <br/> login ```tomek``` hasło ```test```<br/><br/>
+Administrator: <br/> login ```admin``` hasło ```admin```<br/><br/>
+Doktor (w przygotowaniu):<br/>
+login ```doctor1``` hasło ```doctor1```
 
 
 ## Grafiki
 
 ### Funkcjonalności dostępne
-#### v1 osobno
-![Funkcjonalności pacjenta](src/main/resources/db/diagramy/pacjent.png)
-
-#### v1 razem
-![Funkcjonalności](src/main/resources/db/diagramy/pacjent-admin.png)
-
-#### v2
-![Funkcjonalności](src/main/resources/db/diagramy/npa.png)
+![Funkcjonalności](src/main/resources/db/diagramy/func-patient-admin.png)
 
 ### W przygotowaniu
 ![Funkcjonalności](src/main/resources/db/diagramy/lekarz.png)

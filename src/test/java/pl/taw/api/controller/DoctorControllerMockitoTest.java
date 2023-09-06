@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +34,9 @@ import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 import pl.taw.util.WorkingHoursFixtures;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -57,6 +64,9 @@ class DoctorControllerMockitoTest {
 
     @Mock
     private HttpServletRequest request;
+
+    @Mock
+    private ResourceLoader resourceLoader;
 
     private Validator validator;
 
@@ -270,7 +280,7 @@ class DoctorControllerMockitoTest {
     }
 
     @Test
-    void testShowDoctorDetails() {
+    void testShowDoctorDetails() throws IOException {
         // given
         int doctorId = 1;
         DoctorDTO mockDoctor = DtoFixtures.someDoctor1();
@@ -281,6 +291,12 @@ class DoctorControllerMockitoTest {
                 WorkingHoursFixtures.mondayHours(), WorkingHoursFixtures.fridayHours());
         String username = "testUser";
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null);
+
+        Resource doctorResource = Mockito.mock(Resource.class);
+        InputStream inputStream = new ByteArrayInputStream("test data".getBytes());
+
+        when(resourceLoader.getResource(Mockito.anyString())).thenReturn(doctorResource);
+        when(doctorResource.getInputStream()).thenReturn(inputStream);
 
         when(doctorDAO.findById(doctorId)).thenReturn(mockDoctor);
         when(opinionDAO.findAllByDoctor(doctorId)).thenReturn(opinions);
@@ -299,7 +315,8 @@ class DoctorControllerMockitoTest {
         verify(doctorDAO, times(1)).findById(doctorId);
         verify(opinionDAO, times(1)).findAllByDoctor(doctorId);
         verify(doctorService, times(1)).getWorkingHours(doctorId);
-        verifyNoMoreInteractions(doctorDAO, opinionDAO, doctorService);
+        verify(resourceLoader, times(2)).getResource(anyString());
+        verifyNoMoreInteractions(doctorDAO, opinionDAO, doctorService, resourceLoader);
     }
 
     @Test
