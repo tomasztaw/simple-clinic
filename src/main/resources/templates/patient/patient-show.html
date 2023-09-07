@@ -17,9 +17,22 @@
         a:hover {
             text-decoration: none;
         }
+
+        .footer {
+            text-align: center;
+        }
+
+        h1 {
+            color: red;
+            font-weight: bold
+            font-size: 50px;
+        }
     </style>
 </head>
 <body>
+
+<h1>Widok do uzupełnienia</h1>
+
 <div class="container">
     <h2>Pacjent</h2>
     <table class="table table-striped table-hover">
@@ -69,14 +82,14 @@
                 <!--        <form action="#" th:action="@{/patients/show/{patientId}(patientId=${patient.patientId})}"-->
                 <form action="#" th:action="@{/}"
                       method="GET">
-                    <button type="submit" class="btn btn-info">Przycisk dla opinii (dodaj/aktualizuj)</button>
+                    <button type="submit" class="btn btn-info">Przycisk dla opinii (dodaj/aktualizuj) (-)</button>
                 </form>
             </td>
             <td>
                 <!--        th:action="@{/patients/usun/{patientId}(patientId=${patient.patientId})}"-->
                 <form action="#" th:action="@{/}"
                       th:method="DELETE">
-                    <button type="submit" class="btn btn-danger">Usuń opinię</button>
+                    <button type="submit" class="btn btn-danger">Usuń opinię (-)</button>
                 </form>
             </td>
         </tr>

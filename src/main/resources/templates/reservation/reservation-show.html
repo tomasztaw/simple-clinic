@@ -27,13 +27,13 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      overflow: hidden; /* Dodana linia */
+      overflow: hidden;
     }
     .photo-container img {
       width: 200px;
       height: 280px;
       object-fit: cover;
-      object-position: top; /* Dodana linia */
+      object-position: top;
       margin-right: 20px;
     }
     .actions {
@@ -88,10 +88,10 @@
 <!--          przed datą rezerwacji-->
           <div th:if="${reservation.day.isAfter(now.toLocalDate()) || (reservation.day.isEqual(now.toLocalDate()) && reservation.startTimeR.isAfter(now.toLocalTime()))}">
             <h1>Zapraszamy na wizytę w wyznaczonym terminie</h1>
-            <h2>Jeżeli nie możesz przybyć do odwołaj wizytę</h2>
+            <h2>Jeżeli nie możesz przybyć to odwołaj wizytę</h2>
               <form th:action="@{/reservations/delete/{reservationId}(reservationId=${reservation.reservationId})}" th:method="post">
                   <input type="hidden" name="_method" value="DELETE" />
-                  <button class="btn btn-primary" type="submit">Usuń rezerwację</button>
+                  <button class="btn btn-danger" type="submit">Usuń rezerwację</button>
               </form>
           </div>
 
@@ -122,20 +122,20 @@
 
 
 
-        <h2>Opis (zastanowię się co tu jeszcze może być)</h2>
+<!--        <h2>Opis (zastanowię się co tu jeszcze może być)</h2>-->
 <!--        <h3 th:text="${opinion.comment}"></h3>-->
 
-        <h2>Wizyta (nie wiem)</h2>
-        <table class="table table-striped">
-          <tr>
-            <th>Data</th>
-            <th>Notatka</th>
-          </tr>
-          <tr>
+<!--        <h2>Wizyta (nie wiem)</h2>-->
+<!--        <table class="table table-striped">-->
+<!--          <tr>-->
+<!--            <th>Data</th>-->
+<!--            <th>Notatka</th>-->
+<!--          </tr>-->
+<!--          <tr>-->
 <!--            <td th:text="${#temporals.format(visit.dateTime, 'dd MM yyyy HH:mm')}"></td>-->
 <!--            <td th:text="${visit.note}"></td>-->
-          </tr>
-        </table>
+<!--          </tr>-->
+<!--        </table>-->
       </div>
     </div>
 

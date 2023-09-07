@@ -50,17 +50,6 @@
                             <p class="todo">Do zrobienia!</p>
                         </div>
 
-
-                        <!--                        <div th:if="${visit.opinion != null}">-->
-<!--                            <button class="btn btn-primary" onclick="showFormForUpdateOpinion()">Zmodyfikuj opinię</button>-->
-<!--                        </div>-->
-
-<!--                        <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/{visitId}(visitId=${visit.visitId})}" class="btn btn-primary">Dodaj opinię</a>-->
-
-<!--                        <a th:unless="${visit.opinion != null}" th:href="@{/opinions/add/}">-->
-<!--                            <button class="btn btn-primary">Dodaj opinię</button>-->
-<!--                        </a>-->
-
                     </div>
                 </div>
                 <br>
@@ -104,16 +93,6 @@
             x.style.display = "block";
         }
     }
-
-
-<!--    function showFormForUpdateOpinion() {-->
-<!--        var x = document.getElementById("update-opinion-div");-->
-<!--        if (x.style.display === "block") {-->
-<!--            x.style.display = "none";-->
-<!--        } else {-->
-<!--            x.style.display = "block";-->
-<!--        }-->
-<!--    }-->
 
     document.getElementById("update-opinion-form").addEventListener("submit", function(event) {
         event.preventDefault();

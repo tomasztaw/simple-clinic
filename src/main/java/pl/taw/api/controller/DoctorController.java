@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
@@ -36,7 +34,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,6 +70,7 @@ public class DoctorController {
     private final OpinionDAO opinionDAO;
     private final ResourceLoader resourceLoader;
 
+    // TODO do rozbudowanie i przetestowania
     @GetMapping("/dashboard")
     public String showDoctorDashboard() {
         return "doctor/doctor-dashboard";

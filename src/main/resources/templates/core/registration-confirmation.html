@@ -21,14 +21,19 @@
             text-align: center;
             margin-bottom: 20px;
         }
+
+        p {
+          margin: 40px 0px;
+          text-align: center;
+        }
     </style>
 </head>
 <body>
 <div class="container">
   <div class="confirmation-container">
     <h1>Potwierdzenie rejestracji</h1>
-    <p>Rejestracja zakończona pomyślnie. Możesz teraz zalogować się do swojego konta.</p>
-    <a th:href="@{/login}" class="btn btn-primary">Przejdź do strony logowania</a>
+    <p>Rejestracja zakończona pomyślnie.<br> Możesz teraz zalogować się do swojego konta.</p>
+    <a th:href="@{/login}" class="btn btn-primary btn-lg btn-block">Przejdź do strony logowania</a>
   </div>
 </div>
 </body>

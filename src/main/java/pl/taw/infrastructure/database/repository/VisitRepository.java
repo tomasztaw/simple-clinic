@@ -34,6 +34,7 @@ public class VisitRepository implements VisitDAO {
     @Override
     public Page<VisitDTO> findAll(Pageable pageable) {
         Page<VisitEntity> visitPage = visitJpaRepository.findAll(pageable);
+        assert visitPage != null;
         return visitPage.map(visitMapper::mapFromEntity);
     }
 

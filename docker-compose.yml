@@ -3,8 +3,8 @@ services:
   app:
     container_name: app-core
     tty: true # dodane do wyświetlania, z którego kontenera pochodzi informacja w konsoli
-#    image: clinic:v3.0
-    image: clinic:v3.2
+#    image: clinic:v3.2
+    image: simple-clinic-prod:v1.0
     build:
       context: .
     ports:
@@ -29,11 +29,8 @@ services:
       - POSTGRES_DB=simple_clinic
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-#    volumes:
-#      - db-data:/var/lib/postgresql/data_v2
     volumes:
       - /var/lib/postgresql/data_v3
-#      - /var/lib/postgresql/data_v2
     networks:
       - spring-boot-postgres
     healthcheck:
@@ -41,10 +38,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-#volumes:
-#  db-data:
-#    external: true # dodane !!!!
 
 networks:
   spring-boot-postgres:

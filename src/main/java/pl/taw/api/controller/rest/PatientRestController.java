@@ -135,7 +135,6 @@ public class PatientRestController {
 
         if (patient != null) {
             patient.setEmail(newEmail);
-//            patientDAO.save(patient);
             patientDAO.saveForUpdateContact(patient);
             String answer = String.format("Email zaktualizowany na [%s] dla pacjenta [%s %s]"
                     .formatted(newEmail, patient.getName(), patient.getSurname()));

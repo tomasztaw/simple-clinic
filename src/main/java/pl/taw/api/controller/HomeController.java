@@ -65,11 +65,11 @@ public class HomeController {
 
     private String getBackgroundColor(String airQuantity) {
         switch (airQuantity) {
-            case "Bardzo dobra" -> { return "rgba(0, 255, 0, 0.3)"; }
-            case "Dobra" -> { return "rgba(0, 120, 0, 0.3)"; }
-            case "Umiarkowana" -> { return "rgba(255, 255, 0, 0.3)"; }
-            case "Zła" -> { return "rgba(255, 153, 0, 0.3)"; }
-            case "Bardzo zła" -> { return "rgba(255, 0, 0, 0.3)"; }
+            case "Bardzo dobra" -> { return "rgba(87, 177, 8, 0.3)"; }
+            case "Dobra" -> { return "rgba(176, 221, 16, 0.3)"; }
+            case "Umiarkowana" -> { return "rgba(255, 217, 17, 0.3)"; }
+            case "Zła" -> { return "rgba(229, 0, 0, 0.3)"; }
+            case "Bardzo zła" -> { return "rgba(153, 0, 0, 0.3)"; }
             default -> { return ""; }
         }
     }

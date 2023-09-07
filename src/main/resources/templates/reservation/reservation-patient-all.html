@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Patient reservations</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <style>
+    <title>Patient reservations</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
         .header {
             display: flex;
             justify-content: space-between;
@@ -67,89 +67,92 @@
 
 <body>
 
-  <div class="container">
-
-<!--    Header na zewnątrz!-->
+<div class="container">
 
     <div class="header">
-    <div class="header-logo">
-      <a href="/" th:href="@{/}" title="Strona główna">
-        <img th:src="@{/images/2135.jpg}" alt="Logo">
-      </a>
-    </div>
+        <div class="header-logo">
+            <a href="/" th:href="@{/}" title="Strona główna">
+                <img th:src="@{/images/2135.jpg}" alt="Logo">
+            </a>
+        </div>
 
-    <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
-  </div>
+        <a th:href="@{/}" class="btn btn-info" role="button">Powrót do strony głównej</a>
+    </div>
 
     <h2>Pacjent</h2>
     <table class="table table-striped table-hover">
-    <tr>
-      <th>Id</th>
-      <th>Imię</th>
-      <th>Nazwisko</th>
-      <th>Pesel</th>
-      <th>Telefon</th>
-      <th>e-mail</th>
-    </tr>
-    <tr>
-      <td th:text="${patient.patientId}"></td>
-      <td th:text="${patient.name}"></td>
-      <td th:text="${patient.surname}"></td>
-      <td th:text="${patient.pesel}"></td>
-      <td th:text="${patient.phone}"></td>
-      <td th:text="${patient.email}"></td>
-    </tr>
-  </table>
+        <tr>
+            <th>Id</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Pesel</th>
+            <th>Telefon</th>
+            <th>e-mail</th>
+        </tr>
+        <tr>
+            <td th:text="${patient.patientId}"></td>
+            <td th:text="${patient.name}"></td>
+            <td th:text="${patient.surname}"></td>
+            <td th:text="${patient.pesel}"></td>
+            <td th:text="${patient.phone}"></td>
+            <td th:text="${patient.email}"></td>
+        </tr>
+    </table>
 
     <div class="media">
-<!--    <div class="photo-container">-->
-<!--      <img th:src="@{'/images/d' + ${patient.doctorId} + '.jpeg'}" alt="Opis zdjęcia">-->
-<!--    </div>-->
+        <!--    <div class="photo-container">-->
+        <!--      <img th:src="@{'/images/d' + ${patient.doctorId} + '.jpeg'}" alt="Opis zdjęcia">-->
+        <!--    </div>-->
 
-    <div class="media-body">
+        <div class="media-body">
 
-      <h1>Rezerwacje pacjenta</h1>
-      <ul th:if="${reservations.isEmpty()}">
-        <li>Brak rezerwacji</li>
-      </ul>
-      <ul th:if="${not reservations.isEmpty()}">
-        <li th:each="reservation : ${reservations}">
-          <ul>
-            <li>Id: <span th:text="${reservation.reservationId}"></span></li>
-            <li>Id lekarza: <span th:text="${reservation.doctorId}"></span></li>
-<!--            <li>Dane lekarza: <span th:text="${} + ' ' + ${}"></span></li>-->
-            <li>Dzień: <span th:text="${reservation.day}"></span></li>
-            <li>Czas: <span th:text="${reservation.startTimeR}"></span></li>
+            <h1>Rezerwacje pacjenta</h1>
+            <ul th:if="${reservations.isEmpty()}">
+                <li>Brak rezerwacji</li>
+            </ul>
+            <ul th:if="${not reservations.isEmpty()}">
+                <li th:each="reservation : ${reservations}">
+                    <ul>
+                        <li>Id: <span th:text="${reservation.reservationId}"></span></li>
+                        <li>Id lekarza: <span th:text="${reservation.doctorId}"></span></li>
+                        <!--            <li>Dane lekarza: <span th:text="${} + ' ' + ${}"></span></li>-->
+                        <li>Dzień: <span th:text="${reservation.day}"></span></li>
+                        <li>Czas: <span th:text="${reservation.startTimeR}"></span></li>
+                        <div class="actions">
+                            <form th:action="@{/reservations/delete/{reservationId}(reservationId=${reservation.reservationId})}"
+                                  th:method="post">
+                                <input type="hidden" name="_method" value="DELETE"/>
+                                <button class="btn btn-danger" type="submit">Odwołaj wizytę</button>
+                            </form>
+
+                            <a th:href="@{'/doctors/' + ${reservation.doctorId} + '/show'}" class="btn btn-primary">Pokaż
+                                tego lekarza</a>
+
+                            <a th:href="@{'/visits/' + ${reservation.doctorId} + '/' + ${reservation.patientId}}"
+                               class="btn btn-primary">Pokaż wizyty u tego lekarza</a>
+
+                        </div>
+                        <hr>
+                    </ul>
+                    <br>
+                </li>
+            </ul>
+
             <div class="actions">
-              <form th:action="@{/reservations/delete/{reservationId}(reservationId=${reservation.reservationId})}" th:method="post">
-                <input type="hidden" name="_method" value="DELETE" />
-                <button class="btn btn-danger" type="submit">Odwołaj wizytę</button>
-              </form>
-
-              <a th:href="@{'/doctors/' + ${reservation.doctorId} + '/show'}" class="btn btn-primary">Pokaż tego lekarza</a>
-
-              <a th:href="@{'/visits/' + ${reservation.doctorId} + '/' + ${reservation.patientId}}" class="btn btn-primary">Pokaż wizyty u tego lekarza</a>
-
+                <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>
+                <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
             </div>
-          </ul>
-          <br>
-        </li>
-      </ul>
 
-      <div class="actions">
-        <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Umów wizytę</a>
-        <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
-      </div>
 
-<!--      <a class="btn btn-light" th:href="@{/doctors}">Show all doctors</a>-->
+        </div>
 
-      <div class="footer">
-        <div th:replace="~{fragments/footer.html}"></div>
-      </div>
     </div>
-  </div>
 
-  </div>
+    <div class="footer">
+        <div th:replace="~{fragments/footer.html}"></div>
+    </div>
+
+</div>
 
 </body>
 
