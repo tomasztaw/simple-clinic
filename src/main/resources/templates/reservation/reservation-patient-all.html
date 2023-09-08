@@ -117,7 +117,7 @@
                         <li>Id lekarza: <span th:text="${reservation.doctorId}"></span></li>
                         <!--            <li>Dane lekarza: <span th:text="${} + ' ' + ${}"></span></li>-->
                         <li>Dzień: <span th:text="${reservation.day}"></span></li>
-                        <li>Czas: <span th:text="${reservation.startTimeR}"></span></li>
+                        <li>Godzina: <span th:text="${reservation.startTimeR}"></span></li>
                         <div class="actions">
                             <form th:action="@{/reservations/delete/{reservationId}(reservationId=${reservation.reservationId})}"
                                   th:method="post">

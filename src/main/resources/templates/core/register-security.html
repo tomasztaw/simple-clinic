@@ -24,6 +24,11 @@
         .form-group {
             margin-bottom: 20px;
         }
+
+        .action__btn {
+          display: flex;
+          justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -60,8 +65,17 @@
         <input type="email" class="form-control" id="email" name="email" required>
       </div>
         <input type="hidden" name="context" value="login">
-      <div>
-        <button type="submit" class="btn btn-primary">Zarejestruj</button>
+
+      <div class="action__btn">
+
+        <div>
+          <button type="submit" class="btn btn-primary">Zarejestruj</button>
+        </div>
+
+        <div>
+          <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+        </div>
+
       </div>
 
     </form>

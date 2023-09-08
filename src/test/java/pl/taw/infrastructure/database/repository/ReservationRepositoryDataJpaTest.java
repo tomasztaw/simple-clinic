@@ -177,7 +177,7 @@ public class ReservationRepositoryDataJpaTest extends AbstractJpaIT {
         List<ReservationDTO> result = reservationRepository.findAllByDoctor(doctorId);
 
         // then
-        assertThat(result).hasSize(2);
+        assertThat(result).hasSize(3);
         assertThat(result).allMatch(res -> doctorId.equals(res.getDoctorId()));
     }
 
@@ -214,7 +214,7 @@ public class ReservationRepositoryDataJpaTest extends AbstractJpaIT {
         List<ReservationDTO> result = reservationRepository.findAllByPatient(patientId);
 
         // then
-        assertThat(result).hasSize(2);
+        assertThat(result).hasSize(3);
         assertThat(result).allMatch(res -> patientId.equals(res.getPatientId()));
     }
 

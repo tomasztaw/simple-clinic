@@ -51,16 +51,4 @@ CREATE TABLE reservations (
     occupied       BOOLEAN DEFAULT false
 );
 
---
---CREATE TABLE prescriptions (
---  prescription_id   SERIAL    PRIMARY KEY,
---  doctor_id         INT       REFERENCES doctors (doctor_id)   NOT NULL,
---  patient_id        INT       REFERENCES patients (patient_id) NOT NULL,
---  visit_id          INT       REFERENCES visits (visit_id),
---  medication_name   VARCHAR(128)                               NOT NULL,
---  dosage            VARCHAR(64),
---  instructions      TEXT,
---  created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
---);
-
 

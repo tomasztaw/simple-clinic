@@ -3,8 +3,7 @@ services:
   app:
     container_name: app-core
     tty: true # dodane do wyświetlania, z którego kontenera pochodzi informacja w konsoli
-#    image: clinic:v3.2
-    image: simple-clinic-prod:v1.0
+#    image: simple-clinic-prod:v1.0
     build:
       context: .
     ports:
