@@ -1,0 +1,79 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header-logo {
+    flex-grow: 1;
+}
+
+.header-logo img {
+    max-width: 30%;
+    height: auto;
+}
+
+.photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+}
+
+.photo-container img {
+    width: 200px;
+    height: 280px;
+    object-fit: cover;
+    object-position: top;
+    margin-right: 20px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px;
+}
+
+ul, li {
+  list-style: none;
+}
+
+li {
+  margin: 20px 0;
+}
+
+.li-btn {
+    margin: 30px auto;
+}
+
+.opinion-span {
+  font-style: italic;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+h1 {
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+  margin: 20px auto;
+}
+
+.media-body__opinion {
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.delete-form {
+    display: inline;
+    margin-right: 50px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+
