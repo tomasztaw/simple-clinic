@@ -129,7 +129,7 @@ fabric.properties
 
 # Package Files #
 #*.jar
-!simple-clinic.jar
+!simple_clinic.jar
 *.war
 *.nar
 *.ear
