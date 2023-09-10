@@ -128,7 +128,8 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
+!simple-clinic.jar
 *.war
 *.nar
 *.ear
