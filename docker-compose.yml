@@ -19,7 +19,8 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - /home/tomasz/klinika/build/libs/simple_clinic.jar:/app.jar
+#      - /home/tomasz/klinika/build/libs/simple_clinic.jar:/app.jar
+      - ./build/libs/simple_clinic.jar:/app.jar
   db:
     container_name: db-psql
     image: postgres:15.3

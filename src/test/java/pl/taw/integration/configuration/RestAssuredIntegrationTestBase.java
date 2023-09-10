@@ -53,10 +53,10 @@ public abstract class RestAssuredIntegrationTestBase
         return objectMapper;
     }
 
-    @Test
-    void contextLoaded() {
-        assertThat(true).isTrue();
-    }
+//    @Test
+//    void contextLoaded() {
+//        assertThat(true).isTrue();
+//    }
 
     @BeforeAll
     static void beforeAll() {
