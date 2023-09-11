@@ -129,8 +129,8 @@ fabric.properties
 
 # Package Files #
 #*.jar
-!simple_clinic.jar
-!gradle-wrapper.jar
+#!simple_clinic.jar
+#!gradle-wrapper.jar
 *.war
 *.nar
 *.ear
