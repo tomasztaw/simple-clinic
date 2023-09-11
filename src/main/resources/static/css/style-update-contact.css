@@ -1,0 +1,14 @@
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 30px auto;
+  }

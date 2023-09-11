@@ -6,63 +6,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
 
-        .header-logo {
-            flex-grow: 1;
-        }
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style-reservation.css}">
 
-        .header-logo img {
-            max-width: 30%;
-            height: auto;
-            border-radius: 50%;
-            transition: box-shadow 1s;
-        }
-
-        .header-logo img:hover {
-           box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.3);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .photo-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            overflow: hidden;
-        }
-
-        .photo-container img {
-            width: 200px;
-            height: 280px;
-            object-fit: cover;
-            object-position: top;
-            margin-right: 20px;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .actions button, .actions a {
-            margin: auto 20px;
-        }
-
-        ul {
-          list-style: none;
-        }
-    </style>
 </head>
 
 <body>

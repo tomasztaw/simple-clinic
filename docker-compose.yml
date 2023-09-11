@@ -3,9 +3,7 @@ services:
   app:
     container_name: app-core
     tty: true # dodane do wyświetlania, z którego kontenera pochodzi informacja w konsoli
-    image: simple-clinic-prod:v1.1
-#    build:
-#      context: .
+    image: tomaszaleksander/simple-clinic:v1.2
     ports:
       - "8080:8080"
     environment:
@@ -19,7 +17,6 @@ services:
       db:
         condition: service_healthy
     volumes:
-#      - /home/tomasz/klinika/build/libs/simple_clinic.jar:/app.jar
       - ./build/libs/simple_clinic.jar:/app.jar
   db:
     container_name: db-psql
