@@ -49,6 +49,10 @@ public class PatientController {
     public static final String SHOW = "/show/{patientId}";
     public static final String DELETE = "/delete/{patientId}";
     public static final String SHOW_ALL = "/all";
+    public static final String PHONE_VIEW = "/phoneView";
+    public static final String UPDATE_PHONE_NUMBER = "/updatePhoneNumber";
+    public static final String EMAIL_VIEW = "/emailView";
+    public static final String UPDATE_EMAIL = "/updateEmail";
 
     private final PatientJpaRepository patientJpaRepository;
     private final PatientDAO patientDAO;
@@ -278,12 +282,8 @@ public class PatientController {
         }
     }
 
-    // można w przyszłości pomyśleć nad aktualizacją tylko części danych (telefon, email)
-    // w panelu aktualizacji wyświetlają się aktualne dane i poprawia się tylko potrzebne, reszta zostaje
-
-    // próba nowej aktualizacji telefonu - nie działa
-    @GetMapping("/telefon")
-    public String aktualizujTelefon(Authentication authentication, Model model) {
+    @GetMapping(PHONE_VIEW)
+    public String updatePhoneView(Authentication authentication, Model model) {
         ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
         UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
         String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
@@ -297,19 +297,17 @@ public class PatientController {
         return "patient/patient-phone";
     }
 
-    @PatchMapping("/updatePhoneNumber")
+    @PatchMapping(UPDATE_PHONE_NUMBER)
     public String updatePhoneNumber(@ModelAttribute("patient") PatientDTO patient) {
         PatientEntity patientForUpdatePhone = patientDAO.findEntityById(patient.getPatientId());
         patientForUpdatePhone.setPhone(patient.getPhone());
-        patientJpaRepository.save(patientForUpdatePhone);
+        patientDAO.saveForUpdateContact(patientForUpdatePhone);
 
-//        return "redirect:/patients/dashboard/" + patient.getPatientId();
-        // po odświeżeniu strony zmienia się ścieżka do styli i nie są one ładowane
         return "redirect:/";
     }
 
-    @GetMapping("/email")
-    public String aktualizujEmail(Authentication authentication, Model model) {
+    @GetMapping(EMAIL_VIEW)
+    public String updateEmailView(Authentication authentication, Model model) {
         ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
         UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
         String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
@@ -323,59 +321,32 @@ public class PatientController {
         return "patient/patient-email";
     }
 
-    @PatchMapping("/updateEmail")
-    public String updateEmail(@ModelAttribute("patient") PatientDTO patient) {
-        PatientEntity patientForUpdatePhone = patientDAO.findEntityById(patient.getPatientId());
-        patientForUpdatePhone.setEmail(patient.getEmail());
-        // TODO a co z kredkami?!
-        patientJpaRepository.save(patientForUpdatePhone);
+    @PatchMapping(UPDATE_EMAIL)
+    @Transactional
+    public String updateEmail(
+            @ModelAttribute("patient") PatientDTO patient,
+            Authentication authentication
+    ) {
+        ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
+        UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
+        String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
 
-//        return "redirect:/patients/dashboard/" + patient.getPatientId();
-        // po odświeżeniu strony zmienia się ścieżka do styli i nie są one ładowane
+        String newEmail = patient.getEmail();
+        PatientEntity patientForUpdateEmail = patientDAO.findEntityById(patient.getPatientId());
+        patientForUpdateEmail.setEmail(newEmail);
+
+        patientJpaRepository.save(patientForUpdateEmail);
+
+        UserEntity user = userRepository.findByEmail(userEmail);
+
+        if (user != null) {
+            user.setEmail(patient.getEmail());
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Problem z kredkami :( Nie może znaleźć użytkownika");
+        }
+
         return "redirect:/";
     }
 
-
-    // #####################################        RZECZY DO SKASOWANIA    #########################
-
-    public static final String LOGOWANIE = "/logowanie";
-    public static final String REGISTER = "/register";
-
-
-    @GetMapping(LOGOWANIE)
-    public String showLoginForm() {
-        return "login2";
-    }
-
-
-    @PostMapping(LOGOWANIE)
-    public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        if (username.equals("user") && password.equals("test")) {
-            // losowanie pacjent
-            Random random = new Random();
-            int size = patientDAO.findAll().size();
-            int patientId = random.nextInt(size) + 1;
-
-            return "redirect:/patients/dashboard/" + patientId;
-        } else {
-            model.addAttribute("error", "Invalid username or password");
-            return "redirect:/login";
-        }
-    }
-
-    @GetMapping(REGISTER)
-    public String registerPatient() {
-        return "core/register";
-    }
-
-    // wyświetlanie na sztywno pacjenta o id: 5
-    @GetMapping(DASHBOARD)
-    public String showDashboard(Model model) {
-        String pesel = "85061718378";
-        PatientDTO patient = patientDAO.findByPesel(pesel);
-
-        model.addAttribute("patient", patient);
-
-        return "patient/patient-dashboard";
-    }
 }

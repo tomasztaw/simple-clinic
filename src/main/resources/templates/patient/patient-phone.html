@@ -12,12 +12,14 @@
 <h1>Aktualizuj numer telefonu</h1>
 <form th:object="${patient}" th:action="@{/patients/updatePhoneNumber}" th:method="patch">
   <input type="hidden" name="_method" value="patch">
+
   <label for="phoneNumber">Numer telefonu:</label>
-  <input type="text" id="phoneNumber" th:field="*{phone}">
+  <input type="text" id="phoneNumber" th:field="*{phone}" pattern="\+48 [0-9]{3} [0-9]{3} [0-9]{3}"
+         title="Numer telefonu powinien być w formacie: +48 xxx xxx xxx" required>
 
   <input type="hidden" th:field="*{patientId}">
 
-  <button type="submit" class="btn btn-danger disabled">Aktualizuj</button>
+  <button type="submit" class="btn btn-danger">Aktualizuj</button>
 </form>
 <br><br>
 <button class="btn btn-primary btn-lg" onclick="history.go(-1);">Powrót</button>

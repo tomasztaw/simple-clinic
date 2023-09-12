@@ -7,26 +7,18 @@
 
   <title>Formularz do aktualizacji e-mail</title>
 
-  <script>
-    function showConfirmation() {
-      if (confirm('Czy na pewno chcesz zaktualizować e-mail pacjenta? Nie jest jeszcze rozwiązany problem z kredkami!!!!')) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  </script>
 </head>
 <body>
 <h1>Aktualizuj e-mail</h1>
-<form th:object="${patient}" th:action="@{/patients/updateEmail}" th:method="patch" onsubmit="return showConfirmation();">
+<form th:object="${patient}" th:action="@{/patients/updateEmail}" th:method="patch">
   <input type="hidden" name="_method" value="patch">
-  <label for="email">E-mail:</label>
-  <input type="text" id="email" th:field="*{email}">
+
+  <label for="email">Adres e-mail:</label>
+  <input type="email" id="email" th:field="*{email}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Wprowadź poprawny adres e-mail" required>
 
   <input type="hidden" th:field="*{patientId}">
 
-  <button type="submit" class="btn btn-danger disabled">Aktualizuj</button>
+  <button type="submit" class="btn btn-danger">Aktualizuj</button>
 </form>
 
 <br><br>

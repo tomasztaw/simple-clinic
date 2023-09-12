@@ -13,7 +13,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
 import pl.taw.api.dto.PatientDTO;
@@ -23,11 +27,14 @@ import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
+import pl.taw.infrastructure.security.ClinicUserDetailsService;
+import pl.taw.infrastructure.security.UserEntity;
 import pl.taw.infrastructure.security.UserRepository;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -63,6 +70,17 @@ public class PatientControllerWebMvcTest {
     @MockBean
     @SuppressWarnings("unused")
     private UserRepository userRepository;
+
+    @MockBean
+    @SuppressWarnings("unused")
+    private Authentication authentication;
+    @MockBean
+    @SuppressWarnings("unused")
+    private UserDetails userDetails;
+
+    @MockBean
+    @SuppressWarnings("unused")
+    private ClinicUserDetailsService clinicUserDetailsService;
 
     @Test
     void thatEmailValidationWorksCorrectly() throws Exception {
@@ -245,6 +263,34 @@ public class PatientControllerWebMvcTest {
         verify(patientDAO, times(1)).findEntityById(patientId);
         verify(patientDAO, times(1)).save(existingPatient);
         verifyNoMoreInteractions(patientDAO);
+    }
+
+    @Test
+    public void testUpdatePhoneView() throws Exception {
+        // given
+        Integer patientId = 1;
+        PatientEntity existingPatient = EntityFixtures.somePatient3().withPatientId(patientId);
+        PatientDTO patient = DtoFixtures.somePatient2().withPatientId(patientId);
+        UserEntity user = EntityFixtures.someUser1();
+        String referer = "/patients/panel";
+//        Authentication authentication = mock(Authentication.class);
+//        UserDetails details =
+
+
+//        when(userDetails.getAuthorities()).thenReturn(user.getRoles().stream().findAny());
+        when(authentication.getName()).thenReturn("Stanisław");
+//        when(clinicUserDetailsService.loadUserByUsername(authentication.getName())).thenReturn(userDetails);
+        when(clinicUserDetailsService.loadUserByUsername(authentication.getName())).thenReturn(userDetails);
+        when(clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName())).thenReturn("stachu@wp.pl");
+        when(patientDAO.findById(patientId)).thenReturn(patient);
+
+        MockHttpServletRequestBuilder getRequest = get(PATIENTS.concat(PHONE_VIEW)); // Zastąp '/your-endpoint' adresem URL twojej metody
+        getRequest.principal(authentication);
+
+        // when, then
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk()) // Oczekuj statusu HTTP 200 OK
+                .andExpect(model().attributeExists("patient")); // Oczekuj, że model zawiera atrybut "patient"
     }
 
 }

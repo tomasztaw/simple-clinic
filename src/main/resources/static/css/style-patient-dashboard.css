@@ -41,5 +41,5 @@ h1 {
 .updateContact {
     display: flex;
     justify-content: space-around;
-    align-items: baseline;
+    margin-top: 40px;
 }

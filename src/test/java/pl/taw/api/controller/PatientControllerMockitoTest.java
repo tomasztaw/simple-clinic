@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.taw.api.dto.OpinionDTO;
@@ -20,13 +21,15 @@ import pl.taw.business.VisitService;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
+import pl.taw.infrastructure.security.ClinicUserDetailsService;
+import pl.taw.infrastructure.security.RoleEntity;
 import pl.taw.infrastructure.security.UserEntity;
 import pl.taw.infrastructure.security.UserRepository;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.net.URI;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,6 +55,15 @@ class PatientControllerMockitoTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ClinicUserDetailsService clinicUserDetailsService;
+
+    @Mock
+    private UserDetails userDetails;
+
+    @Mock
+    private UserEntity userEntity;
 
     @InjectMocks
     private PatientController patientController;
@@ -510,5 +522,77 @@ class PatientControllerMockitoTest {
         assertEquals(newPhone, patientEntity.getPhone());
         verify(patientDAO, times(1)).save(patientEntity);
     }
+
+    @Test
+    public void testUpdatePhoneView() {
+        // given
+        UserEntity user = EntityFixtures.someUser1();
+        String userName = user.getUserName();
+        PatientDTO patient = DtoFixtures.somePatient1();
+
+        when(userRepository.findByUserName(userName)).thenReturn(user);
+        when(authentication.getName()).thenReturn(userName);
+        when(patientDAO.findByEmail(user.getEmail())).thenReturn(patient);
+
+        // when
+        String result = patientController.updatePhoneView(authentication, model);
+
+        // then
+        assertEquals("patient/patient-phone", result);
+        verify(model).addAttribute(eq("patient"), any(PatientDTO.class));
+        verify(userRepository, times(2)).findByUserName(userName);
+        verify(authentication, times(2)).getName();
+        verify(patientDAO, times(1)).findByEmail(user.getEmail());
+        verifyNoMoreInteractions(model, userRepository, authentication, patientDAO);
+    }
+
+    @Test
+    public void testUpdatePhoneNumber() {
+        // given
+        Integer patientId = 1;
+        PatientDTO patientDTO = DtoFixtures.somePatient2().withPatientId(patientId);
+        String newPhoneNumber = patientDTO.getPhone();
+        PatientEntity patientEntity = EntityFixtures.somePatient2().withPatientId(patientId);
+
+        when(patientDAO.findEntityById(patientId)).thenReturn(patientEntity);
+
+        // when
+        String result = patientController.updatePhoneNumber(patientDTO);
+
+        // then
+        assertEquals("redirect:/", result);
+        assertEquals(newPhoneNumber, patientEntity.getPhone());
+
+        verify(patientDAO, times(1)).findEntityById(patientId);
+        verify(patientDAO, times(1)).saveForUpdateContact(patientEntity);
+        verifyNoMoreInteractions(patientDAO);
+    }
+
+    @Test
+    public void testUpdateEmailView() {
+        // given
+        UserEntity user = EntityFixtures.someUser1();
+        String userName = user.getUserName();
+        PatientDTO patient = DtoFixtures.somePatient1().withEmail(user.getEmail());
+
+        when(userRepository.findByUserName(userName)).thenReturn(user);
+        when(authentication.getName()).thenReturn(userName);
+        when(patientDAO.findByEmail(user.getEmail())).thenReturn(patient);
+
+        // when
+        String result = patientController.updateEmailView(authentication, model);
+
+        // then
+        assertEquals("patient/patient-email", result);
+
+        verify(model).addAttribute(eq("patient"), eq(patient));
+        verify(userRepository, times(2)).findByUserName(userName);
+        verify(authentication, times(2)).getName();
+        verify(patientDAO, times(1)).findByEmail(user.getEmail());
+        verifyNoMoreInteractions(model, userRepository, authentication, patientDAO);
+    }
+
+    // do zrobienia ostatnia metoda!!!
+
 
 }

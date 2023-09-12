@@ -81,7 +81,7 @@ public class PatientRepository implements PatientDAO {
         }
     }
 
-    // TODO Jeżeli wszystko będzie ok, to przerobię to na patientDAO
+    @Override
     public void saveForUpdateContact(PatientEntity patientEntity) {
         patientJpaRepository.save(patientEntity);
     }
