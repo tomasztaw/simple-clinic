@@ -13,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,13 +36,14 @@ import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static pl.taw.api.controller.PatientController.*;
 
@@ -269,28 +272,79 @@ public class PatientControllerWebMvcTest {
     public void testUpdatePhoneView() throws Exception {
         // given
         Integer patientId = 1;
-        PatientEntity existingPatient = EntityFixtures.somePatient3().withPatientId(patientId);
         PatientDTO patient = DtoFixtures.somePatient2().withPatientId(patientId);
         UserEntity user = EntityFixtures.someUser1();
-        String referer = "/patients/panel";
-//        Authentication authentication = mock(Authentication.class);
-//        UserDetails details =
+        String username = "username";
+        String userEmail = "username@user.com";
 
-
-//        when(userDetails.getAuthorities()).thenReturn(user.getRoles().stream().findAny());
-        when(authentication.getName()).thenReturn("Stanisław");
-//        when(clinicUserDetailsService.loadUserByUsername(authentication.getName())).thenReturn(userDetails);
+        when(userRepository.findByUserName(username)).thenReturn(user);
+        when(userRepository.findByEmail(userEmail)).thenReturn(user);
+        when(authentication.getName()).thenReturn(username);
         when(clinicUserDetailsService.loadUserByUsername(authentication.getName())).thenReturn(userDetails);
-        when(clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName())).thenReturn("stachu@wp.pl");
-        when(patientDAO.findById(patientId)).thenReturn(patient);
+        when(clinicUserDetailsService.getUserEmailAfterAuthentication(username)).thenReturn(userEmail);
+        when(patientDAO.findByEmail(userEmail)).thenReturn(patient);
 
-        MockHttpServletRequestBuilder getRequest = get(PATIENTS.concat(PHONE_VIEW)); // Zastąp '/your-endpoint' adresem URL twojej metody
+        MockHttpServletRequestBuilder getRequest = get(PATIENTS.concat(PHONE_VIEW));
         getRequest.principal(authentication);
 
         // when, then
         mockMvc.perform(getRequest)
-                .andExpect(status().isOk()) // Oczekuj statusu HTTP 200 OK
-                .andExpect(model().attributeExists("patient")); // Oczekuj, że model zawiera atrybut "patient"
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("patient"))
+                .andExpect(view().name("patient/patient-phone"));
+
+        verify(userRepository, times(2)).findByUserName(username);
+        verify(authentication, times(4)).getName();
+        verify(patientDAO, times(1)).findByEmail(userEmail);
+    }
+
+    @Test
+    public void testUpdatePhoneNumber() throws Exception {
+        // given
+        Integer patientId = 1;
+        PatientDTO patient = DtoFixtures.somePatient1().withPatientId(patientId);
+        PatientEntity patientEntity = EntityFixtures.somePatient1();
+        String newPhoneNumber = patient.getPhone();
+
+        when(patientDAO.findEntityById(patient.getPatientId())).thenReturn(patientEntity);
+
+        // when, then
+        mockMvc.perform(patch(PATIENTS.concat(UPDATE_PHONE_NUMBER))
+                        .flashAttr("patient", patient))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        verify(patientDAO).saveForUpdateContact(argThat(argument -> Objects.equals(argument.getPatientId(), patientId) && newPhoneNumber.equals(argument.getPhone())));
+        verify(patientDAO, times(1)).findEntityById(patientId);
+        verifyNoMoreInteractions(patientDAO);
+    }
+
+    @Test
+    public void testUpdateEmailView() throws Exception {
+        // given
+        Integer patientId = 1;
+        UserEntity userEntity = EntityFixtures.someUser1();
+        String userEmail = "test@example.com";
+        PatientDTO patient = DtoFixtures.somePatient2().withPatientId(patientId).withEmail(userEmail);
+
+        when(userRepository.findByUserName(userEntity.getUserName())).thenReturn(userEntity);
+        when(patientDAO.findByEmail(userEntity.getEmail())).thenReturn(patient);
+        when(authentication.getName()).thenReturn(userEntity.getUserName());
+
+        MockHttpServletRequestBuilder getRequest = get(PATIENTS.concat(EMAIL_VIEW));
+        getRequest.principal(authentication);
+
+        // when, then
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk())
+                .andExpect(view().name("patient/patient-email"))
+                .andExpect(model().attributeExists("patient"))
+                .andExpect(model().attribute("patient", patient));
+
+        verify(userRepository, times(2)).findByUserName(userEntity.getUserName());
+        verify(patientDAO, times(1)).findByEmail(userEntity.getEmail());
+        verify(authentication, times(3)).getName();
+        verifyNoMoreInteractions(userRepository, patientDAO, authentication);
     }
 
 }

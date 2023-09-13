@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.taw.api.dto.OpinionDTO;
@@ -21,15 +20,13 @@ import pl.taw.business.VisitService;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
-import pl.taw.infrastructure.security.ClinicUserDetailsService;
-import pl.taw.infrastructure.security.RoleEntity;
 import pl.taw.infrastructure.security.UserEntity;
 import pl.taw.infrastructure.security.UserRepository;
 import pl.taw.util.DtoFixtures;
 import pl.taw.util.EntityFixtures;
 
 import java.net.URI;
-import java.util.*;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,15 +52,6 @@ class PatientControllerMockitoTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private ClinicUserDetailsService clinicUserDetailsService;
-
-    @Mock
-    private UserDetails userDetails;
-
-    @Mock
-    private UserEntity userEntity;
 
     @InjectMocks
     private PatientController patientController;
@@ -592,7 +580,35 @@ class PatientControllerMockitoTest {
         verifyNoMoreInteractions(model, userRepository, authentication, patientDAO);
     }
 
-    // do zrobienia ostatnia metoda!!!
+    @Test
+    public void testUpdateEmail() {
+        // given
+        Integer patientId = 1;
+        String username = "username";
+        String newEmail = "new@example.com";
+        String oldEmail = "old@example.com";
+        UserEntity user = EntityFixtures.someUser1();
+        PatientDTO patient = DtoFixtures.somePatient1().withPatientId(patientId).withEmail(newEmail);
+        PatientEntity patientEntity = EntityFixtures.somePatient1().withEmail(oldEmail);
+
+        when(authentication.getName()).thenReturn(username);
+        when(userRepository.findByUserName(username)).thenReturn(user);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        when(patientDAO.findEntityById(patientId)).thenReturn(patientEntity);
+
+        // when
+        String result = patientController.updateEmail(patient, authentication);
+
+        // then
+        assertEquals("redirect:/", result);
+        assertEquals(newEmail, patientEntity.getEmail());
+
+        verify(patientDAO, times(1)).saveForUpdateContact(patientEntity);
+        verify(userRepository, times(1)).findByEmail("username@user.com");
+        verify(userRepository, times(1)).findByUserName(username);
+        verify(authentication, times(1)).getName();
+        verifyNoMoreInteractions(patientDAO, authentication);
+    }
 
 
 }

@@ -14,10 +14,10 @@
   <input type="hidden" name="_method" value="patch">
 
   <label for="phoneNumber">Numer telefonu:</label>
-  <input type="text" id="phoneNumber" th:field="*{phone}" pattern="\+48 [0-9]{3} [0-9]{3} [0-9]{3}"
+  <input type="text" id="phoneNumber" field="*{phone}" pattern="\+48 [0-9]{3} [0-9]{3} [0-9]{3}"
          title="Numer telefonu powinien być w formacie: +48 xxx xxx xxx" required>
 
-  <input type="hidden" th:field="*{patientId}">
+  <input type="hidden" field="*{patientId}">
 
   <button type="submit" class="btn btn-danger">Aktualizuj</button>
 </form>

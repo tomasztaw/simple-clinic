@@ -14,9 +14,9 @@
   <input type="hidden" name="_method" value="patch">
 
   <label for="email">Adres e-mail:</label>
-  <input type="email" id="email" th:field="*{email}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Wprowadź poprawny adres e-mail" required>
+  <input type="email" id="email" field="*{email}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Wprowadź poprawny adres e-mail" required>
 
-  <input type="hidden" th:field="*{patientId}">
+  <input type="hidden" field="*{patientId}">
 
   <button type="submit" class="btn btn-danger">Aktualizuj</button>
 </form>

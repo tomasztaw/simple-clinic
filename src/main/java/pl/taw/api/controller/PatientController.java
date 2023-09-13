@@ -328,14 +328,13 @@ public class PatientController {
             Authentication authentication
     ) {
         ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
-        UserDetails details = clinicUserDetailsService.loadUserByUsername(authentication.getName());
         String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
 
         String newEmail = patient.getEmail();
         PatientEntity patientForUpdateEmail = patientDAO.findEntityById(patient.getPatientId());
         patientForUpdateEmail.setEmail(newEmail);
 
-        patientJpaRepository.save(patientForUpdateEmail);
+        patientDAO.saveForUpdateContact(patientForUpdateEmail);
 
         UserEntity user = userRepository.findByEmail(userEmail);
 
