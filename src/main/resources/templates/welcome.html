@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl-PL">
+<html lang="pl-PL" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,8 @@
         <img src="./images/2135.jpg" class="logo" alt="logo">
         <ul>
             <li><a href="/clinic/register">Zarejestruj</a></li>
-            <li><a href="/clinic/login">Zaloguj</a></li>
+<!--            <li><a href="/clinic/login">Zaloguj</a></li>-->
+            <li><a th:href="@{/register/loginPage}">Zaloguj</a></li>
         </ul>
     </div>
 
@@ -33,7 +34,8 @@
         <div class="button__login">
 
             <button type="button"><span></span><a href="/clinic/register">Zarejestruj się</a></button>
-            <button type="button"><span></span><a href="/clinic/login">Zaloguj</a></button>
+<!--            <button type="button"><span></span><a href="/clinic/login">Zaloguj</a></button>-->
+            <button type="button"><span></span><a th:href="@{/register/loginPage}">Zaloguj</a></button>
         </div>
 
     </div>

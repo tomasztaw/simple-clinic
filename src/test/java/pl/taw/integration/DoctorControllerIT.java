@@ -8,6 +8,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import pl.taw.integration.configuration.AbstractIT;
 
+import java.util.TreeMap;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@SpringBootTest(properties = "spring.security.enabled=false")

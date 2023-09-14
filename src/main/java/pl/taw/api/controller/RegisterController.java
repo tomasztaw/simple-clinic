@@ -26,6 +26,7 @@ import java.util.Set;
 public class RegisterController {
 
     public static final String REGISTER = "/register";
+    public static final String LOGIN_PAGE = "/loginPage";
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -155,6 +156,12 @@ public class RegisterController {
     @GetMapping
     public String registerPatient() {
         return "core/register-security";
+    }
+
+
+    @GetMapping(LOGIN_PAGE)
+    public String loginPage() {
+        return "core/loginPage";
     }
 
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona logowania</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style-login.css}">
+
+</head>
+<body>
+<div class="container">
+    <div class="login-container">
+        <h1>Logowanie</h1>
+
+        <form th:action="@{/register/loginPage}" method="post">
+            <div class="form-group">
+                <label for="username">Nazwa użytkownika:</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Hasło:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Zaloguj</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="alert" th:if="${param.error}">
+        <p>Nieprawidłowe dane logowania. Spróbuj ponownie.</p>
+    </div>
+
+    <div class="actions">
+        <h3>Nie masz konta?<br> Zarejestruj się!</h3>
+        <a class="btn btn-primary btn-block" th:href="@{/register}">Zarejestruj się</a>
+        <a class="btn btn-primary btn-block" th:href="@{/welcome}">Powrót na stronę powitalną</a>
+    </div>
+
+</div>
+</body>
+</html>

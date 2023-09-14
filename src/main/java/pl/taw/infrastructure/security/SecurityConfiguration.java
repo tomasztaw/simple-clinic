@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import pl.taw.api.controller.RegisterController;
 
 import java.util.Set;
 
@@ -82,7 +83,13 @@ public class SecurityConfiguration {
                         .requestMatchers("/clinic", "/login", "/images/**", "/css/**", "/daypilot/**", "/register/**").permitAll()
                                 .anyRequest().authenticated()
 //                        .requestMatchers(HttpMethod.DELETE, HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.PATCH).hasAnyAuthority("ADMIN", "USER", "DOCTOR")
-                ).formLogin(login -> login.permitAll().successHandler(authenticationSuccessHandler()))
+                )
+//                .formLogin(login -> login.permitAll().successHandler(authenticationSuccessHandler()))
+                .formLogin(form -> form
+                        .loginPage("/register/loginPage")
+//                        .loginPage(RegisterController.REGISTER.concat(RegisterController.LOGIN_PAGE))
+                        .permitAll()
+                )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/welcome")
                         .invalidateHttpSession(true)
