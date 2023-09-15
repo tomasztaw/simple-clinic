@@ -93,13 +93,13 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  overflow: hidden; /* Dodana linia */
+  overflow: hidden;
 }
 .photo-container img {
   width: 200px;
   height: 280px;
   object-fit: cover;
-  object-position: top; /* Dodana linia */
+  object-position: top;
   margin-right: 20px;
 }
 .actions {

@@ -76,6 +76,51 @@ public class DoctorController {
         return "doctor/doctor-dashboard";
     }
 
+    @GetMapping("/doctors-new")
+    public String showDoctors(Model model, Authentication authentication) {
+        List<DoctorDTO> doctors = doctorDAO.findAll();
+        model.addAttribute("doctors", doctors);
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
+        return "doctor/doctors-new-view-all";
+    }
+
+    @GetMapping(SPECIALIZATIONS + "-new")
+    public String specializationsNew(Model model, Authentication authentication) {
+        List<String> specializations = doctorDAO.findAll().stream()
+                .map(DoctorDTO::getTitle)
+                .distinct()
+                .toList();
+        model.addAttribute("specializations", specializations);
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
+        return "doctor/specializations-new";
+    }
+
+    @GetMapping(SPECIALIZATION + "-new")
+    public String doctorsBySpecializationsViewNew(
+            @PathVariable String specialization,
+            Model model,
+            Authentication authentication
+    ) {
+        List<DoctorDTO> doctors = doctorDAO.findBySpecialization(specialization);
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("specialization", specialization);
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
+        return "doctor/doctors-specialization-new";
+    }
+
+
+
+    // ##################
+
     @GetMapping
     public String doctors(Model model) {
         List<DoctorDTO> doctors = doctorDAO.findAll();
