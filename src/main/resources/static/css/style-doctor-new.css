@@ -79,12 +79,12 @@ body {
 }
 
 
-.footer {
+/*.footer {
     padding: 10px;
     margin-top: 30px;
     text-align: center;
     background-color: #f5f5f5;
-}
+}*/
 
 .foto-container {
     display: inline-flex;
@@ -145,4 +145,62 @@ body {
     bottom: 10px;
     width: 150px;
     text-decoration: none;
+}
+
+.spec__h1 {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.spec__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.foto-spec-container {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    min-width: 600px;
+    max-width: 1200px;
+    flex-wrap: wrap;
+}
+
+/* nowa stopka */
+
+footer {
+    height: 140px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #f5f5f5;
+}
+
+/*footer {
+    display: flex;
+    justify-content: flex-end; /* Umieszczenie na dole strony */
+    /*align-items: center; /* Wyśrodkowanie zawartości w stopce */
+    /*background-color: #f0f022; /* Dodaj kolor tła, aby stopka była widoczna */
+    /*height: 140px; /* Dostosuj wysokość do własnych preferencji */
+    /*position: fixed; /* Ustaw stopkę jako pozycję stałą */
+    /*bottom: 0; /* Umieść na dole ekranu */
+    /*width: 100%; /* Szerokość stopki na całą szerokość strony */
+/*}*/
+
+.contact-items {
+    display: flex;
+    justify-content: center;
+}
+
+.contact-items p, .footer__links a {
+    margin: 0 15px;
+}
+
+.footer__links {
+    display: flex;
+    justify-content: center;
 }

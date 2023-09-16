@@ -67,9 +67,18 @@
 <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
 
 
-<div class="footer">
-    <div th:replace="~{fragments/footer.html}"></div>
-</div>
+<!--<div class="footer">-->
+<!--    <div th:replace="~{fragments/footer.html}"></div>-->
+<!--</div>-->
+
+<div th:replace="~{fragments/footer.html}"></div>
+
+<script>
+    if (document.body.scrollHeight <= window.innerHeight) {
+      document.querySelector("footer").style.position = "static";
+<!--        document.querySelector("footer").style.position = "fixed";-->
+    }
+</script>
 
 
 </body>
