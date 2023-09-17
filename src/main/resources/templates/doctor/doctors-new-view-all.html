@@ -14,35 +14,28 @@
     <div th:replace="~{fragments/header}"></div>
 </div>
 
-<div>
-    <a th:href="@{/doctors/specializations-new}">Wyszukaj po specjalizacji</a>
-    <button class="btn btn-primary btn-block">Wyszukaj po specjalizacji</button>
-    <button class="btn btn-primary btn-block">Paginacja</button>
+<div class="container">
 
-</div>
-
-<div class="foto-container">
-    <div class="foto-box" th:each="doctor : ${doctors}">
-        <img class="img-box" alt="lekarz"
-             th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'} ? @{'/images/d' + ${doctor.doctorId} + '.jpeg'} : @{'/images/default.png'}">
-        <p class="header-box" th:text="${doctor.name + ' ' + doctor.surname}"></p>
-        <p class="content-box" th:text="${doctor.title}"></p>
-        <a class="box-btn" th:href="@{'/doctors/' + ${doctor.doctorId} + '/show'}">Pokaż</a>
+    <div class="doctor-all__btn">
+<!--        <a th:href="@{/doctors/specializations-new}">Wyszukaj po specjalizacji</a>-->
+        <button class="small-btn"><a th:href="@{/doctors/specializations-new}">Wyszukaj po specjalizacji</a></button>
+        <button class="small-btn"><a th:href="@{/doctors/pagination}">Paginacja</a></button>
     </div>
-</div>
 
-<!--<div class="footer">-->
-<!--    <div th:replace="~{fragments/footer.html}"></div>-->
-<!--</div>-->
+    <div class="foto-container">
+        <div class="foto-box" th:each="doctor : ${doctors}">
+            <img class="img-box" alt="lekarz"
+                 th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'}
+                 ? @{'/images/d' + ${doctor.doctorId} + '.jpeg'} : @{'/images/default.png'}">
+            <p class="header-box" th:text="${doctor.name + ' ' + doctor.surname}"></p>
+            <p class="content-box" th:text="${doctor.title}"></p>
+            <a class="box-btn" th:href="@{'/doctors/' + ${doctor.doctorId} + '/show'}">Pokaż</a>
+        </div>
+    </div>
+
+</div>
 
 <div th:replace="~{fragments/footer.html}"></div>
-
-<script>
-    if (document.body.scrollHeight <= window.innerHeight) {
-      document.querySelector("footer").style.position = "static";
-<!--        document.querySelector("footer").style.position = "fixed";-->
-    }
-</script>
 
 </body>
 </html>

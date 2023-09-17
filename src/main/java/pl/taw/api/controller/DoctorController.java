@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,10 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pl.taw.api.dto.DoctorDTO;
-import pl.taw.api.dto.OpinionDTO;
-import pl.taw.api.dto.PatientDTO;
-import pl.taw.api.dto.ReservationDTO;
+import pl.taw.api.dto.*;
 import pl.taw.business.DoctorService;
 import pl.taw.business.ReservationService;
 import pl.taw.business.WorkingHours;
@@ -117,6 +115,30 @@ public class DoctorController {
         return "doctor/doctors-specialization-new";
     }
 
+    @GetMapping("/pagination")
+    public String doctorsPagination(
+//            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size,
+            Authentication authentication,
+            Model model
+    ) {
+        int adjustedPage = page - 1;
+        Page<DoctorDTO> doctorsPage = doctorService.getDoctorsPage(adjustedPage, size);
+
+//        Page<DoctorDTO> doctorsPage = doctorService.getDoctorsPage(page, size);
+
+        model.addAttribute("doctors", doctorsPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", doctorsPage.getTotalPages());
+        model.addAttribute("selectedSize", size);
+        if (authentication != null) {
+            String username = authentication.getName();
+            model.addAttribute("username", username);
+        }
+
+        return "doctor/doctors-pagination";
+    }
 
 
     // ##################

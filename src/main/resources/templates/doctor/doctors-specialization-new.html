@@ -14,7 +14,14 @@
 
 <div th:replace="~{fragments/header}"></div>
 
-<div class="spec__container">
+<div class="container">
+
+  <div class="spec__container">
+
+    <div class="actions__btn">
+      <button class="small-btn"><a th:href="@{/doctors/doctors-new}">Pokaż wszystkich lekarzy</a></button>
+      <button class="small-btn"><a th:href="@{/doctors/specializations-new}">Wyszukaj po specjalizacji</a></button>
+    </div>
 
   <h1 class="spec__h1">Lista lekarzy o specjalizacji <i><span th:text="${specialization}"></span></i></h1>
 
@@ -28,28 +35,11 @@
     </div>
   </div>
 
-  <div class="actions__btn">
-
-    <a class="btn btn-light" th:href="@{/doctors}">Pokaż wszystkich lekarzy</a>
-    <br>
-    <a th:href="@{/doctors/specializations}" class="btn btn-primary me-2">Wyszukaj po specjalizacji</a>
-
-  </div>
 
 </div>
-
-<!--  <div class="footer">-->
-<!--    <div th:replace="~{fragments/footer.html}"></div>-->
-<!--  </div>-->
+</div>
 
 <div th:replace="~{fragments/footer}"></div>
-
-<script>
-  if (document.body.scrollHeight <= window.innerHeight) {
-      document.querySelector("footer").style.position = "static";
-<!--      document.querySelector("footer").style.position = "fixed";-->
-  }
-</script>
 
 </body>
 </html>

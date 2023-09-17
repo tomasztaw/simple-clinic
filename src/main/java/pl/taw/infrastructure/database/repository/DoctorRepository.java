@@ -1,6 +1,8 @@
 package pl.taw.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.business.dao.DoctorDAO;
@@ -82,4 +84,9 @@ public class DoctorRepository implements DoctorDAO {
         doctorJpaRepository.saveAllAndFlush(doctorEntities);
     }
 
+    @Override
+    public Page<DoctorDTO> findAll(Pageable pageable) {
+        Page<DoctorEntity> doctorPage = doctorJpaRepository.findAll(pageable);
+        return doctorPage.map(doctorMapper::mapFromEntity);
+    }
 }

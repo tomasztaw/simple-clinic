@@ -1,6 +1,10 @@
 package pl.taw.business;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.DoctorScheduleDTO;
@@ -69,4 +73,9 @@ public class DoctorService {
         return appointmentTimes;
     }
 
+    public Page<DoctorDTO> getDoctorsPage(int page, int size) {
+        Sort sort = Sort.by("doctorId").ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return doctorDAO.findAll(pageable);
+    }
 }
