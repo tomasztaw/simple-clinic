@@ -218,6 +218,20 @@ footer {
     color: white
 }
 
+.old-view {
+    background-color: #CCFFFF;
+    color: #CC6666;
+}
+
+.old-view a {
+    color: #CC6666;
+}
+
+.old-view-div {
+    display: flex;
+    justify-content: flex-end;
+}
+
 
 /* Pagination links */
 .pagination a {
@@ -241,3 +255,10 @@ footer {
     display: flex;
     justify-content: center;
 }
+
+.non-active {
+        cursor: default;
+        text-decoration: none;
+        pointer-events: none;
+        color: #999;
+    }

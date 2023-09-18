@@ -19,10 +19,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
 //        String status = ex.getLocalizedMessage();
+        String status = ex.getMessage(); // ta metoda obsługuje błędy z username i email
         String message = "Wystąpił niespodziewany błąd: [%s]".formatted(ex.getMessage());
         log.error(message, ex);
         ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("errorMessage", message);
+        modelAndView.addObject("status", status);
         return modelAndView;
     }
 

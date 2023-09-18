@@ -27,7 +27,19 @@ public class DoctorControllerIT extends AbstractIT {
 
 
     @Test
-    void applicationWorksCorrectly() {
+    void applicationWorksCorrectlyOldView() {
+        // given
+        String url = "http://localhost:%s/clinic/doctors/all-old".formatted(port);
+
+        // when
+        String page = this.testRestTemplate.getForObject(url, String.class);
+
+        // then
+        assertThat(page).contains("<title>Lista lekarzy</title>");
+    }
+
+    @Test
+    void applicationWorksCorrectlyNewView() {
         // given
         String url = "http://localhost:%s/clinic/doctors".formatted(port);
 
@@ -35,6 +47,6 @@ public class DoctorControllerIT extends AbstractIT {
         String page = this.testRestTemplate.getForObject(url, String.class);
 
         // then
-        assertThat(page).contains("<title>Lista lekarzy</title>");
+        assertThat(page).contains("<title>Lista Lekarzy</title>");
     }
 }

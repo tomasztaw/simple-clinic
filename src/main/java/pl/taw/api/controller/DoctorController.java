@@ -58,6 +58,8 @@ public class DoctorController {
     public static final String SPECIALIZATIONS = "/specializations";
     public static final String SCHEDULE = "/{doctorId}/schedule";
     public static final String DOCTOR_UPDATE_TITLE = "/{doctorId}/title";
+    public static final String PAGINATION = "/pagination";
+    public static final String DASHBOARD = "/dashboard";
 
 
     private final DoctorDAO doctorDAO;
@@ -69,24 +71,24 @@ public class DoctorController {
     private final ResourceLoader resourceLoader;
 
     // TODO do rozbudowanie i przetestowania
-    @GetMapping("/dashboard")
+    @GetMapping(DASHBOARD)
     public String showDoctorDashboard() {
         return "doctor/doctor-dashboard";
     }
 
-    @GetMapping("/doctors-new")
-    public String showDoctors(Model model, Authentication authentication) {
+    @GetMapping
+    public String doctors(Model model, Authentication authentication) {
         List<DoctorDTO> doctors = doctorDAO.findAll();
         model.addAttribute("doctors", doctors);
         if (authentication != null) {
             String username = authentication.getName();
             model.addAttribute("username", username);
         }
-        return "doctor/doctors-new-view-all";
+        return "doctor/doctors-all";
     }
 
-    @GetMapping(SPECIALIZATIONS + "-new")
-    public String specializationsNew(Model model, Authentication authentication) {
+    @GetMapping(SPECIALIZATIONS)
+    public String specializations(Model model, Authentication authentication) {
         List<String> specializations = doctorDAO.findAll().stream()
                 .map(DoctorDTO::getTitle)
                 .distinct()
@@ -96,11 +98,11 @@ public class DoctorController {
             String username = authentication.getName();
             model.addAttribute("username", username);
         }
-        return "doctor/specializations-new";
+        return "doctor/specializations";
     }
 
-    @GetMapping(SPECIALIZATION + "-new")
-    public String doctorsBySpecializationsViewNew(
+    @GetMapping(SPECIALIZATION)
+    public String doctorsBySpecializationsView(
             @PathVariable String specialization,
             Model model,
             Authentication authentication
@@ -112,12 +114,11 @@ public class DoctorController {
             String username = authentication.getName();
             model.addAttribute("username", username);
         }
-        return "doctor/doctors-specialization-new";
+        return "doctor/doctors-specialization";
     }
 
-    @GetMapping("/pagination")
+    @GetMapping(PAGINATION)
     public String doctorsPagination(
-//            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size,
             Authentication authentication,
@@ -125,8 +126,6 @@ public class DoctorController {
     ) {
         int adjustedPage = page - 1;
         Page<DoctorDTO> doctorsPage = doctorService.getDoctorsPage(adjustedPage, size);
-
-//        Page<DoctorDTO> doctorsPage = doctorService.getDoctorsPage(page, size);
 
         model.addAttribute("doctors", doctorsPage.getContent());
         model.addAttribute("currentPage", page);
@@ -140,14 +139,13 @@ public class DoctorController {
         return "doctor/doctors-pagination";
     }
 
-
     // ##################
 
-    @GetMapping
-    public String doctors(Model model) {
+    @GetMapping("/all-old")
+    public String doctorsOld(Model model) {
         List<DoctorDTO> doctors = doctorDAO.findAll();
         model.addAttribute("doctors", doctors);
-        return "doctor/doctors-all";
+        return "doctor/doctors-all-old";
     }
 
     @GetMapping(value = DOCTOR_ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -155,22 +153,22 @@ public class DoctorController {
         return doctorDAO.findById(doctorId);
     }
 
-    @GetMapping(SPECIALIZATION)
-    public String doctorsBySpecializationsView(@PathVariable String specialization, Model model) {
+    @GetMapping(SPECIALIZATION + "-old")
+    public String doctorsBySpecializationsViewOld(@PathVariable String specialization, Model model) {
         List<DoctorDTO> doctors = doctorDAO.findBySpecialization(specialization);
         model.addAttribute("doctors", doctors);
         model.addAttribute("specialization", specialization);
-        return "doctor/doctors-specialization";
+        return "doctor/doctors-specialization-old";
     }
 
-    @GetMapping(SPECIALIZATIONS)
-    public String specializations(Model model) {
+    @GetMapping(SPECIALIZATIONS + "-old")
+    public String specializationsOld(Model model) {
         List<String> specializations = doctorDAO.findAll().stream()
                 .map(DoctorDTO::getTitle)
                 .distinct()
                 .toList();
         model.addAttribute("specializations", specializations);
-        return "doctor/specializations";
+        return "doctor/specializations-old";
     }
 
     @GetMapping(SHOW)

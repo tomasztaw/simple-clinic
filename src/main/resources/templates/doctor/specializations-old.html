@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+
+    <title>Specjalizacje</title>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+            <a href="/" th:href="@{/}">
+                <img th:src="@{/images/2135.jpg}" class="logo-spec" alt="Logo" title="Strona główna">
+            </a>
+
+        <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
+
+    </div>
+
+    <h1 class="mt-5 mb-4">Lista specjalizacji</h1>
+    <div class="list-group">
+        <a th:each="specialization : ${specializations}"
+           th:href="@{/doctors/specialization/__${specialization.toLowerCase()}__}"
+           class="list-group-item list-group-item-action">
+            <b><span th:text="${specialization}"></span></b>
+        </a>
+    </div>
+    <br>
+
+    <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+
+    <a class="btn btn-primary btn-lg btn-block" th:href="@{/doctors/specializations}">Nowy widok specjalizacji</a>
+
+
+</div>
+
+<div class="footer">
+    <div th:replace="~{fragments/footer.html}"></div>
+</div>
+
+</body>
+</html>

@@ -148,7 +148,6 @@ public class RegisterController {
 
         patientDAO.save(patient);
 
-
         ModelAndView modelAndView = new ModelAndView("core/registration-confirmation");
         return modelAndView;
     }
