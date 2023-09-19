@@ -19,9 +19,8 @@
     <div class="spec__container">
 
         <div class="actions__btn">
-            <button class="small-btn"><a th:href="@{/doctors/doctors-new}">Pokaż wszystkich lekarzy</a></button>
-            <button class="small-btn"><a th:href="@{/doctors/specializations-new}">Wyszukaj po specjalizacji</a>
-            </button>
+            <button class="small-btn"><a th:href="@{/doctors}">Pokaż wszystkich lekarzy</a></button>
+            <button class="small-btn"><a th:href="@{/doctors/specializations}">Wyszukaj po specjalizacji</a></button>
         </div>
 
         <h1 class="spec__h1">Lista lekarzy o specjalizacji <i><span th:text="${specialization}"></span></i></h1>
@@ -38,7 +37,9 @@
 
 
     </div>
-
+    <div class="old-view-div">
+        <button class="small-btn old-view"><a th:href="@{/doctors/specialization/__${specialization.toLowerCase()}__-old}">Stary widok</a></button>
+    </div>
 
 </div>
 
