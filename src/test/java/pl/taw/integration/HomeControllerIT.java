@@ -33,6 +33,6 @@ public class HomeControllerIT extends AbstractIT {
         String page = this.testRestTemplate.getForObject(url, String.class);
 
         // then
-        Assertions.assertThat(page).contains("Lista lekarzy");
+        Assertions.assertThat(page).contains("Zalogowany:");
     }
 }

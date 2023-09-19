@@ -5,40 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style-doctor-new.css}">
 
     <title>Specjalizacje</title>
+
+    <style>
+        .list-container {
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+            text-align: center;
+        }
+
+        .list-column {
+            width: 48%;
+            box-sizing: border-box;
+        }
+
+        .list-group-item {
+            margin-bottom: 10px;
+        }
+
+        .content-div {
+            display: flex;
+            justify-content: center;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+    </style>
 
 </head>
 <body>
 
+<div th:replace="~{fragments/header}"></div>
+
 <div class="container">
-    <div class="header">
-            <a href="/" th:href="@{/}">
-                <img th:src="@{/images/2135.jpg}" class="logo-spec" alt="Logo" title="Strona główna">
-            </a>
 
-        <a th:href="@{/}" class="btn btn-info" role="button">Strona główna</a>
-
+    <div class="content-div">
+        <div class="list-container">
+            <div class="list-column">
+                <a th:each="specialization, iterStat : ${specializations}"
+                   th:href="@{/doctors/specialization/__${specialization.toLowerCase()}__}"
+                   class="list-group-item list-group-item-action"
+                   th:if="${iterStat.index % 2 == 0}">
+                    <b><span th:text="${specialization}"></span></b>
+                </a>
+            </div>
+            <div class="list-column">
+                <a th:each="specialization, iterStat : ${specializations}"
+                   th:href="@{/doctors/specialization/__${specialization.toLowerCase()}__}"
+                   class="list-group-item list-group-item-action"
+                   th:if="${iterStat.index % 2 != 0}">
+                    <b><span th:text="${specialization}"></span></b>
+                </a>
+            </div>
+        </div>
     </div>
-
-    <h1 class="mt-5 mb-4">Lista specjalizacji</h1>
-    <div class="list-group">
-        <a th:each="specialization : ${specializations}"
-           th:href="@{/doctors/specialization/__${specialization.toLowerCase()}__}"
-           class="list-group-item list-group-item-action">
-            <b><span th:text="${specialization}"></span></b>
-        </a>
-    </div>
-    <br>
-
-    <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
 
 </div>
 
-<div class="footer">
-    <div th:replace="~{fragments/footer.html}"></div>
+<div class="old-view-div">
+    <button class="small-btn old-view"><a th:href="@{/doctors/specializations-old}">Stary widok</a></button>
 </div>
+
+<div th:replace="~{fragments/footer.html}"></div>
 
 </body>
 </html>

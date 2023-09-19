@@ -17,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ExtendedModelMap;
@@ -67,6 +68,9 @@ class DoctorControllerMockitoTest {
 
     @Mock
     private ResourceLoader resourceLoader;
+
+    @Mock
+    private Authentication authentication;
 
     private Validator validator;
 
@@ -137,7 +141,7 @@ class DoctorControllerMockitoTest {
         // when
         Set<ConstraintViolation<DoctorDTO>> violations = validator.validate(doctorDTO);
         BindingResult bindingResult = new BeanPropertyBindingResult(doctorDTO, "updateDoctor");
-        String redirectUrl = doctorController.addValidDoctor(doctorDTO, bindingResult,  request);
+        String redirectUrl = doctorController.addValidDoctor(doctorDTO, bindingResult, request);
 
         // then
         org.junit.jupiter.api.Assertions.assertTrue(violations.isEmpty());
@@ -242,19 +246,23 @@ class DoctorControllerMockitoTest {
         String specialization = "Lekarz rodzinny";
         List<DoctorDTO> expectedList = Arrays.asList(DtoFixtures.someDoctor1(), DtoFixtures.someDoctor2());
         ExtendedModelMap model = new ExtendedModelMap();
+        String username = "kacper";
 
         when(doctorDAO.findBySpecialization(specialization)).thenReturn(expectedList);
+        when(authentication.getName()).thenReturn(username);
 
         // when
-        String viewName = doctorController.doctorsBySpecializationsView(specialization, model);
+        String viewName = doctorController.doctorsBySpecializationsView(specialization, model, authentication);
 
         // then
         assertEquals("doctor/doctors-specialization", viewName);
         assertEquals(expectedList, model.getAttribute("doctors"));
         assertEquals(specialization, model.getAttribute("specialization"));
+        assertEquals(username, model.getAttribute("username"));
 
         verify(doctorDAO, times(1)).findBySpecialization(specialization);
         verify(doctorDAO, only()).findBySpecialization(specialization);
+        verify(authentication, times(1)).getName();
     }
 
     @Test
@@ -265,18 +273,22 @@ class DoctorControllerMockitoTest {
                 DtoFixtures.someDoctor1().withTitle("Dermatolog"),
                 DtoFixtures.someDoctor2(), DtoFixtures.someDoctor3());
         ExtendedModelMap model = new ExtendedModelMap();
+        String username = "kacper";
 
         when(doctorDAO.findAll()).thenReturn(expectedList);
+        when(authentication.getName()).thenReturn(username);
 
         // when
-        String viewName = doctorController.specializations(model);
+        String viewName = doctorController.specializations(model, authentication);
 
         // then
         assertEquals("doctor/specializations", viewName);
         assertEquals(expectedSpecializations, model.getAttribute("specializations"));
+        assertEquals(username, model.getAttribute("username"));
 
         verify(doctorDAO, times(1)).findAll();
         verify(doctorDAO, only()).findAll();
+        verify(authentication, times(1)).getName();
     }
 
     @Test
@@ -324,17 +336,21 @@ class DoctorControllerMockitoTest {
         // given
         List<DoctorDTO> doctors = DtoFixtures.doctors;
         ExtendedModelMap model = new ExtendedModelMap();
+        String username = "kacper";
 
         when(doctorDAO.findAll()).thenReturn(doctors);
+        when(authentication.getName()).thenReturn(username);
 
         // when
-        String result = doctorController.doctors(model);
+        String result = doctorController.doctors(model, authentication);
 
         // then
         assertEquals(doctors, model.getAttribute("doctors"));
         assertEquals("doctor/doctors-all", result);
+        assertEquals(username, model.getAttribute("username"));
 
         verify(doctorDAO, times(1)).findAll();
         verify(doctorDAO, only()).findAll();
+        verify(authentication, times(1)).getName();
     }
 }
