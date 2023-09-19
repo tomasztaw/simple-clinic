@@ -3,7 +3,7 @@ services:
   app:
     container_name: app-core
     tty: true # dodane do wyświetlania, z którego kontenera pochodzi informacja w konsoli
-    image: tomaszaleksander/simple-clinic:v1.3
+    image: tomaszaleksander/simple-clinic:v1.4
     ports:
       - "8080:8080"
     environment:
