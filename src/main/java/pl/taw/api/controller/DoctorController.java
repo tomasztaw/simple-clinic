@@ -405,7 +405,43 @@ public class DoctorController {
         String username = authentication.getName();
         model.addAttribute("username", username);
 
-        return "/doctor/doctor-schedule";
+        return "doctor/doctor-schedule";
+    }
+
+    @GetMapping(SCHEDULE + "-new")
+    public String getDoctorsSchedulesNew(@PathVariable Integer doctorId, Model model, Authentication authentication) {
+        LocalDate today = LocalDate.now();
+        String fullDate = "%s (%s)".formatted(today, WorkingHours.DayOfTheWeek.fromInt(today.getDayOfWeek().getValue()).getName());
+
+        DoctorDTO doctor = doctorDAO.findById(doctorId);
+        UserEntity user = userRepository.findByUserName(authentication.getName());
+        PatientDTO patient = patientDAO.findByEmail(user.getEmail());
+        String username = authentication.getName();
+        List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
+
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("patientId", patient.getPatientId());
+        model.addAttribute("username", username);
+
+        model.addAttribute("fullDate", fullDate);
+
+        boolean ifOk = reservationService.checkIfDoctorWorkingInRestOfThisWeek(workingHoursList);
+
+        model.addAttribute("ifOk", ifOk);
+
+
+        Map<String, WorkingHours> currentWeek = reservationService.currentWeek(workingHoursList);
+
+        model.addAttribute("currentWeek", currentWeek);
+
+        List<String> pol = reservationService.getPolNameForRestWeekDays(today, workingHoursList);
+
+        model.addAttribute("pol", pol);
+
+
+
+
+        return "doctor/doctor-schedule-new";
     }
 
     // odczytywanie plików tekstowych z opisem lekarzy -> chyba nie będzie potrzebne

@@ -9,13 +9,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.taw.api.dto.ReservationDTO;
 import pl.taw.business.dao.ReservationDAO;
+import pl.taw.util.WorkingHoursFixtures;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -139,6 +140,121 @@ class ReservationServiceMockitoTest {
 
     @Test
     void getWorkingHoursForCurrentWeek() {
+    }
+
+    @Test
+    void checkIfDoctorWorkingInRestOfThisWeekTest() {
+        // given
+        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
+        List<WorkingHours> doctorWorkingHours = List.of(
+                WorkingHoursFixtures.mondayHours(),
+                WorkingHoursFixtures.thursdayHours(),
+                WorkingHoursFixtures.fridayHours()
+        );
+
+        // when
+        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
+
+        // then
+        assertTrue(result);
+    }
+
+    @Test
+    void checkIfDoctorWorkingInRestOfThisWeekTest2() {
+        // given
+        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
+        List<WorkingHours> doctorWorkingHours = List.of(
+                WorkingHoursFixtures.mondayHours(),
+                WorkingHoursFixtures.thursdayHours()
+        );
+
+        // when
+        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
+
+        // then
+        assertTrue(result);
+    }
+
+    @Test
+    void checkIfDoctorWorkingInRestOfThisWeekTest3() {
+        // given
+        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
+        int todayNum = today.getDayOfWeek().getValue(); // 3
+        List<WorkingHours> doctorWorkingHours = List.of(
+                WorkingHoursFixtures.mondayHours()
+        );
+
+        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
+
+        // when
+        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
+
+        // then
+        assertFalse(result);
+    }
+
+    @Test
+    void checkIfDoctorWorkingInRestOfThisWeekTest4() {
+        // given
+        LocalDate today = LocalDate.of(2023,9, 18); // monday
+        int todayNum = today.getDayOfWeek().getValue(); // 3
+        List<WorkingHours> doctorWorkingHours = List.of(
+                WorkingHoursFixtures.mondayHours()
+        );
+
+        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
+
+        // when
+        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
+
+        // then
+        assertFalse(result);
+    }
+
+    @Test
+    void checkIfDoctorWorkingInRestOfThisWeekTest5() {
+        // given
+        LocalDate today = LocalDate.of(2023,9, 18); // monday
+        int todayNum = today.getDayOfWeek().getValue(); // 3
+        List<WorkingHours> doctorWorkingHours = List.of(
+                WorkingHoursFixtures.mondayHours(),
+                WorkingHoursFixtures.fridayHours()
+        );
+
+        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
+        List<Integer> daysNums = doctorWorkingHours.stream().map(day -> day.getDayOfTheWeek().getNumber()).toList();
+        long count = daysNums.stream().filter(num -> num > todayNum).count();
+
+        // when
+        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
+
+        // then
+        assertTrue(result);
+        assertEquals(Arrays.asList(1, 5), daysNums);
+        assertEquals(1, count);
+    }
+
+    @Test
+    void checkIfDoctorWorkingInRestOfThisWeekTest6() {
+        // given
+        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
+        int todayNum = today.getDayOfWeek().getValue(); // 3
+        List<WorkingHours> doctorWorkingHours = List.of(
+                WorkingHoursFixtures.mondayHours(),
+                WorkingHoursFixtures.fridayHours()
+        );
+
+        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
+        List<Integer> daysNums = doctorWorkingHours.stream().map(day -> day.getDayOfTheWeek().getNumber()).toList();
+        long count = daysNums.stream().filter(num -> num > todayNum).count();
+
+        // when
+        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
+
+        // then
+        assertTrue(result);
+        assertEquals(Arrays.asList(1, 5), daysNums);
+        assertEquals(1, count);
     }
 
 }

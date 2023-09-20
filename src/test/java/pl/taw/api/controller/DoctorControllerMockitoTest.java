@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -353,4 +352,6 @@ class DoctorControllerMockitoTest {
         verify(doctorDAO, only()).findAll();
         verify(authentication, times(1)).getName();
     }
+
+
 }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Doctor Schedule</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style-doctor.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style-doctor-new.css}">
+
+
+</head>
+<body>
+
+<div th:replace="~{fragments/header}"></div>
+
+<div class="container">
+    <h2>Doctor</h2>
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>Id</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Specjalizacja</th>
+            <th>e-mail</th>
+        </tr>
+        <tr>
+            <td th:text="${doctor.doctorId}"></td>
+            <td th:text="${doctor.name}"></td>
+            <td th:text="${doctor.surname}"></td>
+            <td th:text="${doctor.title}"></td>
+            <td th:text="${doctor.email}"></td>
+        </tr>
+    </table>
+
+    <div class="media">
+        <div class="photo-container">
+            <img th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'} ? @{'/images/d' + ${doctor.doctorId} + '.jpeg'} : @{'/images/default.png'}"
+                 alt="Opis zdjęcia">
+        </div>
+
+        <div class="media-body">
+            <h1>Dostępne terminy:</h1>
+
+            <p>Dzisiaj jest: <span th:text="${fullDate}"></span>
+                , czy lekarz pracuje jeszcze w tym tygodniu: <span th:text="${ifOk ? 'TAK' : 'NIE'}"></span>
+                , pozostałe dni to <span th:text="${pol}"></span>
+            </p>
+
+            <ul>
+                <li th:each="entry : ${currentWeek}">
+                    <h3 th:text="${entry.key}"></h3>
+                    <p>Godziny pracy <span th:text="${entry.value.startTime + ' - ' + entry.value.endTime}"></span></p>
+                    <p>Dostępne terminy:</p>
+                    <ul>
+                        <li>
+                            <ul th:each="workingHours : ${entry.value}">
+                                <div class="row" style="display: flex;">
+                                    <li th:each="time : ${workingHours.appointmentTimes}" style="margin-right: 10px;">
+                                        <span th:text="${time}"></span>
+                                        <form th:action="@{/reservations/add/{doctorId}/{patientId}/{day}/{startTimeR}(doctorId=${doctor.doctorId}, patientId=${patientId}, day=${entry.key.substring(entry.key.indexOf(' ')+1)}, startTimeR=${time})}"
+                                              method="post">
+                                            <button type="submit" class="btn btn-primary">Rezerwuj</button>
+                                        </form>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+                        <hr>
+                    </ul>
+                </li>
+            </ul>
+            <div>
+                <button>Następny tydzień</button>
+            </div>
+
+
+            <!--            <ul>-->
+            <!--                <li th:each="entry : ${simpleMap}">-->
+            <!--                    <h3 th:text="${entry.key}"></h3>-->
+
+            <!--                    <p>Godziny pracy <span th:text="${entry.value.startTime + ' - ' + entry.value.endTime}"></span></p>-->
+
+            <!--                    <p>Dostępne terminy:</p>-->
+
+            <!--                    <ul>-->
+            <!--                        <li>-->
+            <!--                            <ul th:each="workingHours : ${entry.value}">-->
+            <!--                                <div class="row" style="display: flex;">-->
+            <!--                                    <li th:each="time : ${workingHours.appointmentTimes}" style="margin-right: 10px;">-->
+            <!--                                        <span th:text="${time}"></span>-->
+            <!--                                        <form th:action="@{/reservations/add/{doctorId}/{patientId}/{day}/{startTimeR}(doctorId=${doctor.doctorId}, patientId=${patientId}, day=${entry.key.substring(entry.key.indexOf(' ')+1)}, startTimeR=${time})}"-->
+            <!--                                              method="post">-->
+            <!--                                            <button type="submit" class="btn btn-primary">Rezerwuj</button>-->
+            <!--                                        </form>-->
+            <!--                                    </li>-->
+            <!--                                </div>-->
+            <!--                            </ul>-->
+            <!--                        </li>-->
+            <!--                        <hr>-->
+            <!--                    </ul>-->
+            <!--                </li>-->
+            <!--            </ul>-->
+        </div>
+    </div>
+
+    <div class="actions">
+        <a th:href="@{/opinions/doctor/{doctorId}(doctorId=${doctorId})}" class="btn btn-primary btn-lg">Opinie</a>
+        <button class="btn btn-primary" onclick="history.go(-1);">Powrót</button>
+    </div>
+
+    <a class="btn btn-light" th:href="@{/doctors}">Pokaż wszystkich lekarzy</a>
+
+</div>
+
+<div th:replace="~{fragments/footer.html}"></div>
+
+</body>
+</html>
