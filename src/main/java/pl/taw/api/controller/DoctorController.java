@@ -408,38 +408,31 @@ public class DoctorController {
         return "doctor/doctor-schedule";
     }
 
+    // nowe wyświetlanie widoku
     @GetMapping(SCHEDULE + "-new")
     public String getDoctorsSchedulesNew(@PathVariable Integer doctorId, Model model, Authentication authentication) {
-        LocalDate today = LocalDate.now();
-        String fullDate = "%s (%s)".formatted(today, WorkingHours.DayOfTheWeek.fromInt(today.getDayOfWeek().getValue()).getName());
-
         DoctorDTO doctor = doctorDAO.findById(doctorId);
         UserEntity user = userRepository.findByUserName(authentication.getName());
         PatientDTO patient = patientDAO.findByEmail(user.getEmail());
         String username = authentication.getName();
         List<WorkingHours> workingHoursList = doctorService.getWorkingHours(doctorId);
+        List<ReservationDTO> allReservationsByDoctor = reservationService.findAllReservationsByDoctor(doctorId);
 
         model.addAttribute("doctor", doctor);
         model.addAttribute("patientId", patient.getPatientId());
         model.addAttribute("username", username);
 
-        model.addAttribute("fullDate", fullDate);
+        boolean ifDoctorWorkCurrentWeek = reservationService.checkIfDoctorWorkingInRestOfThisWeek(workingHoursList);
+        model.addAttribute("ifDoctorWorkCurrentWeek", ifDoctorWorkCurrentWeek);
+        if (ifDoctorWorkCurrentWeek) {
+            Map<String, WorkingHours> currentWeek = reservationService.currentWeek(workingHoursList);
+            currentWeek = reservationService.afterCheck(currentWeek, allReservationsByDoctor);
+            model.addAttribute("currentWeek", currentWeek);
+        }
 
-        boolean ifOk = reservationService.checkIfDoctorWorkingInRestOfThisWeek(workingHoursList);
-
-        model.addAttribute("ifOk", ifOk);
-
-
-        Map<String, WorkingHours> currentWeek = reservationService.currentWeek(workingHoursList);
-
-        model.addAttribute("currentWeek", currentWeek);
-
-        List<String> pol = reservationService.getPolNameForRestWeekDays(today, workingHoursList);
-
-        model.addAttribute("pol", pol);
-
-
-
+        Map<String, WorkingHours> nextWeek = reservationService.nextWeek(workingHoursList);
+        nextWeek = reservationService.afterCheck(nextWeek, allReservationsByDoctor);
+        model.addAttribute("nextWeek", nextWeek);
 
         return "doctor/doctor-schedule-new";
     }

@@ -233,7 +233,7 @@ footer {
 }
 
 
-/* Pagination links */
+/* Pagination */
 .pagination a {
   color: black;
   float: left;
@@ -242,13 +242,11 @@ footer {
   transition: background-color .3s;
 }
 
-/* Style the active/current link */
 .pagination a.active {
   background-color: dodgerblue;
   color: white;
 }
 
-/* Add a grey background color on mouse-over */
 .pagination a:hover:not(.active) {background-color: #ddd;}
 
 .pagination-container {
@@ -262,3 +260,21 @@ footer {
         pointer-events: none;
         color: #999;
     }
+
+/* rezerwacje */
+
+.photo-container-res {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.photo-container-res img {
+  width: 150px;
+  height: 210px;
+  object-fit: cover;
+  object-position: top;
+  margin-right: 20px;
+  border-radius: 8px;
+}

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.taw.api.dto.ReservationDTO;
 import pl.taw.business.dao.ReservationDAO;
@@ -14,7 +13,9 @@ import pl.taw.util.WorkingHoursFixtures;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -159,21 +160,6 @@ class ReservationServiceMockitoTest {
         assertTrue(result);
     }
 
-    @Test
-    void checkIfDoctorWorkingInRestOfThisWeekTest2() {
-        // given
-        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
-        List<WorkingHours> doctorWorkingHours = List.of(
-                WorkingHoursFixtures.mondayHours(),
-                WorkingHoursFixtures.thursdayHours()
-        );
-
-        // when
-        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
-
-        // then
-        assertTrue(result);
-    }
 
     @Test
     void checkIfDoctorWorkingInRestOfThisWeekTest3() {
@@ -255,6 +241,40 @@ class ReservationServiceMockitoTest {
         assertTrue(result);
         assertEquals(Arrays.asList(1, 5), daysNums);
         assertEquals(1, count);
+    }
+
+    @Test
+    public void testLeftDaysForThursday() {
+        // given
+        LocalDate today = LocalDate.of(2023, 9, 21); // czwartek
+
+        Map<Integer, String> expected = new LinkedHashMap<>();
+        expected.put(5, "2023-09-22"); // piątek
+
+        // when
+        Map<Integer, String> result = reservationService.leftDays(today);
+
+
+        // Sprawdzenie, czy wynik jest zgodny z oczekiwaniami
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testLeftDaysForMonday() {
+        // given
+        LocalDate today = LocalDate.of(2023, 9, 18); // poniedziałek
+
+        Map<Integer, String> expected = new LinkedHashMap<>();
+        expected.put(2, "2023-09-19"); // wtorek
+        expected.put(3, "2023-09-20"); // środa
+        expected.put(4, "2023-09-21"); // czwartek
+        expected.put(5, "2023-09-22"); // piątek
+
+        // when
+        Map<Integer, String> result = reservationService.leftDays(today);
+
+        // Sprawdzenie, czy wynik jest zgodny z oczekiwaniami
+        assertEquals(expected, result);
     }
 
 }

@@ -195,7 +195,6 @@ public class ReservationService {
                 return answer;
             }
         }
-        // zwróć najbliższy dostępny dzień z terminami
         return "Lekarz nie pracuje dzisiaj";
     }
 
@@ -256,7 +255,6 @@ public class ReservationService {
         for (int i = 0; i < 5; i++) {
             LocalDate day = nextMonday.plusDays(i);
             weekDaysList.add(day);
-//            weekDaysMap.put(day.getDayOfWeek().toString(), day);
             weekDaysMap.put(WorkingHours.DayOfTheWeek.fromInt(day.getDayOfWeek().getValue()).getName(), day);
             for (WorkingHours hours : doctorWorkingHours) {
                 if (day.getDayOfWeek().getValue() == hours.getDayOfTheWeek().getNumber()) {
@@ -316,23 +314,73 @@ public class ReservationService {
 
     public Map<String, WorkingHours> currentWeek(List<WorkingHours> doctorWorkingHours) {
         LocalDate today = LocalDate.now();
-
-        List<String> nextDaysPolName = this.getPolNameForRestWeekDays(today, doctorWorkingHours);
-
-        Map<Integer, String> currentAlternative = this.leftDays(today);
+        Map<Integer, String> currentWeekDaysNumAndDate = this.leftDays(today);
 
         List<WorkingHours> workingHoursList = this.workingHoursForRestWeek(today, doctorWorkingHours);
 
-        List<String> fullDateAlt = this.getFullDAte(currentAlternative, workingHoursList);
+        List<String> fullDate = this.getFullDAte(currentWeekDaysNumAndDate, workingHoursList);
 
-        Map<String, WorkingHours> resultAlt = IntStream.range(0, Math.min(workingHoursList.size(), fullDateAlt.size()))
+        Map<String, WorkingHours> result = IntStream.range(0, Math.min(workingHoursList.size(), fullDate.size()))
                 .boxed()
-                .collect(Collectors.toMap(fullDateAlt::get,
-                        workingHoursList::get,
-                        (a, b) -> b,
-                        LinkedHashMap::new));
+                .collect(Collectors.toMap(fullDate::get, workingHoursList::get,
+                        (a, b) -> b, LinkedHashMap::new));
 
-        return resultAlt;
+        return result;
+    }
+
+    public Map<String, WorkingHours> nextWeek(List<WorkingHours> doctorWorkingHours) {
+        LocalDate today = LocalDate.now();
+        Map<String, LocalDate> nextWeekLeftDays = new LinkedHashMap<>();
+        LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+
+        List<LocalDate> weekDaysList = new ArrayList<>();
+        Map<Integer, String> weekDaysMap = new HashMap<>();
+
+        for (int i = 0; i < 5; i++) {
+            LocalDate day = nextMonday.plusDays(i);
+            weekDaysList.add(day);
+            weekDaysMap.put(day.getDayOfWeek().getValue(), day.toString());
+            for (WorkingHours hours : doctorWorkingHours) {
+                if (day.getDayOfWeek().getValue() == hours.getDayOfTheWeek().getNumber()) {
+                    nextWeekLeftDays.put(WorkingHours.DayOfTheWeek.fromInt(day.getDayOfWeek().getValue()).getName(), day);
+                }
+            }
+        }
+
+        List<String> fullDate = this.getFullDAte(weekDaysMap, doctorWorkingHours);
+
+        Map<String, WorkingHours> resultMap = IntStream.range(0, Math.min(doctorWorkingHours.size(), fullDate.size()))
+                .boxed()
+                .collect(Collectors.toMap(fullDate::get, doctorWorkingHours::get, (a, b) -> b, LinkedHashMap::new));
+
+        return resultMap;
+    }
+
+    public Map<String, WorkingHours> afterCheck(Map<String, WorkingHours> map, List<ReservationDTO> reservations) {
+        Map<String, WorkingHours> resultMap = new LinkedHashMap<>(map);
+        List<LocalDateTime> listOfRes = reservations.stream().map(item -> LocalDateTime.of(item.getDay(), item.getStartTimeR())).toList();
+
+        for (Map.Entry<String, WorkingHours> entry : map.entrySet()) {
+            String date = entry.getKey().substring(entry.getKey().indexOf(" ") + 1);
+            WorkingHours workingHours = entry.getValue();
+            List<String> times = workingHours.getAppointmentTimes();
+            List<String> availableTimes = new ArrayList<>();
+            for (String time : times) {
+                LocalDateTime forCheck = LocalDateTime.parse(date + " " + time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                if (!listOfRes.contains(forCheck)) {
+                    availableTimes.add(time);
+                }
+            }
+            if (!availableTimes.isEmpty()) {
+                WorkingHours updatedWorkingHours = new WorkingHours();
+                updatedWorkingHours.setStartTime(workingHours.getStartTime());
+                updatedWorkingHours.setEndTime(workingHours.getEndTime());
+                updatedWorkingHours.setAppointmentTimes(availableTimes);
+                resultMap.put(entry.getKey(), updatedWorkingHours);
+            }
+        }
+
+        return resultMap;
     }
 
     public List<String> getFullDAte(Map<Integer, String> currentWeekDays, List<WorkingHours> workingHoursList) {
@@ -345,16 +393,13 @@ public class ReservationService {
                 .toList();
     }
 
-    public List<WorkingHours> workingHoursForRestWeek(
-            LocalDate today, List<WorkingHours> doctorWorkingHours) {
+    public List<WorkingHours> workingHoursForRestWeek(LocalDate today, List<WorkingHours> doctorWorkingHours) {
         return doctorWorkingHours.stream()
                 .filter(day -> day.getDayOfTheWeek().getNumber() > today.getDayOfWeek().getValue())
                 .toList();
     }
 
-    public List<String> getPolNameForRestWeekDays(
-            LocalDate today, List<WorkingHours> doctorWorkingHours
-    ) {
+    public List<String> getPolNameForRestWeekDays(LocalDate today, List<WorkingHours> doctorWorkingHours) {
         return doctorWorkingHours.stream()
                 .map(WorkingHours::getDayOfTheWeek)
                 .dropWhile(day -> day.getNumber() <= today.getDayOfWeek().getValue())
