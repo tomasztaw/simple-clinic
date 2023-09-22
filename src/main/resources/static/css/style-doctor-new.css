@@ -89,7 +89,7 @@ body {
 .foto-container {
     display: inline-flex;
     padding: 5px;
-    margin-left: 350px;
+    margin: 10px auto;
     min-width: 600px;
     max-width: 1200px;
     flex-wrap: wrap;
@@ -171,6 +171,10 @@ body {
 
 .container {
     margin-bottom: 150px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* nowa stopka */

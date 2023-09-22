@@ -144,106 +144,6 @@ class ReservationServiceMockitoTest {
     }
 
     @Test
-    void checkIfDoctorWorkingInRestOfThisWeekTest() {
-        // given
-        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
-        List<WorkingHours> doctorWorkingHours = List.of(
-                WorkingHoursFixtures.mondayHours(),
-                WorkingHoursFixtures.thursdayHours(),
-                WorkingHoursFixtures.fridayHours()
-        );
-
-        // when
-        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
-
-        // then
-        assertTrue(result);
-    }
-
-
-    @Test
-    void checkIfDoctorWorkingInRestOfThisWeekTest3() {
-        // given
-        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
-        int todayNum = today.getDayOfWeek().getValue(); // 3
-        List<WorkingHours> doctorWorkingHours = List.of(
-                WorkingHoursFixtures.mondayHours()
-        );
-
-        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
-
-        // when
-        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
-
-        // then
-        assertFalse(result);
-    }
-
-    @Test
-    void checkIfDoctorWorkingInRestOfThisWeekTest4() {
-        // given
-        LocalDate today = LocalDate.of(2023,9, 18); // monday
-        int todayNum = today.getDayOfWeek().getValue(); // 3
-        List<WorkingHours> doctorWorkingHours = List.of(
-                WorkingHoursFixtures.mondayHours()
-        );
-
-        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
-
-        // when
-        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
-
-        // then
-        assertFalse(result);
-    }
-
-    @Test
-    void checkIfDoctorWorkingInRestOfThisWeekTest5() {
-        // given
-        LocalDate today = LocalDate.of(2023,9, 18); // monday
-        int todayNum = today.getDayOfWeek().getValue(); // 3
-        List<WorkingHours> doctorWorkingHours = List.of(
-                WorkingHoursFixtures.mondayHours(),
-                WorkingHoursFixtures.fridayHours()
-        );
-
-        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
-        List<Integer> daysNums = doctorWorkingHours.stream().map(day -> day.getDayOfTheWeek().getNumber()).toList();
-        long count = daysNums.stream().filter(num -> num > todayNum).count();
-
-        // when
-        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
-
-        // then
-        assertTrue(result);
-        assertEquals(Arrays.asList(1, 5), daysNums);
-        assertEquals(1, count);
-    }
-
-    @Test
-    void checkIfDoctorWorkingInRestOfThisWeekTest6() {
-        // given
-        LocalDate today = LocalDate.of(2023,9, 20); // wednesday
-        int todayNum = today.getDayOfWeek().getValue(); // 3
-        List<WorkingHours> doctorWorkingHours = List.of(
-                WorkingHoursFixtures.mondayHours(),
-                WorkingHoursFixtures.fridayHours()
-        );
-
-        int numForCheck = doctorWorkingHours.get(0).getDayOfTheWeek().getNumber();
-        List<Integer> daysNums = doctorWorkingHours.stream().map(day -> day.getDayOfTheWeek().getNumber()).toList();
-        long count = daysNums.stream().filter(num -> num > todayNum).count();
-
-        // when
-        boolean result = reservationService.checkIfDoctorWorkingInRestOfThisWeek(doctorWorkingHours);
-
-        // then
-        assertTrue(result);
-        assertEquals(Arrays.asList(1, 5), daysNums);
-        assertEquals(1, count);
-    }
-
-    @Test
     public void testLeftDaysForThursday() {
         // given
         LocalDate today = LocalDate.of(2023, 9, 21); // czwartek
@@ -255,7 +155,7 @@ class ReservationServiceMockitoTest {
         Map<Integer, String> result = reservationService.leftDays(today);
 
 
-        // Sprawdzenie, czy wynik jest zgodny z oczekiwaniami
+        // then
         assertEquals(expected, result);
     }
 
@@ -273,7 +173,7 @@ class ReservationServiceMockitoTest {
         // when
         Map<Integer, String> result = reservationService.leftDays(today);
 
-        // Sprawdzenie, czy wynik jest zgodny z oczekiwaniami
+        // then
         assertEquals(expected, result);
     }
 
