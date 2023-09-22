@@ -28,8 +28,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
+                <a class="nav-link" href="#">Baza</a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link" href="#">Rezerwacje</a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="#">Pacjenci</a>
             </li>
@@ -41,12 +46,13 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Opinie</a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="javascript:history.go(-1);">Powrót</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Wyloguj</a>
+                <a class="nav-link" th:href="@{/logout}">Wyloguj</a>
             </li>
         </ul>
     </div>
@@ -55,6 +61,7 @@
 <!-- Treść panelu lekarza -->
 <div class="container mt-4">
     <h1>Witaj, Dr Adam Adamowicz!</h1>
+<!--    <h1>Witaj, Dr <span th:text="${name}"></span> <span th:text="${surname}"></span></h1>-->
     <p>To jest twój panel lekarza. Tutaj możesz zarządzać pacjentami, planować wizyty i wiele innych.</p>
 
     <h2>Lista Pacjentów</h2>

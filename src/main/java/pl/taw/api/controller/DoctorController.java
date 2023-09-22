@@ -76,6 +76,11 @@ public class DoctorController {
         return "doctor/doctor-dashboard";
     }
 
+    @GetMapping(DASHBOARD + "-new")
+    public String showDoctorDashboardNew() {
+        return "doctor/doctor-dashboard-new";
+    }
+
     @GetMapping
     public String doctors(Model model, Authentication authentication) {
         List<DoctorDTO> doctors = doctorDAO.findAll();

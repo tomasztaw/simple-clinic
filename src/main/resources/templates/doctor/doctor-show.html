@@ -29,8 +29,10 @@
 
     <div class="media">
         <div class="photo-container">
-            <img th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'} ? @{'/images/d' + ${doctor.doctorId} + '.jpeg'} : @{'/images/default.png'}"
+            <img th:src="@{'/images/d' + ${doctor.doctorId} + '.jpeg'} ? @{'/images/d' + ${doctor.doctorId} + '.jpeg'} : @{/images/default.png}"
                  alt="Opis zdjęcia">
+
+
         </div>
 
         <div class="media-body">

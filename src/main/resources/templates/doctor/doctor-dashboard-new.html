@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Lekarza</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<!-- Nawigacja -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand" href="#">Panel Lekarza</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Baza</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#reservations">Rezerwacje</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#patients">Pacjenci</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">Wizyty</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#opinions">Opinie</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:history.go(-1);">Powrót</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">Wyloguj</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+    <div class="container mt-4">
+        <h1>Witaj, Dr Adam Adamowicz!</h1>
+            <h1>Witaj, Dr <span th:text="${name}"></span> <span th:text="${surname}"></span></h1>
+
+        <p>To jest twój panel lekarza. Tutaj możesz zarządzać pacjentami, planować wizyty i wiele innych.</p>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="patients-tab" data-toggle="tab" href="#patients" role="tab" aria-controls="patients" aria-selected="true">Pacjenci</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="reservations-tab" data-toggle="tab" href="#reservations" role="tab" aria-controls="reservations" aria-selected="false">Rezerwacje</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="opinions-tab" data-toggle="tab" href="#opinions" role="tab" aria-controls="opinions" aria-selected="false">Opinie</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="visits-tab" data-toggle="tab" href="#visits" role="tab" aria-controls="visits" aria-selected="false">Wizyty</a>
+            </li>
+
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <!-- Zakładka Pacjenci -->
+            <div class="tab-pane fade show active" id="patients" role="tabpanel" aria-labelledby="patients-tab">
+                <h2>Lista Pacjentów</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Data Urodzenia</th>
+                        <th>Akcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Anna</td>
+                        <td>Kowalska</td>
+                        <td>1980-05-15</td>
+                        <td>
+                            <button class="btn btn-primary">Edytuj</button>
+                            <button class="btn btn-primary">Historia pacjenta</button>
+                            <button class="btn btn-danger">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Jan</td>
+                        <td>Nowak</td>
+                        <td>1975-09-22</td>
+                        <td>
+                            <button class="btn btn-primary">Edytuj</button>
+                            <button class="btn btn-primary">Historia pacjenta</button>
+                            <button class="btn btn-danger">Usuń</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Alina</td>
+                        <td>Malina</td>
+                        <td>1982-07-10</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="btn btn-primary">Edytuj</button>
+                                    <button class="btn btn-primary">Historia pacjenta</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-danger">Usuń</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+
+            <!-- Zakładka Rezerwacje -->
+            <div class="tab-pane fade" id="reservations" role="tabpanel" aria-labelledby="reservations-tab">
+                <h2>Lista Rezerwacji</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Id rezerwacji</th>
+                        <th>Data</th>
+                        <th>Dzień tygodnia</th>
+                        <th>Godzina</th>
+                        <th>Pacjent</th>
+                        <th>Akcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>10</td>
+                        <td>2023-09-04</td>
+                        <td>Poniedziałek</td>
+                        <td>10:00</td>
+                        <td>Lucjan Pawłowski</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="btn btn-primary">Edytuj</button>
+                                    <button class="btn btn-primary">Historia pacjenta</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-danger">Usuń</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+
+            <!-- Zakładka Opinie -->
+            <div class="tab-pane fade" id="opinions" role="tabpanel" aria-labelledby="opinions-tab">
+                <h2>Opinie pacjentów</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Id opinii</th>
+                        <th>Treść</th>
+                        <th>Akcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>22</td>
+                        <td>Jak najbardziej polecam</td>
+                        <td>
+                            <div>
+                                <button class="btn btn-primary">Pokaż szczegóły</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Zakładka Wizyty -->
+            <div class="tab-pane fade" id="visits" role="tabpanel" aria-labelledby="visits-tab">
+                <h2>Wizyty</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Id wizyty</th>
+                        <th>Data</th>
+                        <th>Dzień tygodnia</th>
+                        <th>Godzina</th>
+                        <th>Pacjent</th>
+                        <th>Akcje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>18</td>
+                        <td>2023-09-01</td>
+                        <td>Piątek</td>
+                        <td>12:30</td>
+                        <td>Pankracy Pilny</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="btn btn-primary">Edytuj</button>
+                                    <button class="btn btn-primary">Historia pacjenta</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-danger">Usuń</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+<!-- Przyciski nawigacyjne -->
+<div class="mt-3">
+    <button class="btn btn-primary" onclick="showPatients()">Pacjenci</button>
+    <button class="btn btn-primary" onclick="showReservations()">Rezerwacje</button>
+    <button class="btn btn-primary" onclick="showOpinions()">Opinie</button>
+    <button class="btn btn-primary" onclick="showVisits()">Wizyty</button>
+</div>
+
+
+<script>
+    function showPatients() {
+        $('#myTab a[href="#patients"]').tab('show');
+    }
+
+    function showReservations() {
+        $('#myTab a[href="#reservations"]').tab('show');
+    }
+
+    function showOpinions() {
+        $('#myTab a[href="#opinions"]').tab('show');
+    }
+
+    function showVisits() {
+        $('#myTab a [href="#visits"]').tab('show');
+    }
+</script>
+
+</body>
+</html>
