@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
@@ -54,4 +55,8 @@ public class VisitService {
         Pageable pageable = PageRequest.of(page, size, sort);
         return visitDAO.findAll(pageable);
     }
+
+
+
+
 }

@@ -2,6 +2,7 @@ package pl.taw.business.dao;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.infrastructure.database.entity.VisitEntity;
 
@@ -28,5 +29,8 @@ public interface VisitDAO {
     List<VisitDTO> findAllByPatient(Integer patientId);
 
     List<VisitDTO> findAllForBoth(Integer doctorId, Integer patientId);
+
+    List<PatientDTO> findAllThisDoctorPatients(Integer doctorId);
+
 
 }

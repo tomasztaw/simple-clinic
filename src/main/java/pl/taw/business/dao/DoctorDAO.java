@@ -3,6 +3,7 @@ package pl.taw.business.dao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface DoctorDAO {
 
     DoctorEntity findEntityById(Integer doctorId);
 
+    DoctorDTO findByEmail(String email);
+
     DoctorEntity saveAndReturn(DoctorEntity doctorEntity);
 
     void save(DoctorEntity doctorEntity);
@@ -28,4 +31,5 @@ public interface DoctorDAO {
     List<DoctorDTO> findBySpecialization(String specialization);
 
     List<String> findAllSpecializations();
+
 }

@@ -9,7 +9,10 @@ import pl.taw.infrastructure.database.entity.PatientEntity;
 import pl.taw.infrastructure.database.repository.jpa.PatientJpaRepository;
 import pl.taw.infrastructure.database.repository.mapper.PatientMapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -89,5 +92,18 @@ public class PatientRepository implements PatientDAO {
     @Override
     public void delete(PatientEntity patientEntity) {
         patientJpaRepository.delete(patientEntity);
+    }
+
+    @Override
+    public Map<Integer, String> getPatientsFullNamesByIdAll() {
+        return patientJpaRepository.findAll().stream()
+                .collect(Collectors.toMap(
+                        PatientEntity::getPatientId,
+                        val -> val.getName().concat(" ").concat(val.getSurname())));
+    }
+
+    @Override
+    public Map<Integer, String> getPatientsFullNamesByIdForDoctor(Integer doctorId) {
+        return null;
     }
 }

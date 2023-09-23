@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.api.dto.VisitDTO;
 import pl.taw.business.dao.VisitDAO;
 import pl.taw.domain.exception.NotFoundException;
@@ -87,6 +88,22 @@ public class VisitRepository implements VisitDAO {
         return visitJpaRepository.findAll().stream()
                 .filter(visit -> doctorId.equals(visit.getDoctorId()) && patientId.equals(visit.getPatientId()))
                 .map(visitMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
+    public List<PatientDTO> findAllThisDoctorPatients(Integer doctorId) {
+        return visitJpaRepository.findAll().stream()
+                .filter(visit -> doctorId.equals(visit.getDoctorId()))
+                .map(visit -> PatientDTO.builder()
+                        .patientId(visit.getPatientId())
+                        .name(visit.getPatient().getName())
+                        .surname(visit.getPatient().getSurname())
+                        .pesel(visit.getPatient().getPesel())
+                        .phone(visit.getPatient().getPhone())
+                        .email(visit.getPatient().getEmail())
+                        .build())
+                .distinct()
                 .toList();
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import pl.taw.api.dto.DoctorDTO;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.domain.exception.NotFoundException;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
@@ -59,6 +60,16 @@ public class DoctorRepository implements DoctorDAO {
     }
 
     @Override
+    public DoctorDTO findByEmail(String email) {
+        return doctorJpaRepository.findAll().stream()
+                .filter(doctor -> email.equals(doctor.getEmail()))
+                .findFirst()
+                .map(doctorMapper::mapFromEntity)
+                .orElseThrow(() -> new NotFoundException(
+                        "Could not fount doctorEntity with email: [%s]".formatted(email)));
+    }
+
+    @Override
     public DoctorEntity saveAndReturn(DoctorEntity doctorEntity) {
         return doctorJpaRepository.saveAndFlush(doctorEntity);
     }
@@ -89,4 +100,5 @@ public class DoctorRepository implements DoctorDAO {
         Page<DoctorEntity> doctorPage = doctorJpaRepository.findAll(pageable);
         return doctorPage.map(doctorMapper::mapFromEntity);
     }
+
 }

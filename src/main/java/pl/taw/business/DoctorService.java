@@ -8,8 +8,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.DoctorScheduleDTO;
+import pl.taw.api.dto.PatientDTO;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.DoctorScheduleDAO;
+import pl.taw.business.dao.VisitDAO;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +25,8 @@ public class DoctorService {
     private final DoctorDAO doctorDAO;
 
     private final DoctorScheduleDAO doctorScheduleDAO;
+
+    private final VisitDAO visitDAO;
 
     public List<DoctorDTO> getDoctorsBySpecialization(String specialization) {
         return doctorDAO.findBySpecialization(specialization);
@@ -77,5 +81,9 @@ public class DoctorService {
         Sort sort = Sort.by("doctorId").ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
         return doctorDAO.findAll(pageable);
+    }
+
+    public List<PatientDTO> patientsForThisDoctorList(Integer doctorId) {
+        return visitDAO.findAllThisDoctorPatients(doctorId);
     }
 }

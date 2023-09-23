@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -24,7 +25,9 @@ import pl.taw.business.WorkingHours;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
+import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
+import pl.taw.infrastructure.security.ClinicUserDetailsService;
 import pl.taw.infrastructure.security.UserEntity;
 import pl.taw.infrastructure.security.UserRepository;
 
@@ -36,10 +39,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping(DoctorController.DOCTORS)
@@ -68,6 +68,7 @@ public class DoctorController {
     private final PatientDAO patientDAO;
     private final UserRepository userRepository;
     private final OpinionDAO opinionDAO;
+    private final VisitDAO visitDAO;
     private final ResourceLoader resourceLoader;
 
     // TODO do rozbudowanie i przetestowania
@@ -77,7 +78,21 @@ public class DoctorController {
     }
 
     @GetMapping(DASHBOARD + "-new")
-    public String showDoctorDashboardNew() {
+    public String showDoctorDashboardNew(Model model, Authentication authentication) {
+        ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
+        String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
+        DoctorDTO doctor = doctorDAO.findByEmail(userEmail);
+        model.addAttribute("doctor", doctor);
+
+        List<ReservationDTO> reservations = reservationService.findAllReservationsByDoctor(doctor.getDoctorId());
+        model.addAttribute("reservations", reservations);
+
+        List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctor.getDoctorId());
+        model.addAttribute("opinions", opinions);
+
+        List<VisitDTO> visits = visitDAO.findAllByDoctor(doctor.getDoctorId());
+        model.addAttribute("visits", visits);
+
         return "doctor/doctor-dashboard-new";
     }
 
@@ -193,7 +208,6 @@ public class DoctorController {
         try {
             Resource doctorResource = resourceLoader.getResource(doctorDescFile);
             Resource defaultResource = resourceLoader.getResource(defaultDescription);
-
             String description;
             if (doctorResource.exists()) {
                 description = new String(doctorResource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);

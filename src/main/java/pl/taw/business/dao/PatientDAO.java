@@ -4,6 +4,7 @@ import pl.taw.api.dto.PatientDTO;
 import pl.taw.infrastructure.database.entity.PatientEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PatientDAO {
 
@@ -25,4 +26,7 @@ public interface PatientDAO {
 
     void saveForUpdateContact(PatientEntity patientEntity);
 
+    Map<Integer, String> getPatientsFullNamesByIdAll();
+
+    Map<Integer, String> getPatientsFullNamesByIdForDoctor(Integer doctorId);
 }

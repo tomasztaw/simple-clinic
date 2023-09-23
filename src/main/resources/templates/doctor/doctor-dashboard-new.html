@@ -17,6 +17,7 @@
 <!-- Nawigacja -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
+    <a class="navbar-brand" th:href="@{/}">©E-clinic</a>
     <a class="navbar-brand" href="#">Panel Lekarza</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -27,7 +28,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Baza</a>
+                <a class="nav-link" th:href="@{/}">Strona główna</a>
             </li>
 
             <li class="nav-item">
@@ -59,10 +60,9 @@
 
 
     <div class="container mt-4">
-        <h1>Witaj, Dr Adam Adamowicz!</h1>
-            <h1>Witaj, Dr <span th:text="${name}"></span> <span th:text="${surname}"></span></h1>
+        <h1>Witaj, Dr <span th:text="${doctor.name}"></span> <span th:text="${doctor.surname}"></span></h1>
 
-        <p>To jest twój panel lekarza. Tutaj możesz zarządzać pacjentami, planować wizyty i wiele innych.</p>
+        <p>To jest twój panel lekarza. Tutaj możesz zarządzać pacjentami, sprawdzać wizyty i wiele innych.</p>
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
@@ -94,26 +94,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Anna</td>
-                        <td>Kowalska</td>
-                        <td>1980-05-15</td>
-                        <td>
-                            <button class="btn btn-primary">Edytuj</button>
-                            <button class="btn btn-primary">Historia pacjenta</button>
-                            <button class="btn btn-danger">Usuń</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jan</td>
-                        <td>Nowak</td>
-                        <td>1975-09-22</td>
-                        <td>
-                            <button class="btn btn-primary">Edytuj</button>
-                            <button class="btn btn-primary">Historia pacjenta</button>
-                            <button class="btn btn-danger">Usuń</button>
-                        </td>
-                    </tr>
+<!--                    <tr th:each="patient : ${patients}">-->
+<!--                        <td th:text="${patient.name}"></td>-->
+<!--                        <td th:text="${patient.surname}"></td>-->
+<!--                        <td th:text="${patient.birthDate}"></td>-->
+<!--                    -->
+
                     <tr>
                         <td>Alina</td>
                         <td>Malina</td>
@@ -130,6 +116,7 @@
                             </div>
                         </td>
                     </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -154,12 +141,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>10</td>
-                        <td>2023-09-04</td>
-                        <td>Poniedziałek</td>
-                        <td>10:00</td>
-                        <td>Lucjan Pawłowski</td>
+                    <tr th:each="reservation: ${reservations}">
+                        <td th:text="${reservation.reservationId}"></td>
+                        <td th:text="${reservation.day}"></td>
+                        <td>
+                            <span th:switch="${reservation.day.getDayOfWeek().name()}">
+                                <span th:case="'MONDAY'">Poniedziałek</span>
+                                <span th:case="'TUESDAY'">Wtorek</span>
+                                <span th:case="'WEDNESDAY'">Środa</span>
+                                <span th:case="'THURSDAY'">Czwartek</span>
+                                <span th:case="'FRIDAY'">Piątek</span>
+                            </span>
+                        </td>
+
+                        <td th:text="${reservation.startTimeR}"></td>
+
+
+                        <td>Imię i nazwisko</td>
+
+
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -252,7 +252,7 @@
 
 
 <!-- Przyciski nawigacyjne -->
-<div class="mt-3">
+<div class="mt-3 action-btn__doctor-dashboard">
     <button class="btn btn-primary" onclick="showPatients()">Pacjenci</button>
     <button class="btn btn-primary" onclick="showReservations()">Rezerwacje</button>
     <button class="btn btn-primary" onclick="showOpinions()">Opinie</button>
@@ -274,7 +274,7 @@
     }
 
     function showVisits() {
-        $('#myTab a [href="#visits"]').tab('show');
+        $('#myTab a[href="#visits"]').tab('show');
     }
 </script>
 
