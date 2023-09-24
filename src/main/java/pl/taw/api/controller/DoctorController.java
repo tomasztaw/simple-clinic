@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.taw.api.dto.*;
 import pl.taw.business.DoctorService;
+import pl.taw.business.PatientService;
 import pl.taw.business.ReservationService;
 import pl.taw.business.WorkingHours;
 import pl.taw.business.dao.DoctorDAO;
@@ -66,6 +67,7 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final ReservationService reservationService;
     private final PatientDAO patientDAO;
+    private final PatientService patientService;
     private final UserRepository userRepository;
     private final OpinionDAO opinionDAO;
     private final VisitDAO visitDAO;
@@ -87,11 +89,19 @@ public class DoctorController {
         List<ReservationDTO> reservations = reservationService.findAllReservationsByDoctor(doctor.getDoctorId());
         model.addAttribute("reservations", reservations);
 
+        Map<Integer, String> patientsNames = patientDAO.getPatientsFullNamesByIdAll();
+        model.addAttribute("names", patientsNames);
+
         List<OpinionDTO> opinions = opinionDAO.findAllByDoctor(doctor.getDoctorId());
         model.addAttribute("opinions", opinions);
 
         List<VisitDTO> visits = visitDAO.findAllByDoctor(doctor.getDoctorId());
         model.addAttribute("visits", visits);
+
+        List<PatientDTO> patients = patientDAO.findAll();
+        model.addAttribute("patients", patients);
+
+        model.addAttribute("patientService", patientService);
 
         return "doctor/doctor-dashboard-new";
     }

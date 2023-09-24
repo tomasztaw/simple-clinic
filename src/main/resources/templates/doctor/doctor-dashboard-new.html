@@ -66,7 +66,7 @@
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="patients-tab" data-toggle="tab" href="#patients" role="tab" aria-controls="patients" aria-selected="true">Pacjenci</a>
+                <a class="nav-link active" id="patients-tab" data-toggle="tab" href="#patients" role="tab" aria-controls="patients" aria-selected="true">Pacjenci (wszyscy)</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="reservations-tab" data-toggle="tab" href="#reservations" role="tab" aria-controls="reservations" aria-selected="false">Rezerwacje</a>
@@ -87,23 +87,22 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Imię</th>
                         <th>Nazwisko</th>
                         <th>Data Urodzenia</th>
+                        <th>PESEL</th>
                         <th>Akcje</th>
                     </tr>
                     </thead>
                     <tbody>
-<!--                    <tr th:each="patient : ${patients}">-->
-<!--                        <td th:text="${patient.name}"></td>-->
-<!--                        <td th:text="${patient.surname}"></td>-->
-<!--                        <td th:text="${patient.birthDate}"></td>-->
-<!--                    -->
+                    <tr th:each="patient : ${patients}">
+                        <td th:text="${patient.patientId}"></td>
+                        <td th:text="${patient.name}"></td>
+                        <td th:text="${patient.surname}"></td>
+                        <td th:text="${patientService.getBirthDate(patient.pesel)}"></td>
+                        <td th:text="${patient.pesel}"></td>
 
-                    <tr>
-                        <td>Alina</td>
-                        <td>Malina</td>
-                        <td>1982-07-10</td>
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -123,16 +122,13 @@
 
 
 
-
-
-
             <!-- Zakładka Rezerwacje -->
             <div class="tab-pane fade" id="reservations" role="tabpanel" aria-labelledby="reservations-tab">
                 <h2>Lista Rezerwacji</h2>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Id rezerwacji</th>
+                        <th>Id</th>
                         <th>Data</th>
                         <th>Dzień tygodnia</th>
                         <th>Godzina</th>
@@ -156,9 +152,9 @@
 
                         <td th:text="${reservation.startTimeR}"></td>
 
-
-                        <td>Imię i nazwisko</td>
-
+                        <td>
+                            <span th:each="name : ${names}" th:if="${name.key == reservation.patientId}" th:text="${name.value}"></span>
+                        </td>
 
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
@@ -187,15 +183,15 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Id opinii</th>
+                        <th>Id</th>
                         <th>Treść</th>
                         <th>Akcje</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>22</td>
-                        <td>Jak najbardziej polecam</td>
+                    <tr th:each="opinion : ${opinions}">
+                        <td th:text="${opinion.opinionId}"></td>
+                        <td th:text="${opinion.comment}"></td>
                         <td>
                             <div>
                                 <button class="btn btn-primary">Pokaż szczegóły</button>
@@ -212,21 +208,36 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Id wizyty</th>
+                        <th>Id</th>
                         <th>Data</th>
                         <th>Dzień tygodnia</th>
                         <th>Godzina</th>
                         <th>Pacjent</th>
+                        <th>Notatka</th>
                         <th>Akcje</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>18</td>
-                        <td>2023-09-01</td>
-                        <td>Piątek</td>
-                        <td>12:30</td>
-                        <td>Pankracy Pilny</td>
+                    <tr th:each="visit : ${visits}">
+                        <td th:text="${visit.visitId}"></td>
+                        <td th:text="${visit.dateTime.toLocalDate()}"></td>
+
+                        <td>
+                            <span th:switch="${visit.dateTime.getDayOfWeek().name()}">
+                                <span th:case="'MONDAY'">Poniedziałek</span>
+                                <span th:case="'TUESDAY'">Wtorek</span>
+                                <span th:case="'WEDNESDAY'">Środa</span>
+                                <span th:case="'THURSDAY'">Czwartek</span>
+                                <span th:case="'FRIDAY'">Piątek</span>
+                            </span>
+                        </td>
+
+
+
+                        <td th:text="${visit.dateTime.toLocalTime()}"></td>
+                        <td th:text="${visit.patient.name} + ' ' + ${visit.patient.surname}"></td>
+                        <td th:text="${visit.note}"></td>
+
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
