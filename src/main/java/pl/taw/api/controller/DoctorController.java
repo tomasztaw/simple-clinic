@@ -80,14 +80,18 @@ public class DoctorController {
     }
 
     @GetMapping(DASHBOARD + "-new")
-    public String showDoctorDashboardNew(Model model, Authentication authentication) {
+    public String showDoctorDashboardNew(@RequestParam(required = false) String sort, Model model, Authentication authentication) {
         ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
         String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
         DoctorDTO doctor = doctorDAO.findByEmail(userEmail);
         model.addAttribute("doctor", doctor);
 
         List<ReservationDTO> reservations = reservationService.findAllReservationsByDoctor(doctor.getDoctorId());
-        model.addAttribute("reservations", reservations);
+        List<ReservationDTO> mutableReservations = new ArrayList<>(reservations);
+        if ("date".equals(sort)) {
+            mutableReservations.sort(Comparator.comparing(ReservationDTO::getDay));
+        }
+        model.addAttribute("reservations", mutableReservations);
 
         Map<Integer, String> patientsNames = patientDAO.getPatientsFullNamesByIdAll();
         model.addAttribute("names", patientsNames);
@@ -96,10 +100,27 @@ public class DoctorController {
         model.addAttribute("opinions", opinions);
 
         List<VisitDTO> visits = visitDAO.findAllByDoctor(doctor.getDoctorId());
-        model.addAttribute("visits", visits);
+        List<VisitDTO> mutableVisits = new ArrayList<>(visits);
+        if ("date-visit".equals(sort)) {
+            mutableVisits.sort(Comparator.comparing(VisitDTO::getDateTime));
+        } else if ("alpha-visit".equals(sort)) {
+            mutableVisits.sort(Comparator.comparing((VisitDTO visit) -> visit.getPatient().getSurname())
+                    .thenComparing(visit -> visit.getPatient().getName()));
+        }
+        model.addAttribute("visits", mutableVisits);
 
         List<PatientDTO> patients = patientDAO.findAll();
-        model.addAttribute("patients", patients);
+        List<PatientDTO> mutablePatients = new ArrayList<>(patients);
+        if ("asc".equals(sort)) {
+            mutablePatients.sort(Comparator.comparing(p -> patientService.getBirthDate(p.getPesel())));
+        } else if ("desc".equals(sort)) {
+            mutablePatients.sort(Comparator.comparing((PatientDTO p) -> patientService.getBirthDate(p.getPesel())).reversed());
+        } else if ("alpha".equals(sort)) {
+            mutablePatients.sort(Comparator.comparing(PatientDTO::getSurname).thenComparing(PatientDTO::getName));
+        } else {
+            mutablePatients.sort(Comparator.comparing(PatientDTO::getPatientId));
+        }
+        model.addAttribute("patients", mutablePatients);
 
         model.addAttribute("patientService", patientService);
 

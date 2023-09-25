@@ -84,6 +84,14 @@
             <!-- Zakładka Pacjenci -->
             <div class="tab-pane fade show active" id="patients" role="tabpanel" aria-labelledby="patients-tab">
                 <h2>Lista Pacjentów</h2>
+
+                <div class="d-flex justify-content-end">
+                    <a th:href="@{/doctors/dashboard-new?sort=asc}" class="btn btn-link">Sortuj rosnąco-wiek</a>
+                    <a th:href="@{/doctors/dashboard-new?sort=desc}" class="btn btn-link">Sortuj malejąco-wiek</a>
+                    <a th:href="@{/doctors/dashboard-new?sort=alpha}" class="btn btn-link">Sortuj alfabetycznie</a>
+                    <a th:href="@{/doctors/dashboard-new}" class="btn btn-link">Id</a>
+                </div>
+
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -121,10 +129,17 @@
             </div>
 
 
-
             <!-- Zakładka Rezerwacje -->
             <div class="tab-pane fade" id="reservations" role="tabpanel" aria-labelledby="reservations-tab">
                 <h2>Lista Rezerwacji</h2>
+
+                <div class="d-flex justify-content-end">
+                    <p>sortuje, ale odświeża całą stronę</p>
+                    <a th:href="@{/doctors/dashboard-new?sort=date}" class="btn btn-link">Sortuj-data</a>
+                    <a th:href="@{/doctors/dashboard-new}" class="btn btn-link">Id</a>
+                </div>
+
+
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -205,6 +220,14 @@
             <!-- Zakładka Wizyty -->
             <div class="tab-pane fade" id="visits" role="tabpanel" aria-labelledby="visits-tab">
                 <h2>Wizyty</h2>
+
+                <div class="d-flex justify-content-end">
+                    <a th:href="@{/doctors/dashboard-new?sort=date-visit}" class="btn btn-link">Sortuj-data</a>
+                    <a th:href="@{/doctors/dashboard-new?sort=alpha-visit}" class="btn btn-link">Sortuj pacjenci-alfabetycznie</a>
+                    <a th:href="@{/doctors/dashboard-new}" class="btn btn-link">Id</a>
+                </div>
+
+
                 <table class="table table-bordered">
                     <thead>
                     <tr>
