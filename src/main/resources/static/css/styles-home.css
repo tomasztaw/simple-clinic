@@ -117,3 +117,29 @@
 .btn-container a {
     margin: 20px auto;
 }
+
+
+/* próby ze stopką */
+footer {
+    height: 150px;
+    padding-top: 10px;
+    text-align: center;
+    position: sticky;
+    width: 100%;
+    background-color: #f5f5f5;
+}
+
+
+.contact-items {
+    display: flex;
+    justify-content: center;
+}
+
+.contact-items p, .footer__links a {
+    margin: 0 15px;
+}
+
+.footer__links {
+    display: flex;
+    justify-content: center;
+}

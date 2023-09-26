@@ -23,11 +23,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import pl.taw.api.dto.DoctorDTO;
 import pl.taw.api.dto.OpinionDTO;
 import pl.taw.business.DoctorService;
+import pl.taw.business.PatientService;
 import pl.taw.business.ReservationService;
 import pl.taw.business.WorkingHours;
 import pl.taw.business.dao.DoctorDAO;
 import pl.taw.business.dao.OpinionDAO;
 import pl.taw.business.dao.PatientDAO;
+import pl.taw.business.dao.VisitDAO;
 import pl.taw.infrastructure.database.entity.DoctorEntity;
 import pl.taw.infrastructure.security.UserRepository;
 import pl.taw.util.DtoFixtures;
@@ -67,10 +69,18 @@ class DoctorControllerWebMvcTest {
 
     @MockBean
     @SuppressWarnings("unused")
+    private final PatientService patientService;
+
+    @MockBean
+    @SuppressWarnings("unused")
     private final UserRepository userRepository;
 
     @MockBean
     private final OpinionDAO opinionDAO;
+
+    @MockBean
+    @SuppressWarnings("unused")
+    private final VisitDAO visitDAO;
 
     @MockBean
     private final Authentication authentication;
