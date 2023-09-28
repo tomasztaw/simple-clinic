@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.action-btn__doctor-dashboard {
+    text-align: center;
+    margin: 30px auto;
+}
+
+footer {
+    height: 150px;
+    padding-top: 10px;
+    text-align: center;
+    width: 100%;
+    background-color: #f5f5f5;
+
+    margin-top: auto;
+}
+
+.contact-items {
+    display: flex;
+    justify-content: center;
+}
+
+.contact-items p, .footer__links a {
+    margin: 0 15px;
+}
+
+.footer__links {
+    display: flex;
+    justify-content: center;
+}
+
+/* stub */
+.h1--stub {
+    color: red;
+    margin: 50px auto;
+}
+
+.btn-stub {
+    margin-top: 100px;
+}
+
+.img-container {
+    text-align: center;
+}
+

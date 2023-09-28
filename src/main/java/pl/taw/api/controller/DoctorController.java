@@ -79,6 +79,16 @@ public class DoctorController {
         return "doctor/doctor-dashboard";
     }
 
+    @GetMapping("/stub")
+    public String doctorStub(Model model, Authentication authentication) {
+        ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);
+        String userEmail = clinicUserDetailsService.getUserEmailAfterAuthentication(authentication.getName());
+        DoctorDTO doctor = doctorDAO.findByEmail(userEmail);
+        model.addAttribute("doctor", doctor);
+
+        return "doctor/doctor-stub";
+    }
+
     @GetMapping(DASHBOARD + "-new")
     public String showDoctorDashboardNew(@RequestParam(required = false) String sort, Model model, Authentication authentication) {
         ClinicUserDetailsService clinicUserDetailsService = new ClinicUserDetailsService(userRepository);

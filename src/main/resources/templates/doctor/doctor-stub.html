@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niegotowa funkcjonalność</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style-doctor-dashboard.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Nawigacja -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <a class="navbar-brand" th:href="@{/}">©E-clinic</a>
+        <a class="navbar-brand" href="#">Strona w przygotowaniu</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Strona główna</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/air/airquality}">Jakość powietrza</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:history.go(-1);">Powrót</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="container mt-4">
+        <h2>Jesteś zalogowany jako Dr <span th:text="${doctor.name}"></span> <span th:text="${doctor.surname}"></span></h2>
+
+        <h1 class="h1--stub">Prace nad funkcjonalnością trwają, prosimy o cierpliwość</h1>
+
+        <div class="img-container">
+            <img th:src="@{/images/web4.png}" alt="praca wre">
+        </div>
+
+        <button class="btn btn-primary btn-block btn-stub" onclick="history.go(-1);">Powrót</button>
+
+
+
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/footer}"></div>
+
+</body>
+</html>

@@ -6,54 +6,12 @@
     <title>Panel Lekarza</title>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style-doctor-dashboard.css}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <style>
-        * { margin: 0; padding: 0; }
-
-        html, body {
-            min-height: 100vh;
-
-            display: flex;
-            flex-direction: column;
-        }
-
-       /*.container {
-            min-height: 82%;
-        }*/
-
-        .action-btn__doctor-dashboard {
-            text-align: center;
-            margin: 30px auto;
-        }
-
-        footer {
-            height: 150px;
-            padding-top: 10px;
-            text-align: center;
-            width: 100%;
-            background-color: #f5f5f5;
-
-            margin-top: auto;
-        }
-
-        .contact-items {
-            display: flex;
-            justify-content: center;
-        }
-
-        .contact-items p, .footer__links a {
-            margin: 0 15px;
-        }
-
-        .footer__links {
-            display: flex;
-            justify-content: center;
-        }
-    </style>
 
 </head>
 <body>
@@ -152,11 +110,15 @@
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <button class="btn btn-primary">Edytuj</button>
-                                    <button class="btn btn-primary">Historia pacjenta</button>
+                                    <a th:href="@{/doctors/stub}">
+                                        <button class="btn btn-primary">Edytuj</button>
+                                    </a>
+                                    <a th:href="@{/doctors/stub}">
+                                        <button class="btn btn-primary">Historia pacjenta</button>
+                                    </a>
                                 </div>
                                 <div>
-                                    <button class="btn btn-danger">Usuń</button>
+                                    <button class="btn btn-danger" disabled>Usuń</button>
                                 </div>
                             </div>
                         </td>
@@ -172,7 +134,7 @@
                 <h2>Lista Rezerwacji</h2>
 
                 <div class="d-flex justify-content-end">
-                    <p>sortuje, ale odświeża całą stronę</p>
+                    <p style="color: red">Sortuje, ale odświeża całą stronę</p>
                     <a th:href="@{/doctors/dashboard-new?sort=date}" class="btn btn-link">Sortuj-data</a>
                     <a th:href="@{/doctors/dashboard-new}" class="btn btn-link">Id</a>
                 </div>
@@ -213,11 +175,15 @@
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <button class="btn btn-primary">Edytuj</button>
-                                    <button class="btn btn-primary">Historia pacjenta</button>
+                                    <a th:href="@{/doctors/stub}">
+                                        <button class="btn btn-primary">Edytuj</button>
+                                    </a>
+                                    <a th:href="@{/doctors/stub}">
+                                        <button class="btn btn-primary">Historia pacjenta</button>
+                                    </a>
                                 </div>
                                 <div>
-                                    <button class="btn btn-danger">Usuń</button>
+                                    <button class="btn btn-danger" disabled>Usuń</button>
                                 </div>
                             </div>
                         </td>
@@ -304,7 +270,9 @@
                                     <a th:href="@{/visits/show/{visitId}(visitId=${visit.visitId})}">
                                         <button class="btn btn-primary">Pokaż</button>
                                     </a>
-                                    <button class="btn btn-primary">Historia pacjenta</button>
+                                    <a th:href="@{/doctors/stub}">
+                                        <button class="btn btn-primary">Historia pacjenta</button>
+                                    </a>
                                 </div>
                                 <div>
                                     <button class="btn btn-danger" disabled>Usuń</button>
