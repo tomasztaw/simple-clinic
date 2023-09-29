@@ -95,8 +95,8 @@ Strona powitalna:
 
 Przykładowy użytkownik: <br> login ```tomek``` hasło ```test```<br><br>
 Administrator: <br> login ```admin``` hasło ```admin```<br><br>
-Doktor (w przygotowaniu):<br>
-login ```doctor1``` hasło ```doctor1```
+Doktor (w przygotowaniu/są już jakieś wstępne funkcjonalności):<br>
+login ```konrad``` hasło ```test```
 
 
 ## Grafiki
