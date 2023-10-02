@@ -4,6 +4,12 @@
     font-family: sans-serif;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .banner {
     width: 100%;
     height: 100vh;
@@ -15,7 +21,7 @@
 .navbar {
     width: 85%;
     margin: auto;
-    padding: 25px 0;
+    padding: 35px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -66,13 +72,13 @@
 }
 
 .content h1 {
-    font-size: 70px;
-    margin-top: 40px;
+    font-size: 60px;
+    margin-top: 90px;
 }
 
 .content p {
     margin: 20px auto;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 200;
     line-height: 25px;
 }
@@ -119,33 +125,47 @@ button:hover {
     color: #fff;
 }
 
-/* stopka */
-.footer {
-    padding: 10px;
-    margin-top: 30px;
+footer {
     text-align: center;
-    background-color: #f5f5f5;
-    /*zmiany - nie działa*/
-    /*position: absolute;
-    bottom: 0;*/
+    color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
 }
+
 .contact-info {
-  display: flex;
-  flex-direction: column;
-}
-.navigation-menu a[href="/services"] {
-  margin-right: 10px;
-  color: red;
+    display: flex;
+    justify-content: center;
 }
 
-.privacy-policy a[href="/privacy"] {
-  margin-right: 10px;
-  color: blue;
-}
-.navigation-menu a, .privacy-policy a {
-  margin-right: 10px;
+.contact-info p {
+    margin: 5px 10px; 
 }
 
-.validation {
-    margin: 10px;
+@media (max-width: 1366px) and (max-height: 768px) {
+    /* Zasady CSS dla laptopa Lenovo */
+    .logo {
+        width: 100px;
+        height: auto;
+        cursor: pointer;
+        border-radius: 5%;
+    }
+
+    .content h1 {
+        font-size: 50px;
+        margin-top: 50px;
+    }
+    
+    .content p {
+        margin: 20px auto;
+        font-size: 18px;
+        font-weight: 200;
+        line-height: 20px;
+    }
+
+
+
 }
+
