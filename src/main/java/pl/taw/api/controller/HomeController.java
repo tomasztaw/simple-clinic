@@ -63,6 +63,41 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping(HOME + "-new")
+    public String homePageNewLayout(Model model, Authentication authentication) {
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+            boolean isAdmin = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
+            boolean isDoctor = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("DOCTOR"));
+            boolean isUser = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("USER"));
+
+            String username = authentication.getName();
+            UserEntity user = userRepository.findByUserName(username);
+
+            model.addAttribute("username", username);
+            model.addAttribute("isAdmin", isAdmin);
+            model.addAttribute("isUser", isUser);
+            model.addAttribute("isDoctor", isDoctor);
+
+            if (isUser) {
+                PatientDTO patient = patientDAO.findByEmail(user.getEmail());
+                model.addAttribute("patient", patient);
+            }
+
+            // air
+            String airQuality = airQualityService.getIndexLevelName().replace("y", "a");
+            String backgroundColor = getBackgroundColor(airQuality);
+
+            model.addAttribute("airQuality", airQuality);
+            model.addAttribute("backgroundColor", backgroundColor);
+
+        }
+
+        return "home-new";
+    }
+
     private String getBackgroundColor(String airQuantity) {
         switch (airQuantity) {
             case "Bardzo dobra" -> { return "rgba(87, 177, 8, 0.3)"; }

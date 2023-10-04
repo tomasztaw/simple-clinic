@@ -1,0 +1,176 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.banner {
+  width: 100%;
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/images/z1.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.navbar {
+  width: 85%;
+  margin: auto;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+
+.role-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: auto;
+  flex-wrap: nowrap;
+  color: white;
+
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    cursor: pointer;
+    border-radius: 5%;
+}
+
+.login-button {
+    float: right;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* stopka */
+.footer {
+    padding: 10px;
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+}
+
+/* air */
+.air__container {
+    border: 2px solid white;
+    border-radius: 15px;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.air__container a {
+    color: white;
+    text-decoration: none;
+}
+
+.air--q {
+    font-size: 25px;
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* grid dla admina */
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, auto);
+  gap: 20px;
+  justify-items: center;
+  align-items: center;
+  height: 30vh;
+  width: 80vw;
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+}
+
+.role-div h1 {
+    margin: 15px auto;
+}
+
+.role-div h2 {
+    margin-bottom: 50px;
+}
+
+.btn--add {
+    width: 800px;
+}
+
+.btn-container a {
+    margin: 20px auto;
+}
+
+footer {
+    text-align: center;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+}
+
+.contact-info p {
+    margin: 0px 10px; 
+}
+
+.footer__links {
+    display: inline-flex;
+}
+
+.footer__links a {
+    margin: 5px 5px;
+    color: #c5baba;
+}
+
+footer p {
+    margin-bottom: 0;
+}
+
+@media (max-width: 1366px) and (max-height: 768px) {
+    /* Zasady CSS dla laptopa Lenovo */
+    .logo {
+        width: 100px;
+        height: auto;
+        cursor: pointer;
+        border-radius: 5%;
+    }
+
+    .content h1 {
+        font-size: 42px;
+        margin-top: 30px;
+    }
+
+    .role-div h3 {
+        margin-bottom: 20px;
+    }
+}

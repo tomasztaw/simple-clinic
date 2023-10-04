@@ -9,47 +9,51 @@
 
 </head>
 <body>
-    <div class="banner">
-        <div class="navbar">
-            <img src="./images/2135.jpg" class="logo" alt="logo">
-            <ul>
-                <li><a th:href="@{/register}">Zarejestruj</a></li>
-                <li><a th:href="@{/login}">Zaloguj</a></li>
-            </ul>
-        </div>
-
-        <div class="content">
-    
-            <h1>Witamy w naszej Klinice Medycznej</h1>
-            <br>
-            <p>Dziękujemy, że wybraliście naszą klinikę jako miejsce opieki medycznej.</p>
-            <p>Jesteśmy zespołem doświadczonych lekarzy i personelu medycznego, którzy są gotowi zadbać o Wasze zdrowie i dobre samopoczucie.</p>
-            <p>Nasz priorytet to zapewnienie Wam wysokiej jakości opieki medycznej w przyjaznej i komfortowej atmosferze.</p>
-            <p>W naszej klinice oferujemy szeroki zakres usług medycznych, od rutynowych badań i konsultacji po skomplikowane zabiegi medyczne.</p>
-            <p>Nasi lekarze są wysoko wykwalifikowani i stale doskonalą swoje umiejętności, aby zapewnić Wam najlepszą opiekę.</p>
-            <p>Jeśli macie jakiekolwiek pytania lub potrzebujecie informacji, nasz personel jest tutaj, aby Wam pomóc.</p>
-            <p>Jeszcze raz dziękujemy za zaufanie i wybór naszej Kliniki Medycznej. Jesteśmy gotowi służyć Wam!</p>
-
-            <div class="button__login">
-                <button type="button"><span></span><a th:href="@{/register}">Zarejestruj się</a></button>
-                <button type="button"><span></span><a th:href="@{/login}">Zaloguj</a></button>
-            </div>
-
-        </div>
-
-        <footer>
-            <p><b>© 2023 E-clinic sp. z o.o.</b></p>
-                <div class="contact-info">
-                    <p><b>Numer telefonu:</b> 123-456-789</p>
-                    <p><b>E-mail:</b> info@eclinic.pl</p>
-                    <p><b>Adres:</b> ul. Przykładowa 123, 51-000 Wrocław</p>
-                </div>
-                <div class="opening-hours">
-                    <p><b>Godziny otwarcia:</b> Poniedziałek - Piątek, 8:00 - 17:00</p>
-                </div>
-        </footer>
-           
+<div class="banner">
+    <div class="navbar">
+        <img src="./images/2135.jpg" class="logo" alt="logo">
+        <ul>
+            <li><a th:href="@{/register}">Zarejestruj</a></li>
+            <li><a th:href="@{/register/loginPage}">Zaloguj</a></li>
+        </ul>
     </div>
- 
+
+    <div class="content">
+
+        <h1>Witamy w naszej Klinice Medycznej</h1>
+        <br>
+        <p>Dziękujemy, że wybraliście naszą klinikę jako miejsce opieki medycznej.</p>
+        <p>Jesteśmy zespołem doświadczonych lekarzy i personelu medycznego, którzy są gotowi zadbać o Wasze zdrowie i
+            dobre samopoczucie.</p>
+        <p>Nasz priorytet to zapewnienie Wam wysokiej jakości opieki medycznej w przyjaznej i komfortowej
+            atmosferze.</p>
+        <p>W naszej klinice oferujemy szeroki zakres usług medycznych, od rutynowych badań i konsultacji po
+            skomplikowane zabiegi medyczne.</p>
+        <p>Nasi lekarze są wysoko wykwalifikowani i stale doskonalą swoje umiejętności, aby zapewnić Wam najlepszą
+            opiekę.</p>
+        <p>Jeśli macie jakiekolwiek pytania lub potrzebujecie informacji, nasz personel jest tutaj, aby Wam pomóc.</p>
+        <p>Jeszcze raz dziękujemy za zaufanie i wybór naszej Kliniki Medycznej. Jesteśmy gotowi służyć Wam!</p>
+
+        <div class="button__login">
+            <button type="button"><span></span><a th:href="@{/register}">Zarejestruj się</a></button>
+            <button type="button"><span></span><a th:href="@{/register/loginPage}">Zaloguj</a></button>
+        </div>
+
+    </div>
+
+    <footer>
+        <p><b>© 2023 E-clinic sp. z o.o.</b></p>
+        <div class="contact-info">
+            <p><b>Numer telefonu:</b> 123-456-789</p>
+            <p><b>E-mail:</b> info@eclinic.pl</p>
+            <p><b>Adres:</b> ul. Przykładowa 123, 51-000 Wrocław</p>
+        </div>
+        <div class="opening-hours">
+            <p><b>Godziny otwarcia:</b> Poniedziałek - Piątek, 8:00 - 17:00</p>
+        </div>
+    </footer>
+
+</div>
+
 </body>
 </html>

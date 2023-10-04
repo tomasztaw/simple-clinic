@@ -3,7 +3,7 @@
   <div th:if="${isAdmin}" class="role-div">
 
     <h1>Witaj, Adminie!</h1>
-    <h2>Do Twojej dyspozycji są poniższe panele</h2>
+    <h3>Do Twojej dyspozycji są poniższe panele</h3>
 
     <div class="container">
 
@@ -26,8 +26,8 @@
   <div th:if="${isDoctor}" class="role-div">
 
     <h1>Witaj, Doktorku!</h1>
-    <h2>W przygotowaniu jest panel dla lekarza</h2>
-    <h2>Na razie możesz tylko poprzeglądać lekarzy</h2>
+    <h3>W przygotowaniu jest panel dla lekarza</h3>
+    <h3>Na razie możesz tylko poprzeglądać lekarzy</h3>
     <div class="btn-container">
       <a th:href="@{/doctors}" class="btn btn-primary btn-lg">Przeglądaj dostępnych lekarzy</a>
       <a th:href="@{/doctors/dashboard-new}" class="btn btn-primary btn-lg">Przejdź do panelu lekarza(próbny panel - nowy)</a>
@@ -38,12 +38,12 @@
   <div th:if="${isUser}" class="role-div">
 
     <h1>Witaj, Pacjencie!</h1>
-    <h2>Korzystaj z naszych usług! Umów się na wizytę i nie trać czasu ani zdrowia!</h2>
+    <h3>Korzystaj z naszych usług! Umów się na wizytę i nie trać czasu ani zdrowia!</h3>
     <div class="btn-container">
       <a th:href="@{/doctors/pagination}" class="btn btn-primary btn-lg">Przeglądaj dostępnych lekarzy</a>
     </div>
     <br>
-    <h2>Zarządzaj swoimi danymi, sprawdzaj terminy wizyt, wystawiaj opinię i rób co tylko chcesz</h2>
+    <h3>Zarządzaj swoimi danymi, sprawdzaj terminy wizyt, wystawiaj opinię i rób co tylko chcesz</h3>
     <div class="btn-container">
       <a th:href="@{/patients}" class="btn btn-primary btn-lg">Przejdź do panelu pacjenta</a>
     </div>
