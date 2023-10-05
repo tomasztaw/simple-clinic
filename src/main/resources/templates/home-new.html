@@ -12,16 +12,20 @@
 </head>
 <body>
 
-    <div class="banner" th:style="'background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(' + @{/images/z1.jpg} + ');'">
-        <div th:replace="~{fragments/header-home}"></div>
+    <div class="flex-container">
+        <header>
+            <div th:replace="~{fragments/header-home}"></div>
+        </header>
 
-        <div class="content">
-            <p style="color: white">to jest home-new</p>
+        <main>
             <div th:replace="~{fragments/home-roles}"></div>
-        </div>
+        </main>
 
-        <div th:replace="~{fragments/footer}"></div>
+        <footer>
+            <div th:replace="~{fragments/footer}"></div>
+        </footer>
 
     </div>
+
 </body>
 </html>
